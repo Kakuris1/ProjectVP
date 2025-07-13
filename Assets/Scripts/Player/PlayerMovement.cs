@@ -13,10 +13,14 @@ public class PlayerMovement : MonoBehaviour
 
 #if UNITY_EDITOR || UNITY_STANDALONE
         playerInput = new PCInput();
-#elif UNITY_ANDROID || UNITY_IOS
-        playerInput = new MobileInput();
 #endif
 
+    }
+
+    // 모바일에서 MobileInput 과 연결
+    public void SetInput(IPlayerInput input)
+    {
+        playerInput = input;
     }
 
     void FixedUpdate()
