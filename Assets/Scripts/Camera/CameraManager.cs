@@ -20,7 +20,7 @@ public class CameraManager : MonoBehaviour
 
     //카메라 초기 상태 = Player 탑다운 뷰
     public CameraState currentState = CameraState.TopDown;
-    void LateUpdate()
+    void FixedUpdate()
     {
         switch (currentState)
         {
