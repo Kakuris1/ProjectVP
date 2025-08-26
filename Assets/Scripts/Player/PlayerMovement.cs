@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     // 모바일에서 MobileInput 과 연결
     public void SetInput(IPlayerInput input)
     {
-        playerInput = input;
+        playerInput = input; 
     }
 
     void FixedUpdate()
