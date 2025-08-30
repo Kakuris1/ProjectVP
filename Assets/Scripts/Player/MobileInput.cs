@@ -13,4 +13,9 @@ public class MobileInput : IPlayerInput
     {
         return joystickInput;
     }
+
+    public float GetRotationInput()
+    {
+        return joystickInput.x;
+    }
 }

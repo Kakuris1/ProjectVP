@@ -12,4 +12,11 @@ public class PCInput : IPlayerInput
         // 벡터 크기 1로 정규화
         return new Vector2(h, v).normalized;
     }
+
+    public float GetRotationInput()
+    {
+        float q = Input.GetKey(KeyCode.Q) ? 1f : 0f;
+        float e = Input.GetKey(KeyCode.E) ? 1f : 0f;
+        return e - q;
+    }
 }
