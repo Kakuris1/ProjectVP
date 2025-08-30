@@ -18,7 +18,7 @@ public class TopDownFollowCamera : MonoBehaviour
         Vector3 direction = toTarget.normalized; // 방향 정규화
         float distance = toTarget.magnitude;     // 현재 거리
 
-        if (distance < 0.001f) return;
+        if (distance < 0.001f) return; // 미세 떨림 방지 최소 스냅
 
         velocity = direction * velocity.magnitude; // 방향 수정
 

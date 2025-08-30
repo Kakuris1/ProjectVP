@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class CutsceneCameraController : MonoBehaviour
 {
-    private Transform target;
+    public Transform Player;
+    public Transform target;
     public float moveSpeed = 2f;
 
     public void StartCutscene(Transform targetTransform)
@@ -14,7 +15,8 @@ public class CutsceneCameraController : MonoBehaviour
     {
         if (target == null) return;
 
-        transform.position = Vector3.Lerp(transform.position, target.position, Time.deltaTime * moveSpeed);
-        transform.LookAt(target);
+        transform.position = target.position;
+        //transform.position = Vector3.Lerp(transform.position, target.position, Time.deltaTime * moveSpeed);
+        transform.LookAt(Player);
     }
 }
