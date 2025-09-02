@@ -30,7 +30,6 @@ public class VisionSensor : MonoBehaviour
         float maxR = Mathf.Max(radius, rearRadius);
 
         int n = Physics.OverlapSphereNonAlloc(origin, maxR, _buf, enemyMask, QueryTriggerInteraction.Ignore);
-        Debug.Log(n + "개 감지");
         for (int i = 0; i < n; ++i)
         {
             var t = _buf[i].transform;
@@ -41,7 +40,6 @@ public class VisionSensor : MonoBehaviour
 
             if (IsVisible(origin, forward, t))
                 now.Add(fader);
-            Debug.Log(i+1 + "번 ");
         }
 
         // 아군은 항상 보임
