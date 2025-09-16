@@ -9,8 +9,17 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
+    path: Assets/Scenes/Boot.unity
+    guid: b7c96c38cf20a9d4ab373b4eec0d0617
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 54a3c74b9d272584089f420eeef8d1ed
+  - enabled: 1
+    path: Assets/Scenes/CorePersistent.unity
+    guid: cf0865f9363231f409a08e3af7b914af
+  - enabled: 1
+    path: Assets/Scenes/GameplayPersistent.unity
+    guid: 740f07abf0b8fba4498eb05113608c32
   - enabled: 1
     path: Assets/Scenes/SimpleNaturePack_Demo.unity
     guid: c1532aa6c4ba93c47985072d6bba95d6

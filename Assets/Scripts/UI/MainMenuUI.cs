@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using System.Collections;
 
 public class MainMenuUI : MonoBehaviour
 {
@@ -53,7 +54,7 @@ public class MainMenuUI : MonoBehaviour
 
     void OnStart()
     {
-        SceneManager.LoadScene("SimpleNaturePack_Demo");
+        StartCoroutine(LoadGameFlow());
     }
 
     void OnQuit()
@@ -63,5 +64,18 @@ public class MainMenuUI : MonoBehaviour
 #else
         Application.Quit(); // 빌드에서 종료
 #endif
+    }
+
+    IEnumerator LoadGameFlow()
+    {
+        // 게임 플레이 상주 씬 로드
+        yield return SceneManager.LoadSceneAsync("GameplayPersistent", LoadSceneMode.Additive);
+
+        // 레벨 씬 로드, 활성씬 설정
+        yield return SceneManager.LoadSceneAsync("SimpleNaturePack_Demo", LoadSceneMode.Additive);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("SimpleNaturePack_Demo"));
+
+        //메뉴 언 로드
+        yield return SceneManager.UnloadSceneAsync(gameObject.scene);
     }
 }
