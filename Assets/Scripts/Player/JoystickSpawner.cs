@@ -3,6 +3,7 @@ using UnityEngine;
 // 씬에 빈 오브젝트 배치후 컴포넌트 연결
 public class JoystickSpawner : MonoBehaviour
 {
+    /*
     public GameObject joystickPrefab;
     public Canvas canvas; // 메인 캔버스에 연결
     private MobileInput mobileInput;
@@ -37,5 +38,5 @@ public class JoystickSpawner : MonoBehaviour
 
         JoystickUI ui = obj.GetComponent<JoystickUI>();
         ui.Initialize(mobileInput); // 공유된 MobileInput 넘겨줌
-    }
+    }*/
 }

@@ -1,0 +1,17 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Root" class="root" style="height: 1080px; width: 1920px;">
+        <ui:VisualElement name="Background" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Art/Image/TempMainMenuBackgroundImage.jpg?fileID=2800000&amp;guid=4449fcdb326c2f149a853d8aa2a5b094&amp;type=3#TempMainMenuBackgroundImage&quot;); background-position-y: center 0;" />
+        <ui:VisualElement name="MainPanel" class="panel" style="height: 1077px; width: 1917px; position: absolute; top: -1px; left: 0;">
+            <ui:Button name="StartButton" text="Start" style="height: 104px; opacity: 1; display: flex; visibility: visible; color: rgb(255, 255, 255); background-image: none; -unity-background-image-tint-color: rgb(255, 255, 255); width: 214px; font-size: 60px; background-color: rgba(255, 255, 255, 0); position: absolute; top: 612px; left: 22px;" />
+            <ui:Button name="QuitButton" text="Quit" style="font-size: 60px; color: rgb(255, 255, 255); background-color: rgba(255, 255, 255, 0); height: 105px; width: 223px; position: absolute; top: 954px; left: 12px;" />
+            <ui:Button name="OptionButton" text="Option" style="background-color: rgba(255, 255, 255, 0); font-size: 60px; color: rgb(255, 255, 255); height: 94px; width: 209px; -unity-text-align: lower-center; background-size: 100% 100%; position: absolute; top: 789px; left: 24px;" />
+            <ui:Label text="Game Title" name="GameTitle" style="font-size: 70px; color: rgb(0, 0, 0); -unity-font-style: bold; position: absolute; top: 288px; left: 700px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="OptionPanel" class="panel hidden" style="height: 1078px; position: absolute; width: 1920px;">
+            <ui:Button name="BackButton" text="Back" style="position: absolute; top: 915px; left: 1667px; height: 130px; width: 198px; font-size: 50px; color: rgb(255, 255, 255); background-color: rgba(188, 188, 188, 0);" />
+            <ui:Slider label="BGM" value="42" high-value="100" fill="true" name="BGMController" style="position: absolute; top: 381px; left: 439px; height: 111px; width: 912px; font-size: 40px; color: rgb(255, 255, 255);" />
+            <ui:Slider label="Effect" value="42" high-value="100" fill="true" name="EffectController" style="position: absolute; top: 526px; left: 437px; height: 111px; width: 912px; font-size: 40px; color: rgb(255, 255, 255);" />
+            <ui:DropdownField label="Screen" name="ScreenDropbox" style="position: absolute; top: 259px; left: 441px; width: 938px; height: 51px; background-color: rgba(255, 255, 255, 0); font-size: 40px; color: rgb(255, 255, 255);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
