@@ -26,10 +26,11 @@ namespace Combat.Skills
         {
             if (!projectilePrefab) return;
 
-            // 캐스트 VFX
+            // 최초 시전시 1회 보여줄 VFX
             if (ctx.Spec.castVfx != null)
                 ctx.Spawner?.SpawnOneShot(ctx.Spec.castVfx, ctx.Origin, Quaternion.LookRotation(ctx.Direction));
 
+            // 각 타겟 조준 발사
             if (aimAtEachTarget && targets != null && targets.Count > 0)
             {
                 int count = Mathf.Min(maxProjectiles <= 0 ? targets.Count : maxProjectiles, targets.Count);
@@ -37,8 +38,8 @@ namespace Combat.Skills
                 {
                     var t = targets[i];
                     var dir = (t.position - ctx.Origin);
-                    if (dir.sqrMagnitude < 0.0001f) dir = ctx.Direction;
-                    SpawnOne(ctx, dir.normalized);
+                    if (dir.sqrMagnitude < 0.0001f) dir = ctx.Direction; // 붙어있는 경우 예외처리
+                    SpawnProjectile(ctx, dir.normalized);
                 }
             }
             else
@@ -46,20 +47,25 @@ namespace Combat.Skills
                 // 전방으로만 발사 (maxProjectiles만큼)
                 int count = Mathf.Max(1, maxProjectiles);
                 for (int i = 0; i < count; i++)
-                    SpawnOne(ctx, ctx.Direction);
+                    SpawnProjectile(ctx, ctx.Direction);
             }
         }
 
-        void SpawnOne(in SkillContext ctx, Vector3 dir)
+        void SpawnProjectile(in SkillContext ctx, Vector3 dir)
         {
             var rot = Quaternion.LookRotation(dir);
-            var go = ctx.Spawner?.Spawn(projectilePrefab, ctx.Origin, rot);
-            if (!go) return;
+            var fire = ctx.Spawner?.Spawn(projectilePrefab, ctx.Origin, rot);
 
-            if (!go.TryGetComponent<Projectile>(out var proj))
-                proj = go.AddComponent<Projectile>(); // 안전장치
+            // 발사체가 생성 되지 않으면 종료
+            if (!fire) return;
 
-            proj.Init(ctx, dir, speed, lifetime, hitMask, destroyOnHit);
+            // 발사체 컴포넌트가 없다면 추가
+            if (!fire.TryGetComponent<Projectile>(out var proj))
+            {
+                proj = fire.AddComponent<Projectile>();
+                // 발사체 초기화
+                proj.Init(ctx, dir, speed, lifetime, hitMask, destroyOnHit);
+            }
         }
     }
 }

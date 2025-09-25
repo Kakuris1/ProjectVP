@@ -13,8 +13,10 @@ namespace Combat.Skills
             _targets.Clear();
             var n = ctx.Spec.targeting.AcquireTargets(in ctx, _targets);
 
+            Debug.Log(_targets.Count); // 타게팅 설정에 시야가 고려되지 않는 문제
+
             // 이후 Delivery/Impact에 _targets 전달
-            ctx.Spec.delivery.Deliver(in ctx, _targets);  // IReadOnlyList로 정의해도 좋음
+            ctx.Spec.delivery.Deliver(in ctx, _targets);
             return n > 0;
         }
     }

@@ -6,7 +6,7 @@ namespace Combat.Skills
     [CreateAssetMenu(menuName = "Combat/Targeting/Nearest")]
     public class NearestTargetTargetingAsset : TargetingAsset
     {
-        public float range = 25f;
+        public float range = 6f;
         public LayerMask mask;
         private static readonly Collider[] _buf = new Collider[64]; // 읽기 전용 버퍼(정적 공유)
 

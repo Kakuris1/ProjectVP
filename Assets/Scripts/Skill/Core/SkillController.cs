@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SocialPlatforms;
 
 namespace Combat.Skills
 {
@@ -20,7 +21,7 @@ namespace Combat.Skills
         private ISpawner Spawner => spawnerMb as ISpawner;
         private IResourceWallet Wallet => walletMb as IResourceWallet;
 
-        private float nextReadyTime;
+        private float nextReadyTime = 0f;
 
         private void OnEnable() { fireAction?.action.Enable(); }
         private void OnDisable() { fireAction?.action.Disable(); }
@@ -29,22 +30,21 @@ namespace Combat.Skills
 
         private void Update()
         {
-            if (fireAction != null && fireAction.action.WasPerformedThisFrame())
-            {
-                TryCast();
-            }
+            TryCast();
         }
 
         private void TryCast()
         {
             if (equippedSpecAsset == null || pipeline == null) return;
 
-            var spec = SkillRuntimeSpec.From(equippedSpecAsset);
+            float now = TimeSrc?.Now ?? Time.time;
+            if (now < nextReadyTime) return; // 쿨타임 체크
 
+            var spec = SkillRuntimeSpec.From(equippedSpecAsset);
             var ctx = new SkillContext
             {
                 Caster = transform,
-                Origin = transform.position + Vector3.up * 1.0f,
+                Origin = transform.position + Vector3.up,
                 Direction = transform.forward,
                 Spec = spec,
                 Time = TimeSrc,
@@ -52,10 +52,12 @@ namespace Combat.Skills
                 Wallet = Wallet
             };
 
-            // 통합 쿨다운(코스트 정책 내부에서 nextReadyTime을 갱신)
-            if (TimeSrc != null && TimeSrc.Now < nextReadyTime) return;
+            // ▼ 조건 체크 및 비용 소모
+            if (!spec.costPolicy.CheckAndConsume(in ctx, now, out nextReadyTime)) return;
 
             pipeline.Execute(in ctx);
+            Debug.Log("execute");
         }
+
     }
 }

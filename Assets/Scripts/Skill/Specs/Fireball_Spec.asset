@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa01ed33454d5584ea36325bdef9e07d, type: 3}
+  m_Name: Fireball_Spec
+  m_EditorClassIdentifier: 
+  damage: 20
+  cooldown: 2
+  manaCost: 10
+  targeting: {fileID: 11400000, guid: 3975edee73eb3b84c9ac101511352f67, type: 2}
+  delivery: {fileID: 11400000, guid: f3ee74b93c9ac4149aedcd8bda0081c0, type: 2}
+  impacts:
+  - {fileID: 11400000, guid: 656b48ede13ea1846a62e47a38bf65d9, type: 2}
+  costPolicy: {fileID: 11400000, guid: 029d7bcbc1c78c24080561f2d4ebc066, type: 2}
+  castVfx: {fileID: 0}
+  hitVfx: {fileID: 0}
