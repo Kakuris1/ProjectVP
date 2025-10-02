@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4928934741247971892}
   - component: {fileID: 8404109269316040289}
   - component: {fileID: 9186667407350259708}
+  - component: {fileID: 8642641261137169210}
   m_Layer: 14
   m_Name: Mouse
   m_TagString: Untagged
@@ -154,3 +155,16 @@ MonoBehaviour:
   renderers: []
   fadeSeconds: 0.2
   colorProp: _BaseColor
+--- !u!114 &8642641261137169210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151807541875160355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f97908b22ec2c44bb8f3d386770111, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHp: 100

@@ -8,7 +8,7 @@ namespace Combat.Skills
     public interface ISpawner
     {
         GameObject Spawn(GameObject prefab, Vector3 pos, Quaternion rot);
-        void SpawnOneShot(GameObject prefab, Vector3 pos, Quaternion rot);
+        void SpawnOneShot(GameObject prefab, float scl, Vector3 pos, Quaternion rot);
     }
     public interface IResourceWallet
     {
@@ -38,6 +38,7 @@ namespace Combat.Skills
         public CostAsset costPolicy;
 
         public GameObject castVfx, hitVfx;
+        public float castVfxSize, hitVfxSize;
 
         public static SkillRuntimeSpec From(SkillSpecAsset src) => new SkillRuntimeSpec
         {
@@ -49,7 +50,9 @@ namespace Combat.Skills
             impacts = src.impacts,
             costPolicy = src.costPolicy,
             castVfx = src.castVfx,
-            hitVfx = src.hitVfx
+            hitVfx = src.hitVfx,
+            castVfxSize = src.castVfxSize,
+            hitVfxSize = src.hitVfxSize
         };
     }
 

@@ -28,7 +28,7 @@ namespace Combat.Skills
 
             // 최초 시전시 1회 보여줄 VFX
             if (ctx.Spec.castVfx != null)
-                ctx.Spawner?.SpawnOneShot(ctx.Spec.castVfx, ctx.Origin, Quaternion.LookRotation(ctx.Direction));
+                ctx.Spawner?.SpawnOneShot(ctx.Spec.castVfx, ctx.Spec.castVfxSize, ctx.Origin, Quaternion.LookRotation(ctx.Direction));
 
             // 각 타겟 조준 발사
             if (aimAtEachTarget && targets != null && targets.Count > 0)
@@ -54,18 +54,17 @@ namespace Combat.Skills
         void SpawnProjectile(in SkillContext ctx, Vector3 dir)
         {
             var rot = Quaternion.LookRotation(dir);
-            var fire = ctx.Spawner?.Spawn(projectilePrefab, ctx.Origin, rot);
+            var fire = ctx.Spawner?.Spawn(projectilePrefab,ctx.Origin, rot);
 
             // 발사체가 생성 되지 않으면 종료
             if (!fire) return;
 
             // 발사체 컴포넌트가 없다면 추가
             if (!fire.TryGetComponent<Projectile>(out var proj))
-            {
                 proj = fire.AddComponent<Projectile>();
-                // 발사체 초기화
-                proj.Init(ctx, dir, speed, lifetime, hitMask, destroyOnHit);
-            }
+
+            // 발사체 초기화
+            proj.Init(ctx, dir, speed, lifetime, hitMask, destroyOnHit);
         }
     }
 }

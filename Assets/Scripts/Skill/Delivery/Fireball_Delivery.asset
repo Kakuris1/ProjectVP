@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 133e50e234f7212408cacfa14c836f6f, type: 3}
   m_Name: Fireball_Delivery
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 7000735478735714895, guid: ae1153d780f01fa4daa8e6b53c171784, type: 3}
+  projectilePrefab: {fileID: 7000735478735714895, guid: 0968a0f4b7ff76642b46684e3bde0ac6, type: 3}
   speed: 2
   lifetime: 10
   aimAtEachTarget: 1
-  maxProjectiles: 2
+  maxProjectiles: 1
   hitMask:
     serializedVersion: 2
     m_Bits: 16384

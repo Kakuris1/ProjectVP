@@ -15,7 +15,7 @@ namespace Combat.Skills
                     hitPoint = target.position,
                     source = ctx.Caster
                 });
-                if (ctx.Spec.hitVfx) ctx.Spawner?.SpawnOneShot(ctx.Spec.hitVfx, target.position, Quaternion.identity);
+                if (ctx.Spec.hitVfx) ctx.Spawner?.SpawnOneShot(ctx.Spec.hitVfx, ctx.Spec.hitVfxSize, target.position, Quaternion.identity);
             }
         }
     }

@@ -18,6 +18,8 @@ namespace Combat.Skills
 
         [Header("FX")]
         public GameObject castVfx;
+        public float castVfxSize;
         public GameObject hitVfx;
+        public float hitVfxSize;
     }
 }

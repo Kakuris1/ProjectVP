@@ -47,6 +47,7 @@ namespace Combat.Skills
 
         void OnTriggerEnter(Collider other)
         {
+            Debug.Log("Enter");
             // 레이어 필터
             if (((1 << other.gameObject.layer) & _hitMask.value) == 0) return;
 
@@ -55,7 +56,7 @@ namespace Combat.Skills
             {
                 // Hit VFX
                 if (_spec.hitVfx != null)
-                    _spawner?.SpawnOneShot(_spec.hitVfx, other.transform.position, Quaternion.identity);
+                    _spawner?.SpawnOneShot(_spec.hitVfx, _spec.hitVfxSize, other.transform.position, Quaternion.identity);
 
                 for (int i = 0; i < _spec.impacts.Length; i++)
                 {
@@ -79,7 +80,6 @@ namespace Combat.Skills
 
         void Despawn()
         {
-            // 풀을 쓰고 있다면 풀 반환 지점으로 교체
             Destroy(gameObject);
         }
     }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Fireball_Spec
   m_EditorClassIdentifier: 
   damage: 20
-  cooldown: 2
+  cooldown: 5
   manaCost: 10
   targeting: {fileID: 11400000, guid: 3975edee73eb3b84c9ac101511352f67, type: 2}
   delivery: {fileID: 11400000, guid: f3ee74b93c9ac4149aedcd8bda0081c0, type: 2}

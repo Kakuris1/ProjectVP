@@ -13,13 +13,13 @@ namespace Combat.Skills
         {
             // 캐스트 VFX (시전 타이밍)
             if (ctx.Spec.castVfx != null)
-                ctx.Spawner?.SpawnOneShot(ctx.Spec.castVfx, ctx.Origin, Quaternion.LookRotation(ctx.Direction));
-
-            if (targets == null || targets.Count == 0) return;
+                ctx.Spawner?.SpawnOneShot(ctx.Spec.castVfx, ctx.Spec.castVfxSize, ctx.Origin, Quaternion.LookRotation(ctx.Direction));
+            Debug.Log("a");
+            if (targets == null || targets.Count == 0) return; Debug.Log("b");
             if (ctx.Spec.impacts == null || ctx.Spec.impacts.Length == 0) return;
-
+            Debug.Log("c");
             int count = applyToAllTargets ? targets.Count : 1;
-
+            Debug.Log(ctx.Spec.impacts[0]);
             // 모든 임팩트를 각 타겟에 적용
             for (int i = 0; i < count; i++)
             {
