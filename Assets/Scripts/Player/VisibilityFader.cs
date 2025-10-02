@@ -24,7 +24,7 @@ public class VisibilityFader : MonoBehaviour
         _target = v ? 1f : 0f;
         if (_co != null) StopCoroutine(_co);
         _co = StartCoroutine(Fade());
-        Debug.Log("SetVisible : " + v);
+        //Debug.Log("SetVisible : " + v);
     }
 
     IEnumerator Fade()

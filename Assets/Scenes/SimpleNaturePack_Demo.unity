@@ -3423,6 +3423,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mouse (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 1151807541875160355, guid: 840532c05be24af45be45dfd9fc81d81, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3955,6 +3959,10 @@ PrefabInstance:
     - target: {fileID: 1151807541875160355, guid: 840532c05be24af45be45dfd9fc81d81, type: 3}
       propertyPath: m_Name
       value: Mouse (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151807541875160355, guid: 840532c05be24af45be45dfd9fc81d81, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5931,6 +5939,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mouse (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 1151807541875160355, guid: 840532c05be24af45be45dfd9fc81d81, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5987,6 +5999,10 @@ PrefabInstance:
     - target: {fileID: 1151807541875160355, guid: 840532c05be24af45be45dfd9fc81d81, type: 3}
       propertyPath: m_Name
       value: Mouse (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151807541875160355, guid: 840532c05be24af45be45dfd9fc81d81, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7371,6 +7387,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mouse (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1151807541875160355, guid: 840532c05be24af45be45dfd9fc81d81, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 1512354790829069558, guid: 840532c05be24af45be45dfd9fc81d81, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -7747,6 +7767,10 @@ PrefabInstance:
     - target: {fileID: 1151807541875160355, guid: 840532c05be24af45be45dfd9fc81d81, type: 3}
       propertyPath: m_Name
       value: Mouse (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151807541875160355, guid: 840532c05be24af45be45dfd9fc81d81, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10242,6 +10266,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mouse (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 1151807541875160355, guid: 840532c05be24af45be45dfd9fc81d81, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11295,6 +11323,10 @@ PrefabInstance:
     - target: {fileID: 1151807541875160355, guid: 840532c05be24af45be45dfd9fc81d81, type: 3}
       propertyPath: m_Name
       value: Mouse
+      objectReference: {fileID: 0}
+    - target: {fileID: 1151807541875160355, guid: 840532c05be24af45be45dfd9fc81d81, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
