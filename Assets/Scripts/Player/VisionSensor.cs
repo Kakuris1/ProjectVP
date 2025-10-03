@@ -54,7 +54,14 @@ public class VisionSensor : MonoBehaviour
         foreach (var f in now) if (_visible.Add(f)) f.SetVisible(true);
         var toHide = new List<VisibilityFader>();
         foreach (var f in _visible) if (!now.Contains(f)) toHide.Add(f);
-        foreach (var f in toHide) { f.SetVisible(false); _visible.Remove(f); }
+        foreach (var f in toHide)
+        {
+            if (f != null) // f가 파괴되지 않고 살아있을 때만 함수를 호출
+            {
+                f.SetVisible(false);
+            }
+            _visible.Remove(f); // 목록에서는 파괴되었든 아니든 제거
+        }
     }
 
     bool IsVisible(Vector3 origin, Vector3 forward, Transform target)

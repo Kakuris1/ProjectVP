@@ -10,10 +10,6 @@ namespace Combat.Skills
         GameObject Spawn(GameObject prefab, Vector3 pos, Quaternion rot);
         void SpawnOneShot(GameObject prefab, float scl, Vector3 pos, Quaternion rot);
     }
-    public interface IResourceWallet
-    {
-        bool TryConsumeMana(float amount);
-    }
     public interface IDamageable
     {
         void ApplyDamage(DamagePayload payload);
@@ -67,7 +63,6 @@ namespace Combat.Skills
 
         public ITimeSource Time;
         public ISpawner Spawner;
-        public IResourceWallet Wallet;
     }
 
     // ---- 4단계 파이프라인의 전략 추상 SO ----
