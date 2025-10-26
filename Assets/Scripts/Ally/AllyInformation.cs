@@ -13,15 +13,20 @@ public class AllyInformation : MonoBehaviour
     [Header("능력치 (Stats)")]
     public float moveSpeed;
     public float attackRange;
+
+    [Header("시야 설정")]
+    [Tooltip("적을 감지할 최대 반경 (XZ 평면 기준)")]
+    public float detectionRadius = 5f;
+
     [Header("스킬 (Skill")]
     public SkillSpecAsset Skill;
     public float NextSkillReadyTime { get; set; }
+    [Tooltip("현재 목표물")]
     public Transform CurrentTarget { get; set; }
     // ... 기타 필요한 능력치 (최대 체력, 공격력 등)
 
     [Header("포메이션 정보")]
-    public int pomationnum;
-    public int FormationSlot { get; set; }
+    public int FormationSlot;
 
     // 상태 변경
     public void ChangeState(UnitState newState)
@@ -41,15 +46,9 @@ public class AllyInformation : MonoBehaviour
     {
         CommandTargetPosition = position;
     }
-
-    void Start()
-    {
-        // 게임 시작 시 기본 상태는 플레이어를 따라가는 것.
-        ChangeState(UnitState.Idle);
-    }
 }
 
-// 유닛이 가질 수 있는 상태들을 Enum(열거형)으로 정의합니다.
+// 유닛이 가질 수 있는 상태들
 public enum UnitState
 {
     Idle,           // 대기
@@ -57,24 +56,3 @@ public enum UnitState
     Engaging,       // 적과 교전
     MovingToCommand // 명령 지점으로 이동
 }
-
-
-
-/*
- * 1. 아군 영입 이벤트
-
-2. 아군 움직임 구현
-
-3. 아군 상태 변경 (입력이나 주변 상황에 따른 상태 변화)
-
-4. 아군 전체 명령 반응 코드 (명령 내릴 시 각 개체의 반응 구현)
-
-5. 상호작용 관리
-
-6. 아군/적군/중립 피아 변환
-
-7. 스킬 사용 컴포넌트(이미 있는 플레이어 스킬 그대로 넣기)
-
-8. 체력/사망 관리
-
-9. AllyInformation (아군 유닛 정보 데이터를 모두 갖는 데이터 중심 클래스)*/

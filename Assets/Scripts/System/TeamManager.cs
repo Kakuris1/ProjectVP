@@ -47,7 +47,7 @@ public class TeamManager : MonoBehaviour
             // 팀 리스트 확인용 변수
             teamlist.Add(newAlly.targetAreaNumber);
 
-            // ✨ [추가] 팀원이 추가되었으므로 포메이션 슬롯을 갱신합니다.
+            // 팀원이 추가되었으므로 포메이션 슬롯을 갱신
             UpdateFormationSlots();
 
             // 팀이 업데이트되었다고 이벤트 발송 (UI 갱신 등에 사용)
@@ -63,22 +63,19 @@ public class TeamManager : MonoBehaviour
             allies.Remove(allyToRemove);
             Debug.Log($"{allyToRemove.name}이(가) 팀에서 이탈했습니다. 현재 팀원 수: {allies.Count}");
 
-            // ✨ [추가] 팀원이 제거되었으므로 포메이션 슬롯을 갱신합니다.
+            // 팀원이 제거되었으므로 포메이션 슬롯을 갱신
             UpdateFormationSlots();
 
             OnTeamUpdated?.Invoke();
         }
     }
 
-    /// <summary>
-    /// ✨ [추가] 현재 아군 목록을 기준으로 모든 아군의 포메이션 슬롯 번호를 갱신합니다.
-    /// 이 함수가 포메이션 시스템의 핵심입니다.
-    /// </summary>
+    // 현재 아군 목록을 기준으로 모든 아군의 포메이션 슬롯 번호를 갱신
     private void UpdateFormationSlots()
     {
         for (int i = 0; i < allies.Count; i++)
         {
-            // 리스트의 각 아군에게 현재 인덱스(순서)를 포메이션 슬롯 번호로 할당합니다.
+            // 리스트의 각 아군에게 현재 인덱스(순서)를 포메이션 슬롯 번호로 할당
             if (allies[i] != null)
             {
                 allies[i].FormationSlot = i;

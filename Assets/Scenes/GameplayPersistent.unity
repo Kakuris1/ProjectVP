@@ -1272,7 +1272,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   input: {fileID: 6574999600709026858}
-  target: {fileID: 2015982217}
+  togglebutton: {fileID: 2015982217}
+  _previousToggleState: 0
   onColor: {r: 0.07075471, g: 0.20846845, b: 1, a: 1}
   offColor: {r: 1, g: 0.07075471, b: 0.07075471, a: 1}
 --- !u!114 &2015982216
