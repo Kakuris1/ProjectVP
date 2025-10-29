@@ -894,7 +894,7 @@ PrefabInstance:
     - target: {fileID: 2677041372948042951, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: equippedSpecAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 1a3b8a7f56e954f49be391646e6ab462, type: 2}
+      objectReference: {fileID: 11400000, guid: c6e90ced13718df4a8c1cbd11c52643d, type: 2}
     - target: {fileID: 4224521531799455630, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: m_LocalPosition.z
       value: 34.3

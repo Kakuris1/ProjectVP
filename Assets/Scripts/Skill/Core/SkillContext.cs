@@ -3,22 +3,18 @@ using System.Collections.Generic;
 
 namespace Combat.Skills
 {
-    // 외부 서비스 계약(간단 버전)
-    public interface ITimeSource { float Now { get; } }
-    public interface ISpawner
+    // 실행 컨텍스트 (한 번의 시전에 필요한 모든 것)
+    public struct SkillContext
     {
-        GameObject Spawn(GameObject prefab, Vector3 pos, Quaternion rot);
-        void SpawnOneShot(GameObject prefab, float scl, Vector3 pos, Quaternion rot);
-    }
-    public interface IDamageable
-    {
-        void ApplyDamage(DamagePayload payload);
-    }
-    public struct DamagePayload
-    {
-        public float amount;
-        public Vector3 hitPoint;
-        public Transform source;
+        public Transform Caster;
+        public Vector3 Origin;
+        public Vector3 Direction;
+        public ISkillTargetSensor TargetSensor;
+        // spec은 구조체 - 값 전달이므로 변경 가능
+        public SkillRuntimeSpec Spec;
+
+        public ITimeSource Time;
+        public ISpawner Spawner;
     }
 
     // 런타임 사본 (SpecAsset → RuntimeSpec)
@@ -52,17 +48,22 @@ namespace Combat.Skills
         };
     }
 
-    // 실행 컨텍스트 (한 번의 시전에 필요한 모든 것)
-    public struct SkillContext
+    // 외부 서비스 계약(간단 버전)
+    public interface ITimeSource { float Now { get; } }
+    public interface ISpawner
     {
-        public Transform Caster;
-        public Vector3 Origin;
-        public Vector3 Direction;
-        // spec은 구조체 - 값 전달이므로 변경 가능
-        public SkillRuntimeSpec Spec;
-
-        public ITimeSource Time;
-        public ISpawner Spawner;
+        GameObject Spawn(GameObject prefab, Vector3 pos, Quaternion rot);
+        void SpawnOneShot(GameObject prefab, float scl, Vector3 pos, Quaternion rot);
+    }
+    public interface IDamageable
+    {
+        void ApplyDamage(DamagePayload payload);
+    }
+    public struct DamagePayload
+    {
+        public float amount;
+        public Vector3 hitPoint;
+        public Transform source;
     }
 
     // ---- 4단계 파이프라인의 전략 추상 SO ----

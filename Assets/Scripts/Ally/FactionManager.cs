@@ -1,16 +1,5 @@
 using UnityEngine;
-
+// 아군 피아 변환 클래스
 public class FactionManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

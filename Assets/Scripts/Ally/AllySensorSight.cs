@@ -1,6 +1,8 @@
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-public class AllySensorSight : MonoBehaviour
+public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
 {
     AllyInformation Info;
 
@@ -12,8 +14,8 @@ public class AllySensorSight : MonoBehaviour
     [SerializeField] private float eyeHeight = 1.6f;
 
     [Header("스캔 설정")]
-    [Tooltip("적을 스캔하는 주기 (초)")]
-    [SerializeField] private float scanInterval = 0.5f;
+    [Tooltip("초당 적을 스캔하는 횟수")]
+    [SerializeField] private float updateHz = 5f;
 
     [Header("필터링 레이어")]
     [Tooltip("감지할 적의 레이어 마스크")]
@@ -35,6 +37,7 @@ public class AllySensorSight : MonoBehaviour
 
     // 매번 메모리를 할당하지 않도록 콜라이더 배열을 미리 캐시
     private Collider[] detectedColliders = new Collider[30];
+    private List<Transform> targetColliders = new List<Transform>();
 
     private void Awake()
     {
@@ -42,17 +45,28 @@ public class AllySensorSight : MonoBehaviour
     }
     private void Update()
     {
-        scanTimer -= Time.deltaTime;
-        if (scanTimer <= 0f)
-        {
-            scanTimer = scanInterval;
-            ScanForEnemies();
-        }
+        scanTimer += Time.deltaTime;
+        if (scanTimer < 1f/updateHz) return;
+        else ScanForEnemies();
+        scanTimer = 0f;
+    }
+
+    public List<Transform> GetCurrentTargetList()
+    {
+        return targetColliders;
+    }
+
+    public Transform GetNearestTarget()
+    {
+        return currentNearestTarget;
+        
     }
 
     // 주변의 적을 스캔하고 유효한 타겟을 찾음
     private void ScanForEnemies()
     {
+        // 스킬 타겟 리스트 clear
+        targetColliders.Clear();
         // 1. OverlapSphere로 1차 감지
         // Y축 높이도 고려해야 하므로 detectionRadius를 그대로 사용
         int hitCount = Physics.OverlapSphereNonAlloc(
@@ -81,6 +95,9 @@ public class AllySensorSight : MonoBehaviour
             {
                 continue; // 장애물에 가려져 있으면 무시
             }
+
+            // 스킬 타겟 리스트에 추가
+            targetColliders.Add(potentialTarget);
 
             // 4. 가장 가까운 타겟 찾기
             float distanceSqr = (potentialTarget.position - transform.position).sqrMagnitude;

@@ -11,6 +11,8 @@ namespace Combat.Skills
         [Header("Input (New Input System)")]
         [SerializeField] private InputActionReference fireAction; // 액션 맵에서 연결
 
+        private ISkillTargetSensor _TargetSensor;
+
         //의존성을 받을 private 필드
         private ITimeSource _timeSource;
         private ISpawner _spawner;
@@ -27,6 +29,8 @@ namespace Combat.Skills
             }
             _timeSource = manager.TimeSource;
             _spawner = manager.Spawner;
+            pipeline = GetComponent<SkillPipeline>();
+            _TargetSensor = GetComponentInChildren<ISkillTargetSensor>();
         }
 
         private void OnEnable() { fireAction?.action.Enable(); }
@@ -34,7 +38,7 @@ namespace Combat.Skills
 
         public void Equip(SkillSpecAsset spec) => equippedSpecAsset = spec;
 
-        private void Update()
+        private void Update()   
         {
             TryCast();
         }
@@ -52,6 +56,7 @@ namespace Combat.Skills
                 Caster = transform,
                 Origin = transform.position + Vector3.up,
                 Direction = transform.forward,
+                TargetSensor = _TargetSensor,
                 Spec = spec,
                 Time = _timeSource,
                 Spawner = _spawner

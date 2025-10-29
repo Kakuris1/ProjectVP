@@ -109,7 +109,7 @@ public class AllyMovement : MonoBehaviour
     private void HandleCommandMovement()
     {
         // '모이기' 명령
-        agent.stoppingDistance = 2f; // 약간의 여유
+        agent.stoppingDistance = 1; // 약간의 여유
         agent.SetDestination(allyInfo.CommandTargetPosition);
     }
 
@@ -122,7 +122,7 @@ public class AllyMovement : MonoBehaviour
         }
 
         // 스킬 사거리에 맞춰 정지
-        agent.stoppingDistance = 5.0f; // (예시: 스킬 사거리 5m)
+        agent.stoppingDistance = allyInfo.attackRange; // (예시: 스킬 사거리 5m)
         agent.SetDestination(allyInfo.CurrentTarget.position);
     }
 

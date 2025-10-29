@@ -7,7 +7,7 @@ public class AllyInformation : MonoBehaviour
     public int targetAreaNumber;
     [Header("상태 (State)")]
     // 외부에서는 읽기만 가능하도록 private set을 사용합니다.
-    public UnitState CurrentState; //프로퍼티로 바꿔야함!!!
+    public UnitState CurrentState { get; private set; } //프로퍼티로 바꿔야함!!!
     public Vector3 CommandTargetPosition { get; private set; }
 
     [Header("능력치 (Stats)")]

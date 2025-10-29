@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VisionSensor : MonoBehaviour
+public class VisionSensor : MonoBehaviour, ISkillTargetSensor
 {
     public Transform eye;
     public float eyeHeight = 1.3f;
@@ -16,12 +16,18 @@ public class VisionSensor : MonoBehaviour
     readonly HashSet<VisibilityFader> _visible = new();
 
     Collider[] _buf = new Collider[128];
+    List<Transform> TargetColliders = new List<Transform>();
+    Transform NearestTarget;
 
     void Update()
     {
         _timer += Time.deltaTime;
         if (_timer < 1f / updateHz) return;
         _timer = 0f;
+
+        //스캔 시작 시, 리스트를 초기화(Clear)합니다.
+        TargetColliders.Clear();
+        NearestTarget = null; // 가장 가까운 타겟도 초기화
 
         var now = new HashSet<VisibilityFader>();
 
@@ -30,6 +36,7 @@ public class VisionSensor : MonoBehaviour
         float maxR = Mathf.Max(radius, rearRadius);
 
         int n = Physics.OverlapSphereNonAlloc(origin, maxR, _buf, enemyMask, QueryTriggerInteraction.Ignore);
+        float closestDistanceSqr = float.MaxValue;
         for (int i = 0; i < n; ++i)
         {
             var t = _buf[i].transform;
@@ -39,7 +46,19 @@ public class VisionSensor : MonoBehaviour
             if (!fader) continue;
 
             if (IsVisible(origin, forward, t))
+            {
                 now.Add(fader);
+
+                // SkillController 에 넘길 타겟 정보
+                TargetColliders.Add(t);
+                // 가장 가까운 대상
+                float distanceSqr = (t.position - transform.position).magnitude;
+                if (distanceSqr < closestDistanceSqr)
+                {
+                    closestDistanceSqr = distanceSqr;
+                    NearestTarget = t;
+                }
+            }
         }
 
         // 아군은 항상 보임
@@ -86,5 +105,15 @@ public class VisionSensor : MonoBehaviour
 
         // 위 조건들 충족시 보임
         return true;
+    }
+
+    public List<Transform> GetCurrentTargetList()
+    {
+        return TargetColliders;
+    }
+
+    public Transform GetNearestTarget()
+    {
+        return NearestTarget;
     }
 }

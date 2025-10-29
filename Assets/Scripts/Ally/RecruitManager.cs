@@ -1,3 +1,4 @@
+using Combat.Skills;
 using Unity.VisualScripting;
 using UnityEngine;
 // 아군 영입 이벤트 관리 클래스
@@ -42,6 +43,8 @@ public class RecruitManager : MonoBehaviour
         // 3. 영입 후 필요한 컴포넌트 활성화
         GetComponent<AllyController>().enabled = true;
         GetComponent<AllyMovement>().enabled = true;
+        GetComponent<AllySensorSight>().enabled = true;
+        GetComponent<HelathManager>().enabled = true;
 
         Debug.Log($"{name} 영입 절차 완료!");
 
