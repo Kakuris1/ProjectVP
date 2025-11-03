@@ -2,12 +2,12 @@ using Combat.Skills;
 using System;
 using UnityEngine;
 // 동료 유닛 데이터 중심 클래스
-public class AllyInformation : MonoBehaviour, IUnitDataHub
+public class EnemyInformation : MonoBehaviour, IUnitDataHub
 {
     [Header("최초 구역")]
     public int targetAreaNumber;
-    [Header("포메이션 정보")]
-    public int FormationSlot;
+    [Header("적 유닛 ID")]
+    public int EnemyID;
     [Header("상태 (State)")]
     // 외부에서는 읽기만 가능하도록 private set을 사용합니다.
     public UnitState CurrentState; //프로퍼티로 바꿔야함!!!
@@ -63,6 +63,7 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
         if (IsDead) return;
         CurrentHP -= amount;
         OnHPChanged?.Invoke(CurrentHP, MaxHP); // HP 변경 알림
+        Debug.Log($"Hit, {gameObject.name} HP : {CurrentHP}");
         if (CurrentHP <= 0)
         {
             CurrentHP = 0;
@@ -75,17 +76,9 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
         if (IsDead) return;
         IsDead = true;
         ChangeState(UnitState.Dead);
-        OnDeath?.Invoke(); // 사망 알림
+        OnDeath?.Invoke(); // 사망 알림 내부
+        EventManager.Instance.EnemyDefeated(EnemyID); // 사망 알림 전역
+        Debug.Log($"몬스터 ID {EnemyID} 처치!");
+        Destroy(gameObject);
     }
-}
-
-
-// 유닛이 가질 수 있는 상태들
-public enum UnitState
-{
-    Idle,           // 대기
-    Following,      // 플레이어 추적
-    Engaging,       // 적과 교전
-    MovingToCommand,// 명령 지점으로 이동
-    Dead            // 죽음
 }

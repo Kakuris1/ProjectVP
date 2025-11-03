@@ -8,8 +8,6 @@ namespace Combat.Skills
     {
         [SerializeField] private SkillSpecAsset equippedSpecAsset;
         [SerializeField] private SkillPipeline pipeline;
-        [Header("Input (New Input System)")]
-        [SerializeField] private InputActionReference fireAction; // 액션 맵에서 연결
 
         private ISkillTargetSensor _TargetSensor;
 
@@ -17,7 +15,11 @@ namespace Combat.Skills
         private ITimeSource _timeSource;
         private ISpawner _spawner;
 
-        private float nextReadyTime = 0f;
+        [Header("스킬 쿨타임")]
+        [SerializeField] private float nextReadyTime = 0f;
+
+        [Header("Input (New Input System)")]
+        [SerializeField] private InputActionReference fireAction; // 액션 맵에서 연결
 
         private void Awake()
         {
@@ -59,7 +61,6 @@ namespace Combat.Skills
             };
 
             float now = _timeSource?.Now ?? Time.time;
-            if (now < nextReadyTime) return; // 쿨타임 체크
             // ▼ 조건 체크 및 비용 소모
             if (!spec.costPolicy.CheckAndConsume(in ctx, now, ref nextReadyTime)) return;
 

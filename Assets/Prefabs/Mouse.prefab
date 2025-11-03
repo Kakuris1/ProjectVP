@@ -14,8 +14,10 @@ GameObject:
   - component: {fileID: 4928934741247971892}
   - component: {fileID: 8404109269316040289}
   - component: {fileID: 9186667407350259708}
-  - component: {fileID: 8642641261137169210}
-  - component: {fileID: -2687822916578466631}
+  - component: {fileID: 4980660030374820442}
+  - component: {fileID: 8380531998969995149}
+  - component: {fileID: -4983618173710076678}
+  - component: {fileID: -3158790432419448787}
   m_Layer: 14
   m_Name: Mouse
   m_TagString: Untagged
@@ -156,7 +158,7 @@ MonoBehaviour:
   renderers: []
   fadeSeconds: 0.2
   colorProp: _BaseColor
---- !u!114 &8642641261137169210
+--- !u!114 &4980660030374820442
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -165,11 +167,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1151807541875160355}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23f97908b22ec2c44bb8f3d386770111, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d55846334be3c7429b19b3c315d0757, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8380531998969995149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151807541875160355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29c50a0ad4aeec54fa63e493a1d17edd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 100
---- !u!114 &-2687822916578466631
+  EnemyID: 0
+--- !u!114 &-4983618173710076678
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -178,7 +193,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1151807541875160355}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3f3b0ca23aa1734da1179b29ae8200a, type: 3}
+  m_Script: {fileID: 11500000, guid: 023a2ee89d2da2844abd3867f342dc17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyID: 0
+  equippedSpecAsset: {fileID: 0}
+  pipeline: {fileID: 0}
+  nextReadyTime: 0
+  fireAction: {fileID: 0}
+--- !u!114 &-3158790432419448787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151807541875160355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8cbd3fa47344c149b3dba8a1839922f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

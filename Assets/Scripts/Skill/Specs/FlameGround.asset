@@ -15,11 +15,12 @@ MonoBehaviour:
   damage: 20
   cooldown: 3
   manaCost: 10
+  skillRange: 5
   targeting: {fileID: 11400000, guid: 3975edee73eb3b84c9ac101511352f67, type: 2}
   delivery: {fileID: 11400000, guid: 746edd3f04b91314394b252cbf455a87, type: 2}
   impacts:
   - {fileID: 11400000, guid: 656b48ede13ea1846a62e47a38bf65d9, type: 2}
-  costPolicy: {fileID: 11400000, guid: 029d7bcbc1c78c24080561f2d4ebc066, type: 2}
+  costPolicy: {fileID: 11400000, guid: e6233c3206bbf6740bec7e35e8d87e9f, type: 2}
   castVfx: {fileID: 0}
   castVfxSize: 1
   hitVfx: {fileID: 1435070486616384899, guid: dc271cdeddd897d47b55b968f7cd24e7, type: 3}

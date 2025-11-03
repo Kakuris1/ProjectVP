@@ -20,6 +20,7 @@ namespace Combat.Skills
     // 런타임 사본 (SpecAsset → RuntimeSpec)
     public struct SkillRuntimeSpec
     {
+        public string skillName;
         public float damage;
         public float cooldown;
         public float manaCost;
@@ -35,6 +36,7 @@ namespace Combat.Skills
 
         public static SkillRuntimeSpec From(SkillSpecAsset src) => new SkillRuntimeSpec
         {
+            skillName = src.name,
             damage = src.damage,
             cooldown = src.cooldown,
             manaCost = src.manaCost,

@@ -1,3 +1,4 @@
+using Combat.Skills;
 using UnityEngine;
 using UnityEngine.AI; // NavMeshAgent를 사용하기 위해 추가
 
@@ -42,6 +43,10 @@ public class AllyMovement : MonoBehaviour
 
             case UnitState.Idle:
                 HandleIdleMovement();
+                break;
+
+            case UnitState.Dead:
+                HandleDead();
                 break;
         }
     }
@@ -122,8 +127,17 @@ public class AllyMovement : MonoBehaviour
         }
 
         // 스킬 사거리에 맞춰 정지
-        agent.stoppingDistance = allyInfo.skillRange; // (예시: 스킬 사거리 5m)
+        agent.stoppingDistance = allyInfo.skillRange - 0.5f; // (예시: 스킬 사거리 5m)
         agent.SetDestination(allyInfo.CurrentTarget.position);
+    }
+
+    private void HandleDead() // Dead 상태 되면 스크립트 비활성화
+    {
+        GetComponent<AllyController>().enabled = false;
+        GetComponent<AllyMovement>().enabled = false;
+        GetComponent<AllySensorSight>().enabled = false;
+        GetComponent<SkillController>().enabled = false;
+        GetComponent<SkillPipeline>().enabled = false;
     }
 
     private void StopMovement()

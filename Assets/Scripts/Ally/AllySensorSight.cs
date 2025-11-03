@@ -33,6 +33,7 @@ public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
 
     // 매 갱신되는 가장 가까운 대상. [참고 : 범위 내 대상이 없으면 Null 을 반환]
     public Transform currentNearestTarget { get; private set; }
+    public Collider currentNearestTargetCollider { get; private set; }
     private float scanTimer;
 
     // 매번 메모리를 할당하지 않도록 콜라이더 배열을 미리 캐시
@@ -62,6 +63,24 @@ public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
         
     }
 
+    // 사거리 확인
+    public bool IsNearestTargetInAttackRange(float range, Vector3 origin)
+    {
+        // 1. 캐시된 타겟이 없으면 무조건 false
+        if (currentNearestTarget == null || currentNearestTargetCollider == null)
+        {
+            return false;
+        }
+
+        // 2. 'ClosestPoint'를 사용해 '콜라이더 가장자리'까지의 정확한 거리 계산
+        //    (CostAsset이 할 뻔했던 무거운 작업을 센서가 대신 해줍니다)
+        Vector3 closestPoint = currentNearestTargetCollider.ClosestPoint(origin);
+        float distance = Vector3.Distance(origin, closestPoint);
+
+        // 3. 사거리 내에 있는지 판별
+        return distance <= range;
+    }
+
     // 주변의 적을 스캔하고 유효한 타겟을 찾음
     private void ScanForEnemies()
     {
@@ -77,11 +96,15 @@ public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
         );
 
         Transform bestTarget = null;
+        Collider bestTargetCollider = null;
         float closestDistanceSqr = float.MaxValue; // 제곱 거리를 사용해 불필요한 Sqrt 연산 방지
 
         for (int i = 0; i < hitCount; i++)
         {
-            Transform potentialTarget = detectedColliders[i].transform;
+            Collider potentialCollider = detectedColliders[i];
+            if (potentialCollider == null) continue;
+
+            Transform potentialTarget = potentialCollider.transform;
 
             // 2. Y축 높이 차이 필터링
             float verticalDistance = Mathf.Abs(transform.position.y - potentialTarget.position.y);
@@ -100,11 +123,13 @@ public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
             targetColliders.Add(potentialTarget);
 
             // 4. 가장 가까운 타겟 찾기
-            float distanceSqr = (potentialTarget.position - transform.position).sqrMagnitude;
+            Vector3 closestPoint = potentialCollider.ClosestPoint(transform.position);
+            float distanceSqr = (closestPoint - transform.position).sqrMagnitude;
             if (distanceSqr < closestDistanceSqr)
             {
                 closestDistanceSqr = distanceSqr;
                 bestTarget = potentialTarget;
+                bestTargetCollider = potentialCollider; // 가장 가까운 타겟의 Collider 저장
             }
         }
 
@@ -112,6 +137,7 @@ public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
         if (currentNearestTarget != bestTarget)
         {
             currentNearestTarget = bestTarget;
+            currentNearestTargetCollider = bestTargetCollider;
             OnTargetChanged?.Invoke(currentNearestTarget);
         }
     }

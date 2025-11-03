@@ -44,7 +44,6 @@ public class RecruitManager : MonoBehaviour
         GetComponent<AllyController>().enabled = true;
         GetComponent<AllyMovement>().enabled = true;
         GetComponent<AllySensorSight>().enabled = true;
-        GetComponent<HelathManager>().enabled = true;
         GetComponent<SkillController>().enabled = true;
         GetComponent<SkillPipeline>().enabled = true;
 

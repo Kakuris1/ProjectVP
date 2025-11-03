@@ -5,4 +5,6 @@ public interface ISkillTargetSensor
 {
     List<Transform> GetCurrentTargetList();
     Transform GetNearestTarget();
+
+    bool IsNearestTargetInAttackRange(float range, Vector3 origin);
 }
