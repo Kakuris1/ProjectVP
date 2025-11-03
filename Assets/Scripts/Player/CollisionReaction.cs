@@ -92,9 +92,6 @@ public class CollisionReaction : MonoBehaviour
 
         // 목표 스케일 설정
         SetGoalBoneScale(avgNLocal);
-
-        Debug.Log("world : " + avgNWorld);
-        Debug.Log("local : " + avgNLocal);
     }
 
     private void OnCollisionExit(Collision collision)
@@ -106,7 +103,6 @@ public class CollisionReaction : MonoBehaviour
             SetGoalBoneScale(-prev);
             contrib.Remove(key);
         }
-        Debug.Log("out");
     }
 
     private void SetGoalBoneScale(Vector3 avgNLocal)

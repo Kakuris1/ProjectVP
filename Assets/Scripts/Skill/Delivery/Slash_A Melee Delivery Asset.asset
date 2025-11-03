@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53d288ece1249ea498df8c7ca07fe02a, type: 3}
   m_Name: Slash_A Melee Delivery Asset
   m_EditorClassIdentifier: 
-  range: 2
-  radius: 0.8
-  angleDeg: 60
+  range: 5
+  radius: 0
+  angleDeg: 120
   hitMask:
     serializedVersion: 2
     m_Bits: 16384

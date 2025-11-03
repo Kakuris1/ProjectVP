@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa01ed33454d5584ea36325bdef9e07d, type: 3}
   m_Name: Slash_A
   m_EditorClassIdentifier: 
-  damage: 20
+  damage: 50
   cooldown: 3
   manaCost: 10
+  skillRange: 5
   targeting: {fileID: 11400000, guid: be736449f2b77df4fae325993f39e2fd, type: 2}
   delivery: {fileID: 11400000, guid: b11f69b0bb6c6f44ab07a9ae23d7a196, type: 2}
   impacts:
   - {fileID: 11400000, guid: 656b48ede13ea1846a62e47a38bf65d9, type: 2}
-  costPolicy: {fileID: 11400000, guid: 029d7bcbc1c78c24080561f2d4ebc066, type: 2}
+  costPolicy: {fileID: 11400000, guid: e6233c3206bbf6740bec7e35e8d87e9f, type: 2}
   castVfx: {fileID: 5484218944294176571, guid: 063091fcdabad66489d9c94721816c86, type: 3}
   castVfxSize: 3
   hitVfx: {fileID: 0}

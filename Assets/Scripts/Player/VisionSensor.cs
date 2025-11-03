@@ -1,21 +1,26 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
-public class VisionSensor : MonoBehaviour
+public class VisionSensor : MonoBehaviour, ISkillTargetSensor
 {
     public Transform eye;
     public float eyeHeight = 1.3f;
     public float fovAngle = 90f, radius = 4f, rearRadius = 2.0f;
     public LayerMask obstacleMask;
-    public LayerMask enemyMask;       // Àû
-    public LayerMask allyMask;        // ¾Æ±º(Ç×»ó º¸ÀÌ°Ô Ã³¸®)
+    public LayerMask enemyMask;       // ì 
+    public LayerMask allyMask;        // ì•„êµ°(í•­ìƒ ë³´ì´ê²Œ ì²˜ë¦¬)
 
-    public float updateHz = 10f;      // ÃÊ´ç ÆÇÁ¤ È½¼ö
+    public float updateHz = 10f;      // ì´ˆë‹¹ íŒì • íšŸìˆ˜
     float _timer;
 
     readonly HashSet<VisibilityFader> _visible = new();
+    private readonly HashSet<VisibilityFader> _nowVisibleFaders = new HashSet<VisibilityFader>();
+    private readonly List<VisibilityFader> _fadersToHide = new List<VisibilityFader>();
 
     Collider[] _buf = new Collider[128];
+    List<Transform> TargetColliders = new List<Transform>();
+    Transform NearestTarget;
+    Collider NearestTargetCollider;
 
     void Update()
     {
@@ -23,61 +28,115 @@ public class VisionSensor : MonoBehaviour
         if (_timer < 1f / updateHz) return;
         _timer = 0f;
 
-        var now = new HashSet<VisibilityFader>();
+        //ìŠ¤ìº” ì‹œì‘ ì‹œ, ë¦¬ìŠ¤íŠ¸ë¥¼ ì´ˆê¸°í™”(Clear)í•©ë‹ˆë‹¤.
+        TargetColliders.Clear();
+        NearestTarget = null; // ê°€ì¥ ê°€ê¹Œìš´ íƒ€ê²Ÿë„ ì´ˆê¸°í™”
+        NearestTargetCollider = null; // ì½œë¼ì´ë” ìºì‹œë„ ì´ˆê¸°í™”
+
+        _nowVisibleFaders.Clear();
 
         var origin = eye.position + Vector3.up * eyeHeight;
         var forward = Vector3.ProjectOnPlane(eye.forward, Vector3.up).normalized;
         float maxR = Mathf.Max(radius, rearRadius);
 
         int n = Physics.OverlapSphereNonAlloc(origin, maxR, _buf, enemyMask, QueryTriggerInteraction.Ignore);
+        float closestDistanceSqr = float.MaxValue;
         for (int i = 0; i < n; ++i)
         {
-            var t = _buf[i].transform;
-            if (!t) continue;
+            var col = _buf[i];
+            if (col == null) continue;
+            var t = col.transform;
 
             var fader = t.GetComponentInParent<VisibilityFader>();
             if (!fader) continue;
 
-            if (IsVisible(origin, forward, t))
-                now.Add(fader);
+            if (IsVisible(origin, forward, t, col))
+            {
+                _nowVisibleFaders.Add(fader);
+
+                // SkillController ì— ë„˜ê¸¸ íƒ€ê²Ÿ ì •ë³´
+                TargetColliders.Add(t);
+                // ê°€ì¥ ê°€ê¹Œìš´ ëŒ€ìƒ
+                Vector3 closestPoint = col.ClosestPoint(origin);
+                float distanceSqr = (closestPoint - origin).sqrMagnitude;
+
+                if (distanceSqr < closestDistanceSqr)
+                {
+                    closestDistanceSqr = distanceSqr;
+                    NearestTarget = t;
+                    NearestTargetCollider = col; // ì½œë¼ì´ë”ë„ í•¨ê»˜ ìºì‹œ
+                }
+            }
         }
 
-        // ¾Æ±ºÀº Ç×»ó º¸ÀÓ
+        // ì•„êµ°ì€ í•­ìƒ ë³´ì„
         int m = Physics.OverlapSphereNonAlloc(origin, maxR, _buf, allyMask, QueryTriggerInteraction.Ignore);
         for (int i = 0; i < m; ++i)
         {
             var fader = _buf[i].GetComponentInParent<VisibilityFader>();
-            if (fader) { now.Add(fader); fader.SetVisible(true); }
+            if (fader) { _nowVisibleFaders.Add(fader); fader.SetVisible(true); }
         }
 
-        // Enter/Exit Ã³¸®
-        foreach (var f in now) if (_visible.Add(f)) f.SetVisible(true);
-        var toHide = new List<VisibilityFader>();
-        foreach (var f in _visible) if (!now.Contains(f)) toHide.Add(f);
-        foreach (var f in toHide) { f.SetVisible(false); _visible.Remove(f); }
+        // Enter/Exit ì²˜ë¦¬
+        foreach (var f in _nowVisibleFaders) if (_visible.Add(f)) f.SetVisible(true);
+        _fadersToHide.Clear();
+        foreach (var f in _visible) if (!_nowVisibleFaders.Contains(f)) _fadersToHide.Add(f);
+        foreach (var f in _fadersToHide)
+        {
+            if (f != null) // fê°€ íŒŒê´´ë˜ì§€ ì•Šê³  ì‚´ì•„ìˆì„ ë•Œë§Œ í•¨ìˆ˜ë¥¼ í˜¸ì¶œ
+            {
+                f.SetVisible(false);
+            }
+            _visible.Remove(f); // ëª©ë¡ì—ì„œëŠ” íŒŒê´´ë˜ì—ˆë“  ì•„ë‹ˆë“  ì œê±°
+        }
     }
 
-    bool IsVisible(Vector3 origin, Vector3 forward, Transform target)
+    bool IsVisible(Vector3 origin, Vector3 forward, Transform target, Collider col)
     {
-        var col = target.GetComponentInParent<Collider>();
-        if (col == null) return false;
-        Vector3 closestColliderPoint = col.ClosestPoint(origin); // Å¸±ê Collider¿ÍÀÇ ÃÖ´Ü ÁöÁ¡
-        Vector3 dir = closestColliderPoint - origin;    // ÇØ´ç ÁöÁ¡À¸·Î ¹æÇâ º¤ÅÍ
+        Vector3 closestColliderPoint = col.ClosestPoint(origin); // íƒ€ê¹ƒ Colliderì™€ì˜ ìµœë‹¨ ì§€ì 
+        Vector3 dir = closestColliderPoint - origin;    // í•´ë‹¹ ì§€ì ìœ¼ë¡œ ë°©í–¥ ë²¡í„°
         float dist = dir.magnitude;
-        Vector3 toFlat = dir; toFlat.y = 0f; // °¢µµ Ã¼Å© À§ÇÑ ¼öÆò º¤ÅÍ
+        Vector3 toFlat = dir; toFlat.y = 0f; // ê°ë„ ì²´í¬ ìœ„í•œ ìˆ˜í‰ ë²¡í„°
 
         bool angleOK = (dist <= rearRadius) || Vector3.Angle(forward, toFlat) <= fovAngle * 0.5f;
-        if (!angleOK) return false; // ±ÙÁ¢ÇÏÁö ¾Ê°í,, ½Ã¾ß °¢ ¹üÀ§ ¹ÛÀÌ¸é ¾Èº¸ÀÓ
+        if (!angleOK) return false; // ê·¼ì ‘í•˜ì§€ ì•Šê³ ,, ì‹œì•¼ ê° ë²”ìœ„ ë°–ì´ë©´ ì•ˆë³´ì„
 
-        // Å¸°Ù Collider ÃÖ´Ü ÁöÁ¡¿¡ µµ´ŞÇÏÁö ¾ÊÀ¸¸é ¾Èº¸ÀÓ
+        // íƒ€ê²Ÿ Collider ìµœë‹¨ ì§€ì ì— ë„ë‹¬í•˜ì§€ ì•Šìœ¼ë©´ ì•ˆë³´ì„
         if (!col.Raycast(new Ray(origin, dir.normalized), out var hitToTarget, dir.magnitude + 0.05f))
             return false;
 
-        // Àå¾Ö¹°¿¡ °¡¸®¸é ¾È º¸ÀÓ
+        // ì¥ì• ë¬¼ì— ê°€ë¦¬ë©´ ì•ˆ ë³´ì„
         if (Physics.Raycast(origin, dir.normalized, dist + 0.05f, obstacleMask, QueryTriggerInteraction.Ignore))
             return false;
 
-        // À§ Á¶°Çµé ÃæÁ·½Ã º¸ÀÓ
+        // ìœ„ ì¡°ê±´ë“¤ ì¶©ì¡±ì‹œ ë³´ì„
         return true;
+    }
+
+    public List<Transform> GetCurrentTargetList()
+    {
+        return TargetColliders;
+    }
+
+    public Transform GetNearestTarget()
+    {
+        return NearestTarget;
+    }
+
+    public bool IsNearestTargetInAttackRange(float range, Vector3 origin)
+    {
+        // 1. ìºì‹œëœ íƒ€ê²Ÿê³¼ ì½œë¼ì´ë”ê°€ ìœ íš¨í•œì§€ í™•ì¸
+        if (NearestTarget == null || NearestTargetCollider == null)
+        {
+            return false;
+        }
+
+        // 2. 'ClosestPoint'ë¥¼ ì‚¬ìš©í•´ 'ì½œë¼ì´ë” ê°€ì¥ìë¦¬'ê¹Œì§€ì˜ ì •í™•í•œ ê±°ë¦¬ ê³„ì‚°
+        //    (CostAssetì´ ë§¤ í”„ë ˆì„ í˜¸ì¶œí•´ë„ ë  ë§Œí¼ ê°€ë³ìŠµë‹ˆë‹¤)
+        Vector3 closestPoint = NearestTargetCollider.ClosestPoint(origin);
+        float distance = Vector3.Distance(origin, closestPoint);
+
+        // 3. ì‚¬ê±°ë¦¬ ë‚´ì— ìˆëŠ”ì§€ íŒë³„
+        return distance <= range;
     }
 }

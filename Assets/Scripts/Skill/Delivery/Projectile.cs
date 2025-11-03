@@ -68,8 +68,7 @@ namespace Combat.Skills
                         Direction = _dir,
                         Spec = _spec,
                         Spawner = _spawner,
-                        Time = null,
-                        Wallet = null
+                        Time = null
                     };
                     _spec.impacts[i].Apply(hitCtx, other.transform);
                 }

@@ -8,8 +8,7 @@ namespace Combat.Skills
     public class MeleeDeliveryAsset : DeliveryAsset
     {
         [Header("Melee Shape")]
-        public float range = 2.0f;                // 최대 사거리(전방)
-        public float radius = 0.8f;               // 반경(월드)
+        public float radius = 0.5f;               // 반경(월드)
         public float angleDeg = 60f;              // 전방 원뿔 각도(도). 0이면 원형
         public LayerMask hitMask = ~0;
 
@@ -25,8 +24,10 @@ namespace Combat.Skills
             // cast VFX
             if (ctx.Spec.castVfx) ctx.Spawner?.SpawnOneShot(ctx.Spec.castVfx, ctx.Spec.castVfxSize, ctx.Origin, Quaternion.LookRotation(-ctx.Direction));
 
+            float skillRange = ctx.Spec.skillRange;
+
             // OverlapSphereNonAlloc을 써서 충돌 후보 수집
-            int n = Physics.OverlapSphereNonAlloc(ctx.Origin, range + radius, _overlapBuf, hitMask);
+            int n = Physics.OverlapSphereNonAlloc(ctx.Origin, skillRange + radius, _overlapBuf, hitMask);
             if (n <= 0) return;
 
             int applied = 0;
@@ -39,9 +40,16 @@ namespace Combat.Skills
                 if (col == null) continue;
                 var t = col.transform;
 
-                // 거리 체크 (원형/반경) — optional if using radius
-                float sqr = (t.position - origin).sqrMagnitude;
-                if (sqr > (range + radius) * (range + radius)) continue;
+                // 거리 체크 (원형/반경)
+                // 1. 시전자(origin)에서 가장 가까운 타겟 콜라이더의 '가장자리' 지점을 찾음
+                Vector3 closestPoint = col.ClosestPoint(origin);
+
+                // 2. '가장자리'까지의 실제 방향과 거리 계산
+                Vector3 dirToTarget = closestPoint - origin;
+                float distance = dirToTarget.magnitude;
+
+                // 3. 거리 체크: 이 스킬의 '공식 사거리' (skillRange) 이내인지 확인
+                if (distance > skillRange) continue;
 
                 // 전방 원뿔 체크 (angle 기준)
                 if (angleDeg > 0f)
