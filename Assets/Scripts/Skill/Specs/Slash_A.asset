@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa01ed33454d5584ea36325bdef9e07d, type: 3}
   m_Name: Slash_A
   m_EditorClassIdentifier: 
-  damage: 20
+  damage: 50
   cooldown: 3
   manaCost: 10
   targeting: {fileID: 11400000, guid: be736449f2b77df4fae325993f39e2fd, type: 2}

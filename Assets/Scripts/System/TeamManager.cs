@@ -88,6 +88,7 @@ public class TeamManager : MonoBehaviour
     public void ToggleCombatMode(bool currentState)
     {
         IsCombatMode = currentState;
+        Debug.Log("현재 공격 모드 " + IsCombatMode);
     }
 }
 

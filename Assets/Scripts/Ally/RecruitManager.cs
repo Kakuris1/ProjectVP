@@ -45,6 +45,8 @@ public class RecruitManager : MonoBehaviour
         GetComponent<AllyMovement>().enabled = true;
         GetComponent<AllySensorSight>().enabled = true;
         GetComponent<HelathManager>().enabled = true;
+        GetComponent<SkillController>().enabled = true;
+        GetComponent<SkillPipeline>().enabled = true;
 
         Debug.Log($"{name} 영입 절차 완료!");
 

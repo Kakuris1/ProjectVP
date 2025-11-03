@@ -9,6 +9,7 @@ namespace Combat.Skills
         public float damage = 20f;
         public float cooldown = 0.5f;
         public float manaCost = 10f;
+        public float skillRange = 5f;
 
         [Header("Pipeline")]
         public TargetingAsset targeting;

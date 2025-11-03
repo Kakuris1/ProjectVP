@@ -122,7 +122,7 @@ public class AllyMovement : MonoBehaviour
         }
 
         // 스킬 사거리에 맞춰 정지
-        agent.stoppingDistance = allyInfo.attackRange; // (예시: 스킬 사거리 5m)
+        agent.stoppingDistance = allyInfo.skillRange; // (예시: 스킬 사거리 5m)
         agent.SetDestination(allyInfo.CurrentTarget.position);
     }
 

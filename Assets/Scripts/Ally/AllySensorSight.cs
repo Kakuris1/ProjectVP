@@ -31,7 +31,7 @@ public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
     /// </summary>
     public event Action<Transform> OnTargetChanged;
 
-    // 매 갱신되는 가장 가까운 대상
+    // 매 갱신되는 가장 가까운 대상. [참고 : 범위 내 대상이 없으면 Null 을 반환]
     public Transform currentNearestTarget { get; private set; }
     private float scanTimer;
 

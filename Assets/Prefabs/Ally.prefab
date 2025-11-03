@@ -146,7 +146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVerticalDistance: 3
   eyeHeight: 1.6
-  scanInterval: 0.5
+  updateHz: 5
   enemyLayerMask:
     serializedVersion: 2
     m_Bits: 16384
@@ -184,12 +184,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2230885765117154152}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 023a2ee89d2da2844abd3867f342dc17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equippedSpecAsset: {fileID: 0}
+  equippedSpecAsset: {fileID: 11400000, guid: 1a3b8a7f56e954f49be391646e6ab462, type: 2}
   pipeline: {fileID: 0}
   fireAction: {fileID: 0}
 --- !u!114 &-5031429293810958208
@@ -199,7 +199,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2230885765117154152}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8cbd3fa47344c149b3dba8a1839922f, type: 3}
   m_Name: 

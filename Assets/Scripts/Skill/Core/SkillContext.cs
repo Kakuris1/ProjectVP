@@ -23,6 +23,7 @@ namespace Combat.Skills
         public float damage;
         public float cooldown;
         public float manaCost;
+        public float skillRange;
 
         public TargetingAsset targeting;
         public DeliveryAsset delivery;
@@ -37,6 +38,7 @@ namespace Combat.Skills
             damage = src.damage,
             cooldown = src.cooldown,
             manaCost = src.manaCost,
+            skillRange = src.skillRange,
             targeting = src.targeting,
             delivery = src.delivery,
             impacts = src.impacts,
@@ -71,7 +73,7 @@ namespace Combat.Skills
     // 1) Targeting: 누구/어디를 노릴지
     public abstract class TargetingAsset : ScriptableObject
     {
-        public abstract int AcquireTargets(in SkillContext ctx, List<Transform> results);
+        public abstract int AcquireTargets(in SkillContext ctx, List<Transform> targets);
     }
 
     // 2) Delivery: 어떻게 닿게 만들지(근접/투사체/장판…)
@@ -91,6 +93,6 @@ namespace Combat.Skills
     public abstract class CostAsset : ScriptableObject
     {
         // 반환값: 시전 가능/불가
-        public abstract bool CheckAndConsume(in SkillContext ctx, float now, out float nextReadyTime);
+        public abstract bool CheckAndConsume(in SkillContext ctx, float now, ref float nextReadyTime);
     }
 }

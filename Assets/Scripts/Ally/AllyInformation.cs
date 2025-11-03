@@ -7,12 +7,12 @@ public class AllyInformation : MonoBehaviour
     public int targetAreaNumber;
     [Header("상태 (State)")]
     // 외부에서는 읽기만 가능하도록 private set을 사용합니다.
-    public UnitState CurrentState { get; private set; } //프로퍼티로 바꿔야함!!!
+    public UnitState CurrentState; //프로퍼티로 바꿔야함!!!
     public Vector3 CommandTargetPosition { get; private set; }
 
     [Header("능력치 (Stats)")]
     public float moveSpeed;
-    public float attackRange;
+    public float skillRange;
 
     [Header("시야 설정")]
     [Tooltip("적을 감지할 최대 반경 (XZ 평면 기준)")]
@@ -20,14 +20,20 @@ public class AllyInformation : MonoBehaviour
 
     [Header("스킬 (Skill")]
     public SkillSpecAsset Skill;
-    public float NextSkillReadyTime { get; set; }
+    public float NextSkillReadyTime;
     [Tooltip("현재 목표물")]
-    public Transform CurrentTarget { get; set; }
+    public Transform CurrentTarget;
     // ... 기타 필요한 능력치 (최대 체력, 공격력 등)
 
     [Header("포메이션 정보")]
     public int FormationSlot;
 
+    private void Awake()
+    {
+        SkillController _SkillController = GetComponent<SkillController>();
+        _SkillController.Equip(Skill);
+        skillRange = Skill.skillRange;
+    }
     // 상태 변경
     public void ChangeState(UnitState newState)
     {

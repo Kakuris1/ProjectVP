@@ -46,10 +46,6 @@ namespace Combat.Skills
         private void TryCast()
         {
             if (equippedSpecAsset == null || pipeline == null) return;
-
-            float now = _timeSource?.Now ?? Time.time;
-            if (now < nextReadyTime) return; // 쿨타임 체크
-
             var spec = SkillRuntimeSpec.From(equippedSpecAsset);
             var ctx = new SkillContext
             {
@@ -62,8 +58,10 @@ namespace Combat.Skills
                 Spawner = _spawner
             };
 
+            float now = _timeSource?.Now ?? Time.time;
+            if (now < nextReadyTime) return; // 쿨타임 체크
             // ▼ 조건 체크 및 비용 소모
-            if (!spec.costPolicy.CheckAndConsume(in ctx, now, out nextReadyTime)) return;
+            if (!spec.costPolicy.CheckAndConsume(in ctx, now, ref nextReadyTime)) return;
 
             pipeline.Execute(in ctx);
         }

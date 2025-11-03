@@ -1,17 +1,17 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 
 namespace Combat.Skills
 {
-    [CreateAssetMenu(menuName = "Combat/Delivery/Instant")] // Áï¹ßÇü
+    [CreateAssetMenu(menuName = "Combat/Delivery/Instant")] // ì¦‰ë°œí˜•
     public class InstantDeliveryAsset : DeliveryAsset
     {
-        [Tooltip("true¸é ¸ğµç Å¸°Ù¿¡ Àû¿ë, false¸é Ã¹ Å¸°Ù¿¡¸¸ Àû¿ë")]
+        [Tooltip("trueë©´ ëª¨ë“  íƒ€ê²Ÿì— ì ìš©, falseë©´ ì²« íƒ€ê²Ÿì—ë§Œ ì ìš©")]
         public bool applyToAllTargets = true;
 
         public override void Deliver(in SkillContext ctx, List<Transform> targets)
         {
-            // Ä³½ºÆ® VFX (½ÃÀü Å¸ÀÌ¹Ö)
+            // ìºìŠ¤íŠ¸ VFX (ì‹œì „ íƒ€ì´ë°)
             if (ctx.Spec.castVfx != null)
                 ctx.Spawner?.SpawnOneShot(ctx.Spec.castVfx, ctx.Spec.castVfxSize, ctx.Origin, Quaternion.LookRotation(ctx.Direction));
 
@@ -20,12 +20,24 @@ namespace Combat.Skills
 
             int count = applyToAllTargets ? targets.Count : 1;
 
-            // ¸ğµç ÀÓÆÑÆ®¸¦ °¢ Å¸°Ù¿¡ Àû¿ë
+            // ëª¨ë“  ì„íŒ©íŠ¸ë¥¼ ê° íƒ€ê²Ÿì— ì ìš©
             for (int i = 0; i < count; i++)
             {
                 var t = targets[i];
+                if (t == null) continue;
                 for (int j = 0; j < ctx.Spec.impacts.Length; j++)
-                    ctx.Spec.impacts[j].Apply(ctx, t);
+                {
+                    // âœ¨ [ì•ˆì „ ì¥ì¹˜ ì¶”ê°€]
+                    // ì¸ìŠ¤í™í„°ì—ì„œ Impact ì• ì…‹ì„ ë¹¼ë¨¹ì—ˆëŠ”ì§€ í™•ì¸
+                    if (ctx.Spec.impacts[j] != null)
+                    {
+                        ctx.Spec.impacts[j].Apply(ctx, t);
+                    }
+                    else
+                    {
+                        Debug.LogError($"SkillSpec ì˜ 'Impacts' ë°°ì—´ {j}ë²ˆì§¸ ìš”ì†Œê°€ ë¹„ì–´ìˆìŠµë‹ˆë‹¤!", ctx.Caster);
+                    }
+                }
             }
         }
     }
