@@ -1,0 +1,46 @@
+/* ============================================
+1. 모든 버튼의 기본 스타일 (클래스 셀렉터)
+============================================
+*/
+
+.unity-button {
+    /* 텍스트 스타일 */
+    font-size: 60px;
+    color: rgb(255, 255, 255);
+
+    /* 배경/테두리 기본값 */
+    background-color: rgba(0, 0, 0, 0.3); /* 살짝 어두운 배경 */
+    border-width: 3px; /* 테두리 두께 (버그 수정을 위해 추가) */
+    border-color: rgba(0, 0, 0, 0); /* 평소엔 투명한 테두리 */
+
+    /* 크기 및 간격 */
+    width: 300px;
+    height: 100px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    /* 부드러운 전환 효과 (이게 오류 원인이 아니었음) */
+    transition: all 0.1s linear;
+}
+
+/* ============================================
+2. 버튼 호버/클릭 시각 효과
+============================================
+*/
+
+/* ★ 마우스를 올렸을 때 (Hover) ★ */
+.unity-button:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* 더 밝게 */
+    color: rgb(0, 0, 0); /* 글자색 검게 */
+    
+    /* transform: scale() 버그 대신 테두리 색상으로 대체 */
+    border-color: rgb(255, 255, 255); /* 흰색 테두리 보이기 */
+}
+
+/* ★ 클릭했을 때 (pressed/active) ★ */
+.unity-button:active {
+    background-color: rgb(255, 255, 255); /* 완전 흰색 */
+    
+    /* transform: scale() 버그 대신 테두리 색상으로 대체 */
+    border-color: rgb(255, 255, 255); /* 흰색 테두리 유지 */
+}
