@@ -73,7 +73,6 @@ public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
         }
 
         // 2. 'ClosestPoint'를 사용해 '콜라이더 가장자리'까지의 정확한 거리 계산
-        //    (CostAsset이 할 뻔했던 무거운 작업을 센서가 대신 해줍니다)
         Vector3 closestPoint = currentNearestTargetCollider.ClosestPoint(origin);
         float distance = Vector3.Distance(origin, closestPoint);
 

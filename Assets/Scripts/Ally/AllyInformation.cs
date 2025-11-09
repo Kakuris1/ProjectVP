@@ -10,7 +10,7 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
     public int FormationSlot;
     [Header("상태 (State)")]
     // 외부에서는 읽기만 가능하도록 private set을 사용합니다.
-    public UnitState CurrentState; //프로퍼티로 바꿔야함!!!
+    public AllyUnitState CurrentState; //프로퍼티로 바꿔야함!!!
     public Vector3 CommandTargetPosition { get; private set; }
 
     [Header("능력치 (Stats)")]
@@ -41,7 +41,7 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
         skillRange = Skill.skillRange;
     }
     // 상태 변경
-    public void ChangeState(UnitState newState)
+    public void ChangeState(AllyUnitState newState)
     {
         if (CurrentState == newState) return;
         CurrentState = newState;
@@ -74,14 +74,14 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
     {
         if (IsDead) return;
         IsDead = true;
-        ChangeState(UnitState.Dead);
+        ChangeState(AllyUnitState.Dead);
         OnDeath?.Invoke(); // 사망 알림
     }
 }
 
 
-// 유닛이 가질 수 있는 상태들
-public enum UnitState
+// 아군 유닛이 가질 수 있는 상태들
+public enum AllyUnitState
 {
     Idle,           // 대기
     Following,      // 플레이어 추적
