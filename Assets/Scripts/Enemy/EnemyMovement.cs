@@ -34,7 +34,31 @@ public class EnemyMovement : MonoBehaviour
         if (!agent.enabled)
         {
             return;
+        
         }
+
+        // 전투 중일 때 따로 제어
+        if (enemyInfo.CurrentState == EnemyUnitState.Engaging)
+        {
+            if (enemyController.HasBT())
+            {
+                return; // BT가 움직임 제어
+            }
+            else
+            {
+                LookAtTarget(); // 타겟 주시
+                HandleEngagingMovement(); // 비 BT 유닛
+                return;
+            }
+        }
+
+
+        // 교전 중이 아닐 때는 NavMesh가 이동 방향을 보게 함
+        if (agent.velocity.sqrMagnitude > 0.1f)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(agent.velocity.normalized), Time.deltaTime * agent.angularSpeed);
+        }
+
         // EnemyInformation에 기록된 현재 상태를 읽어와서 그에 맞는 이동 로직을 실행
         switch (enemyInfo.CurrentState)
         {
@@ -50,14 +74,14 @@ public class EnemyMovement : MonoBehaviour
                 HandleMovingToCommandMovement();
                 break;
 
-            case EnemyUnitState.Engaging:
-                HandleEngagingMovement();
-                break;
-
             case EnemyUnitState.Dead:
                 HandleDead();
                 break;
+
+            default:
+                break;
         }
+
     }
 
     // (순찰) 상태: patrolOrigin을 기준으로 무작위 배회 
@@ -127,8 +151,9 @@ public class EnemyMovement : MonoBehaviour
     }
 
     // (교전) 상태: 타겟을 향해 스킬 사거리까지 접근
-    private void HandleEngagingMovement()
+    public void HandleEngagingMovement()
     {
+        if (!agent.enabled) return;
         // 타겟이 없으면(죽었거나) 이동을 멈추고 Controller가 상태를 바꿔주길 기다림
         if (enemyInfo.CurrentTarget == null)
         {
@@ -137,7 +162,8 @@ public class EnemyMovement : MonoBehaviour
         }
 
         // 스킬 사거리에 맞춰 정지
-        agent.stoppingDistance = enemyInfo.skillRange - 0.5f; // 사거리보다 0.5m 안쪽
+        if ((transform.position-enemyInfo.CurrentTarget.position).magnitude < enemyInfo.skillRange) StopMovement();
+        agent.stoppingDistance = enemyInfo.skillRange - 0.1f; // 사거리보다 0.5m 안쪽
         agent.speed = enemyInfo.engagingSpeed;
         agent.SetDestination(enemyInfo.CurrentTarget.position);
     }
@@ -158,9 +184,31 @@ public class EnemyMovement : MonoBehaviour
 
     private void StopMovement()
     {
-        if (agent.isOnNavMesh && !agent.isStopped)
+        // 에이전트가 활성화되어 있고 NavMesh 위에 있을 때만 실행
+        if (agent.enabled && agent.isOnNavMesh)
         {
+            // ★ 1. (핵심) 현재 속도(관성)를 아주 낮게 만듭니다. ★
+            agent.velocity *= 0.1f;
+
+            // ★ 2. NavMeshAgent의 내부 이동 계산을 즉시 중지시킵니다. ★
+            agent.isStopped = true;
+
+            // ★ 3. 현재 설정된 목표 경로를 지웁니다. ★
             agent.ResetPath();
+        }
+    }
+
+    private void LookAtTarget()
+    {
+        if (enemyInfo.CurrentTarget == null) return;
+
+        Vector3 lookDir = (enemyInfo.CurrentTarget.position - transform.position).normalized;
+        lookDir.y = 0; // Y축은 고정
+        if (lookDir != Vector3.zero)
+        {
+            float customTurnSpeed = 10f;
+            // (Slerp를 사용해 부드럽게 회전)
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir), Time.deltaTime * customTurnSpeed);
         }
     }
 
@@ -213,5 +261,121 @@ public class EnemyMovement : MonoBehaviour
 
         // 5. NavMeshAgent를 다시 켜서 BT의 제어권을 돌려줌
         agent.enabled = true;
+    }
+
+
+    // BT가 호출할 행동 함수 (이하)
+
+    // 거리 유지 함수
+    public void KiteTarget(float distance)
+    {
+        if (!agent.enabled) return; //
+        if (enemyInfo.CurrentTarget == null) return;
+
+        Vector3 targetPos = enemyInfo.CurrentTarget.position;
+        Vector3 currentPos = transform.position;
+        float currentDistance = Vector3.Distance(targetPos, currentPos);
+
+        float buffer = distance * 0.1f;
+
+        //  너무 가까우면-> 도망
+        if (currentDistance < (distance - buffer))
+        {
+            // (기존 로직: 도망갈 때만 경로 갱신)
+            Vector3 fleeDir = (currentPos - targetPos).normalized;
+            Vector3 fleePoint = currentPos + fleeDir * 3f; // 3m 뒤로
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(fleePoint, out hit, 3.0f, NavMesh.AllAreas))
+            {
+                agent.stoppingDistance = 0;
+                agent.speed = enemyInfo.runSpeed;
+                agent.SetDestination(hit.position);
+            }
+        }
+        // 너무 멀면 -> 접근
+        else if (currentDistance > distance)
+        {
+            // 목표 거리(distance) 근처까지 접근
+            agent.stoppingDistance = distance - buffer;
+            agent.speed = enemyInfo.runSpeed;
+            agent.SetDestination(targetPos);
+        }
+        //  적정 거리이면 -> 멈춤
+        else
+        {
+            LookAtTarget();
+            StopMovement();
+        }
+    }
+
+    //  BT가 호출할 '회피 기동' 코루틴 
+    public void PerformDodgeManeuver()
+    {
+        // ★ 수정: 코루틴이 이미 실행 중이면 또 실행하지 않음
+        if (!agent.enabled || enemyController.isDodging) return;
+
+        StartCoroutine(DodgeManeuverCoroutine());
+    }
+
+    private IEnumerator DodgeManeuverCoroutine()
+    {
+        // 1. Controller에게 "나 회피 중!"이라고 알림
+        enemyController.SetIsDodging(true);
+        // agent.enabled = false; // ★★★ 삭제: NavMeshAgent를 끄지 않습니다.
+
+        Transform target = enemyInfo.CurrentTarget;
+        if (target == null) // 만약 타겟이 없으면 회피 즉시 중단
+        {
+            enemyController.ResetLungeCounter();
+            enemyController.SetIsDodging(false);
+            yield break; // 코루틴 종료
+        }
+
+        // 2. (회피 - 후퇴) NavMeshAgent로 경로 계산
+        float fleeDist = UnityEngine.Random.Range(3f, 5f);
+        Vector3 fleeDir = (transform.position - enemyInfo.CurrentTarget.position).normalized;
+        Vector3 fleeEndPos = transform.position + fleeDir * fleeDist;
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(fleeEndPos, out hit, fleeDist, NavMesh.AllAreas))
+            fleeEndPos = hit.position;
+
+        // 3. (명령 1) 후퇴 지점으로 이동
+        agent.stoppingDistance = 0f;
+        agent.speed = enemyInfo.runSpeed; //
+        agent.SetDestination(fleeEndPos);
+
+        // 4. 도착할 때까지 "매 프레임" 타겟을 바라봄
+        while (!(!agent.pathPending && agent.remainingDistance < 0.5f))
+        {
+            LookAtTarget(); // 타겟 주시
+            yield return null; // 다음 프레임까지 대기
+        }
+        // 관성 제거
+        StopMovement();
+
+        // 5. (회피 - 측면) NavMeshAgent로 경로 계산
+        float strafeDist = UnityEngine.Random.Range(2f, 5f);
+        Vector3 strafeDir = (UnityEngine.Random.value > 0.5f) ? Vector3.Cross(fleeDir, Vector3.up) : Vector3.Cross(fleeDir, -Vector3.up);
+        Vector3 strafeEndPos = transform.position + strafeDir * strafeDist;
+
+        if (NavMesh.SamplePosition(strafeEndPos, out hit, strafeDist, NavMesh.AllAreas))
+            strafeEndPos = hit.position;
+
+        // 6. (명령 2) 측면 지점으로 이동
+        agent.SetDestination(strafeEndPos);
+        Quaternion lookRotation = Quaternion.LookRotation(strafeDir); // 이동방향
+
+        // 7. 도착할 때까지 "매 프레임" 이동 방향을 바라봄 (빙글 도는 부분)
+        while (!(!agent.pathPending && agent.remainingDistance < 0.5f))
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * agent.angularSpeed);
+            yield return null;
+        }
+
+        // 8. 회피 기동 완료
+        // agent.enabled = true; // ★★★ 삭제
+        enemyController.ResetLungeCounter();
+        enemyController.SetIsDodging(false);
     }
 }

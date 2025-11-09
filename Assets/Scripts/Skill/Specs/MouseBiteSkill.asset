@@ -20,7 +20,7 @@ MonoBehaviour:
   delivery: {fileID: 11400000, guid: efba150748457c04ea8696d4fb62be3b, type: 2}
   impacts:
   - {fileID: 11400000, guid: 656b48ede13ea1846a62e47a38bf65d9, type: 2}
-  costPolicy: {fileID: 11400000, guid: e6233c3206bbf6740bec7e35e8d87e9f, type: 2}
+  costPolicy: {fileID: 11400000, guid: 043dc143ced34fa4b91627c65cf6f33b, type: 2}
   castVfx: {fileID: 0}
   castVfxSize: 0
   hitVfx: {fileID: 0}

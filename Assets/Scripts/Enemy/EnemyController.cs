@@ -1,6 +1,8 @@
 using System.Dynamic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Unity.AI;
+using Unity.Behavior;
 
 [RequireComponent(typeof(EnemyInformation), typeof(EnemySensorSight))]
 public class EnemyController : MonoBehaviour
@@ -8,14 +10,29 @@ public class EnemyController : MonoBehaviour
     private EnemyInformation EnemyInfo;
     private EnemySensorSight sensor;
 
-    // TODO: 여기에 나중에 만들 BT 컴포넌트 변수 선언
-    // private BehaviorTreeRunner behaviorTree; 
+    // BT 변수 선언
+    private  BehaviorGraphAgent btRunner; // BT 실행기
+    public int lungeAttackCounter = 0; 
+    public bool isDodging = false;
+
+    // BT 호출할 제어 함수
+    public void IncrementLungeCounter() { lungeAttackCounter++; }
+    public void ResetLungeCounter() { lungeAttackCounter = 0; }
+    public void SetIsDodging(bool value) { isDodging = value; }
+    public bool HasBT()
+    {
+        return btRunner != null;
+    }
 
     void Awake()
     {
         EnemyInfo = GetComponent<EnemyInformation>();
         sensor = GetComponent<EnemySensorSight>();
-        // behaviorTree = GetComponent<BehaviorTreeRunner>();
+        btRunner = GetComponent<BehaviorGraphAgent>();
+        if (btRunner != null)
+        {
+            btRunner.SetVariableValue("Self", this.gameObject);
+        }
     }
 
     private void OnEnable()
@@ -48,6 +65,7 @@ public class EnemyController : MonoBehaviour
         // 이동 명령이 떨어지면 최우선
         if (EnemyInfo.hasMoveCommand)
         {
+            if (btRunner != null) btRunner.enabled = false;
             EnemyInfo.ChangeState(EnemyUnitState.MovingToCommand);
             return;
         }
@@ -55,16 +73,19 @@ public class EnemyController : MonoBehaviour
         // 타겟이 없으면 순찰
         if(EnemyInfo.CurrentTarget == null)
         {
+            if (btRunner != null) btRunner.enabled = false;
             EnemyInfo.ChangeState(EnemyUnitState.Patrol);
             return;
         }
         else if (EnemyInfo.Hostile)
         {// 타겟이 있고 적대적임
             EnemyInfo.ChangeState(EnemyUnitState.Engaging);
+            if (btRunner != null) btRunner.enabled = true; // BT 켜기
             return;
         }
         else
         {// 타겟이 있으나 비적대적
+            if (btRunner != null) btRunner.enabled = false;
             EnemyInfo.ChangeState(EnemyUnitState.StopAndWatching);
         }
     }

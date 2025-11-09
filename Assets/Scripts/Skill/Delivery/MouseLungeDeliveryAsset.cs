@@ -21,6 +21,7 @@ namespace Combat.Skills
                 Debug.LogError($"'{ctx.Caster.name}'에 EnemyMovement가 없습니다!", ctx.Caster);
                 return;
             }
+            EnemyController controller = ctx.Caster.GetComponent<EnemyController>();
 
             // 'in' 매개변수인 'ctx'를 캡처할 수 없으므로,
             // 로컬 사본(struct 복사)을 만듬
@@ -36,6 +37,8 @@ namespace Combat.Skills
                         ctx_localCopy.Spec.impacts[j].Apply(ctx_localCopy, target);
                     }
                 }
+                // 공격 횟수 카운트 +1
+                controller?.IncrementLungeCounter();
             };
 
             // EnemyMovement에게 "이 타겟을 향해, 이 콜백을 가지고 박치기해!"라고 명령

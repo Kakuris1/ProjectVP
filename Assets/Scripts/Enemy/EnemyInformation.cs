@@ -15,6 +15,9 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
     public bool Hostile; // 프로퍼티로 바꿔야함
     [Header("비적대적일 때 행동 SO")]
     public NonHostileBehaviorAsset nonHostileBehavior;
+    [Header("BT 제어 플래그")]
+    [Tooltip("BT가 공격을 허가할 때만 true가 됨")]
+    public bool CanAttack = false; // 기본값은 false
     // 적 최초 조우 여부
     protected bool firstTimeToMeet = true;
     // 유닛 이동 명령 여부
@@ -68,6 +71,12 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
     {
         CommandTargetPosition = position;
     }
+    
+    public void SetCurrentHP(float value)
+    {
+        CurrentHP = value;
+    }
+
     public virtual void Internal_TakeDamage(float amount)
     {
         if (IsDead) return;

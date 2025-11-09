@@ -668,6 +668,8 @@ MonoBehaviour:
   hostileMouseCount: 6
   nonHostileMouseCount: 2
   DistanceWithPlayer: 30
+  runAwayHP: 60
+  overrideKitingAndAttack: 0
 --- !u!1 &465924773
 GameObject:
   m_ObjectHideFlags: 0
@@ -2053,7 +2055,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622333503629280156, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: radius
-      value: 20
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 1161250154739145882, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: radius
@@ -2061,7 +2063,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1161250154739145882, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: rearRadius
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2142918660254338326, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: m_Name
@@ -2217,7 +2219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6574999602249099165, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 20
+      value: 11.98
       objectReference: {fileID: 0}
     - target: {fileID: 6574999602249099165, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: m_LocalPosition.y

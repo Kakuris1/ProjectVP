@@ -33,6 +33,10 @@ public class MouseManager : MonoBehaviour
     public int nonHostileMouseCount = 2; // 이 숫자까지 줄어들면 도망
     [Header("생쥐 무리의 플레이어와 유지 거리")]
     public int DistanceWithPlayer = 30;
+    [Header("이 수치 이하로 피가 까이면 잠시 후퇴")]
+    public float runAwayHP = 60f;
+    [Header("생쥐 무리의 전원 동시 공격 명령")]
+    public bool overrideKitingAndAttack = false;
 
     // 생쥐 무리 수의 변화 알림
     public event Action MouseSwarmUpdate;
@@ -46,6 +50,8 @@ public class MouseManager : MonoBehaviour
 
         // 생쥐 집합 장소 갱신
         SetMouseConvengePoint();
+        // 생쥐들의 체력 상태를 체크 
+        CheckWoundedStatus();
         scanTimer = 0f;
     }
 
@@ -91,7 +97,8 @@ public class MouseManager : MonoBehaviour
             {
                 for (int i = 0; i < M_Count; i++)
                 {
-                    MouseList[i].Hostile = false;
+                    MouseList[i].Hostile = false; // 비적대적으로 변환
+                    MouseList[i].SetCurrentHP(100); // 체력 회복
                 }
 
                 // 임시 : 한번 도망갈 때 마다, 요구되는 무리 숫자 +1
@@ -109,4 +116,28 @@ public class MouseManager : MonoBehaviour
         CurrentConvengePoint = playerPosition + dir * DistanceWithPlayer;
     }
 
+    // 전원 돌격 플래그를 갱신하는 함수
+    private void CheckWoundedStatus()
+    {
+        // 경계 중인 쥐가 없으면 플래그를 내림
+        if (MouseList.Count == 0)
+        {
+            overrideKitingAndAttack = false;
+            return;
+        }
+
+        foreach (MouseInformation mouse in MouseList)
+        {
+            // 한마리라도 후퇴하지 않았다면
+            if (mouse.CurrentHP >= runAwayHP)
+            {
+                overrideKitingAndAttack = false; // "전원 돌격" 취소
+                return;
+            }
+        }
+
+        // (위의 'return'이 실행되지 않고) 루프가 끝까지 돌았다면
+        // -> "모든 쥐가 60% 미만"이라는 뜻
+        overrideKitingAndAttack = true; // "전원 돌격" 명령!
+    }
 }

@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 1512354790829069558}
   - component: {fileID: 4928934741247971892}
   - component: {fileID: 8404109269316040289}
+  - component: {fileID: 2896963158269526894}
   m_Layer: 14
   m_Name: Mouse
   m_TagString: Untagged
@@ -61,6 +62,7 @@ MonoBehaviour:
   CurrentState: 1
   Hostile: 0
   nonHostileBehavior: {fileID: 11400000, guid: bb13e2199e3acaf4fa9866e7c0ac3ee5, type: 2}
+  CanAttack: 0
   hasMoveCommand: 0
   patrolSpeed: 5
   engagingSpeed: 8
@@ -82,6 +84,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09c514e03e11c194aaed9597b495d148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lungeAttackCounter: 0
+  isDodging: 0
 --- !u!114 &-1834783054092880254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,3 +302,32 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &2896963158269526894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151807541875160355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Graph: {fileID: -781815971489947173, guid: 19541cde56cef7a41baa37eca018797a, type: 2}
+  m_BlackboardVariableOverridesList:
+  - rid: 6684224956715499607
+  m_OriginalGraph: {fileID: 0}
+  m_IsInitialised: 0
+  m_IsStarted: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 6684224956715499607
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 1151807541875160355}
