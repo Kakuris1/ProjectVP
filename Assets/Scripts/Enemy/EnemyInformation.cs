@@ -10,29 +10,39 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
     public int EnemyID;
     [Header("상태 (State)")]
     // 외부에서는 읽기만 가능하도록 private set을 사용합니다.
-    public UnitState CurrentState; //프로퍼티로 바꿔야함!!!
+    public EnemyUnitState CurrentState; //프로퍼티로 바꿔야함!!!
+    // 플레이어와의 조우시 적대적 = 즉시 교전, 비적대적 = 도망
+    public bool Hostile; // 프로퍼티로 바꿔야함
+    [Header("비적대적일 때 행동 SO")]
+    public NonHostileBehaviorAsset nonHostileBehavior;
+    // 적 최초 조우 여부
+    protected bool firstTimeToMeet = true;
+    // 유닛 이동 명령 여부
+    public bool hasMoveCommand = false;
     public Vector3 CommandTargetPosition { get; private set; }
 
     [Header("능력치 (Stats)")]
-    public float moveSpeed;
-    public float skillRange;
+    public float patrolSpeed = 5f;
+    public float engagingSpeed = 8f;
+    public float runSpeed = 10f;
+    public float skillRange = 5f;
     [SerializeField] private float maxHealth = 100f;
     public float MaxHP { get; private set; }
     public float CurrentHP { get; private set; }
     public bool IsDead { get; private set; } = false;
     [Header("시야 설정")]
     [Tooltip("적을 감지할 최대 반경 (XZ 평면 기준)")]
-    public float detectionRadius = 5f;
+    public float detectionRadius = 12f;
     [Header("스킬 (Skill")]
     public SkillSpecAsset Skill;
     [Tooltip("현재 목표물")]
     public Transform CurrentTarget;
 
     // 이벤트
-    public event Action<float, float> OnHPChanged;
+    public event Action<float, float> OnHPChanged; // 현재, 최대 체력
     public event Action OnDeath;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         CurrentHP = maxHealth;
         MaxHP = maxHealth;
@@ -41,14 +51,14 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
         skillRange = Skill.skillRange;
     }
     // 상태 변경
-    public void ChangeState(UnitState newState)
+    public void ChangeState(EnemyUnitState newState)
     {
         if (CurrentState == newState) return;
         CurrentState = newState;
     }
 
     //현재 공격 대상을 설정
-    public void SetTarget(Transform newTarget)
+    public virtual void SetTarget(Transform newTarget)
     {
         CurrentTarget = newTarget;
     }
@@ -58,12 +68,15 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
     {
         CommandTargetPosition = position;
     }
-    public void Internal_TakeDamage(float amount)
+    public virtual void Internal_TakeDamage(float amount)
     {
         if (IsDead) return;
         CurrentHP -= amount;
-        OnHPChanged?.Invoke(CurrentHP, MaxHP); // HP 변경 알림
+        // HP 변경 알림
+        OnHPChanged?.Invoke(CurrentHP, MaxHP); 
+
         Debug.Log($"Hit, {gameObject.name} HP : {CurrentHP}");
+
         if (CurrentHP <= 0)
         {
             CurrentHP = 0;
@@ -71,14 +84,24 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
         }
     }
 
-    public void Internal_Die()
+    public virtual void Internal_Die()
     {
         if (IsDead) return;
         IsDead = true;
-        ChangeState(UnitState.Dead);
         OnDeath?.Invoke(); // 사망 알림 내부
         EventManager.Instance.EnemyDefeated(EnemyID); // 사망 알림 전역
         Debug.Log($"몬스터 ID {EnemyID} 처치!");
+
         Destroy(gameObject);
     }
+}
+
+// 적 유닛이 가질 수 있는 상태들
+public enum EnemyUnitState
+{
+    StopAndWatching,// 경계
+    Patrol,         // 순찰
+    Engaging,       // 적과 교전
+    MovingToCommand,// 명령 지점으로 이동
+    Dead            // 죽음
 }

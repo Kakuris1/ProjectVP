@@ -1,10 +1,11 @@
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
+
+[RequireComponent(typeof(EnemyInformation))]
+public class EnemySensorSight : MonoBehaviour, ISkillTargetSensor
 {
-    AllyInformation Info;
+    EnemyInformation Info;
 
     [Header("시야 설정")]
     [Tooltip("적을 감지할 수 있는 최대 수직(Y) 높이 차이")]
@@ -18,8 +19,8 @@ public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
     [SerializeField] private float updateHz = 5f;
 
     [Header("필터링 레이어")]
-    [Tooltip("감지할 적의 레이어 마스크")]
-    [SerializeField] private LayerMask enemyLayerMask;
+    [Tooltip("감지할 타겟(플레이어, 아군)의 레이어 마스크")]
+    [SerializeField] private LayerMask targetLayerMask;
 
     [Tooltip("시야를 가로막는 장애물(벽, 지형 등)의 레이어 마스크")]
     [SerializeField] private LayerMask obstacleLayerMask;
@@ -42,15 +43,18 @@ public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
 
     private void Awake()
     {
-        Info = GetComponent<AllyInformation>();
+        Info = GetComponent<EnemyInformation>();
     }
     private void Update()
     {
         scanTimer += Time.deltaTime;
-        if (scanTimer < 1f/updateHz) return;
-        else ScanForEnemies();
+        if (scanTimer < 1f / updateHz) return;
+
+        ScanForTargets();
         scanTimer = 0f;
     }
+
+    // --- 이하 ISkillTargetSensor 인터페이스 구현
 
     public List<Transform> GetCurrentTargetList()
     {
@@ -60,7 +64,7 @@ public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
     public Transform GetNearestTarget()
     {
         return currentNearestTarget;
-        
+
     }
 
     // 사거리 확인
@@ -80,23 +84,21 @@ public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
         return distance <= range;
     }
 
-    // 주변의 적을 스캔하고 유효한 타겟을 찾음
-    private void ScanForEnemies()
+    private void ScanForTargets()
     {
-        // 스킬 타겟 리스트 clear
         targetColliders.Clear();
+
         // 1. OverlapSphere로 1차 감지
-        // Y축 높이도 고려해야 하므로 detectionRadius를 그대로 사용
         int hitCount = Physics.OverlapSphereNonAlloc(
             transform.position,
             Info.detectionRadius,
             detectedColliders,
-            enemyLayerMask
+            targetLayerMask 
         );
 
         Transform bestTarget = null;
         Collider bestTargetCollider = null;
-        float closestDistanceSqr = float.MaxValue; // 제곱 거리를 사용해 불필요한 Sqrt 연산 방지
+        float closestDistanceSqr = float.MaxValue;
 
         for (int i = 0; i < hitCount; i++)
         {
@@ -109,16 +111,15 @@ public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
             float verticalDistance = Mathf.Abs(transform.position.y - potentialTarget.position.y);
             if (verticalDistance > maxVerticalDistance)
             {
-                continue; // 너무 높거나 낮으면 무시
+                continue;
             }
 
-            // 3. 시야(Line of Sight) 확인 (Narrow Phase)
+            // 3. 시야(Line of Sight) 확인
             if (!HasLineOfSight(potentialTarget))
             {
-                continue; // 장애물에 가려져 있으면 무시
+                continue;
             }
 
-            // 스킬 타겟 리스트에 추가
             targetColliders.Add(potentialTarget);
 
             // 4. 가장 가까운 타겟 찾기
@@ -128,7 +129,7 @@ public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
             {
                 closestDistanceSqr = distanceSqr;
                 bestTarget = potentialTarget;
-                bestTargetCollider = potentialCollider; // 가장 가까운 타겟의 Collider 저장
+                bestTargetCollider = potentialCollider;
             }
         }
 
@@ -141,22 +142,16 @@ public class AllySensorSight : MonoBehaviour, ISkillTargetSensor
         }
     }
 
-    // 지정된 타겟까지 장애물(벽)이 가로막고 있는지 확인
     private bool HasLineOfSight(Transform target)
     {
-        // Linecast의 시작점 (자신의 눈 위치)
         Vector3 eyePosition = transform.position + (Vector3.up * eyeHeight);
-
-        // Linecast의 끝점 (타겟의 가슴 높이 정도)
         Vector3 targetPosition = target.position + (Vector3.up * 1.0f);
 
-        // Physics.Linecast는 두 지점 사이에 obstacleLayerMask에 해당하는 것이
-        // 하나라도 감지되면 true를 반환합니다.
         if (Physics.Linecast(eyePosition, targetPosition, obstacleLayerMask))
         {
-            return false; // 장애물에 가로막힘 (시야 X)
+            return false;
         }
 
-        return true; // 시야가 깨끗함
+        return true;
     }
 }

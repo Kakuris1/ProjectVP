@@ -29,23 +29,23 @@ public class AllyMovement : MonoBehaviour
         // AllyInformation에 기록된 현재 상태를 읽어와서 그에 맞는 이동 로직을 실행
         switch (allyInfo.CurrentState)
         {
-            case UnitState.Following:
+            case AllyUnitState.Following:
                 HandleFollowingMovement();
                 break;
 
-            case UnitState.MovingToCommand:
+            case AllyUnitState.MovingToCommand:
                 HandleCommandMovement();
                 break;
 
-            case UnitState.Engaging:
+            case AllyUnitState.Engaging:
                 HandleEngagingMovement();
                 break;
 
-            case UnitState.Idle:
+            case AllyUnitState.Idle:
                 HandleIdleMovement();
                 break;
 
-            case UnitState.Dead:
+            case AllyUnitState.Dead:
                 HandleDead();
                 break;
         }
