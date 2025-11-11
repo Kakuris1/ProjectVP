@@ -6,8 +6,10 @@ public class AttackToggleButtonView : MonoBehaviour
     [SerializeField] private InputReader input;   // Player의 InputReader 드래그
     [SerializeField] private Graphic togglebutton;      // 바꿀 이미지 (토글 버튼)
     [SerializeField] private bool _previousToggleState;
-    [SerializeField] private Color onColor = new Color(1f, 0.6f, 0.2f, 1f);
-    [SerializeField] private Color offColor = new Color(1f, 1f, 1f, 1f);
+    [SerializeField] private Color onColor = new Color(1f, 1f, 1f, 1f);
+    [SerializeField] private Color offColor = new Color(1f, 0.6f, 0.2f, 1f);
+    [SerializeField] private Image Fade_ON;
+    [SerializeField] private Image Fade_OFF;
 
     void Reset() { togglebutton = GetComponent<Graphic>(); }
     void Start()
@@ -30,10 +32,14 @@ public class AttackToggleButtonView : MonoBehaviour
         if (currentToggleState)
         {   // 전투 모드시
             togglebutton.color = onColor;
+            Fade_ON.enabled = false;
+            Fade_OFF.enabled = true;
         }
         else
         {   // 비전투 모드시
             togglebutton.color = offColor;
+            Fade_ON.enabled = true;
+            Fade_OFF.enabled = false;
         }
     }
 }

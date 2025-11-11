@@ -35,6 +35,8 @@ public class Player : MonoBehaviour, IUnitDataHub
     {
         // Player가 생성되면 자신의 Transform을 이벤트로 알림
         OnPlayerSpawned?.Invoke(this.transform);
+        MaxHP = maxHealth;
+        CurrentHP = MaxHP;
     }
 
     // 오브젝트 제거 시 호출
@@ -54,6 +56,7 @@ public class Player : MonoBehaviour, IUnitDataHub
         if (IsDead) return;
         CurrentHP -= amount;
         OnHPChanged?.Invoke(CurrentHP, MaxHP); // HP 변경 알림
+        Debug.Log("Player 피해 입음. HP : " +  CurrentHP);
         if (CurrentHP <= 0)
         {
             CurrentHP = 0;
@@ -66,5 +69,6 @@ public class Player : MonoBehaviour, IUnitDataHub
         if (IsDead) return;
         IsDead = true;
         OnDeath?.Invoke(); // 사망 알림
+        EventManager.Instance.TriggerGameOver(); // 전역 사망 알림
     }
 }
