@@ -2749,6 +2749,10 @@ PrefabInstance:
       propertyPath: uiPrefab
       value: 
       objectReference: {fileID: 954490523143617969, guid: 6df3f7abbfc8b8042b801dabe0743684, type: 3}
+    - target: {fileID: 2181083101088645605, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
+      propertyPath: defaultSkillPool
+      value: 
+      objectReference: {fileID: 11400000, guid: 326967e6b5a0e634e97aae3392385101, type: 2}
     - target: {fileID: 6574999602249099165, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: m_LocalPosition.x
       value: 26

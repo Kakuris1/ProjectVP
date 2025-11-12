@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0b98943dba956f4085e89bb65a127c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetAreaNumber: 1
+  targetAreaNumber: 0
   FormationSlot: 0
   CurrentState: 0
   moveSpeed: 5
@@ -100,6 +100,7 @@ MonoBehaviour:
   maxHealth: 100
   detectionRadius: 5
   Skill: {fileID: 0}
+  defaultSkillPool: {fileID: 11400000, guid: 326967e6b5a0e634e97aae3392385101, type: 2}
   CurrentTarget: {fileID: 0}
   uiPrefab: {fileID: 954490523143617969, guid: 6df3f7abbfc8b8042b801dabe0743684, type: 3}
   hpSlider: {fileID: 0}
