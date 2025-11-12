@@ -72,6 +72,10 @@ MonoBehaviour:
   detectionRadius: 15
   Skill: {fileID: 11400000, guid: 9adce21f90c0d114aba649155e8ab77d, type: 2}
   CurrentTarget: {fileID: 0}
+  uiPrefab: {fileID: 954490523143617969, guid: 6df3f7abbfc8b8042b801dabe0743684, type: 3}
+  UIOffset: {x: -0.8, y: -0.6, z: 0}
+  hpSlider: {fileID: 0}
+  skillSlider: {fileID: 0}
 --- !u!114 &5962333650152227930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,7 +179,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderers: []
   fadeInDuration: 0.15
-  fadeOutDuration: 1
+  fadeOutDuration: 0.5
   colorProp: _BaseColor
 --- !u!195 &-1199509219229259334
 NavMeshAgent:
