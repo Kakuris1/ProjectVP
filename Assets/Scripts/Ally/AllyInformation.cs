@@ -162,6 +162,7 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
             // 값을 0~1 사이의 비율로 변환
             hpSlider.value = CurrentHP / MaxHP;
         }
+        if (CurrentHP >= MaxHP) CurrentHP = MaxHP;
 
         if (CurrentHP <= 0)
         {

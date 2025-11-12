@@ -157,6 +157,7 @@ public class Player : MonoBehaviour, IUnitDataHub
             hpSlider.value = CurrentHP / MaxHP;
         }
 
+        if (CurrentHP >= MaxHP) CurrentHP = MaxHP;
         Debug.Log("Player 피해 입음. HP : " +  CurrentHP);
         if (CurrentHP <= 0)
         {

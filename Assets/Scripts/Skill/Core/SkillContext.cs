@@ -25,14 +25,17 @@ namespace Combat.Skills
         public float cooldown;
         public float manaCost;
         public float skillRange;
+        public float skillDelay;
+        public int maxTargetCount;
+        public int pierceCount;
 
         public TargetingAsset targeting;
         public DeliveryAsset delivery;
         public ImpactAsset[] impacts;
         public CostAsset costPolicy;
 
-        public GameObject castVfx, hitVfx;
-        public float castVfxSize, hitVfxSize;
+        public GameObject castVfx, hitVfx, skillVfx;
+        public float castVfxSize, hitVfxSize, skillVfxSize;
 
         public static SkillRuntimeSpec From(SkillSpecAsset src) => new SkillRuntimeSpec
         {
@@ -41,14 +44,19 @@ namespace Combat.Skills
             cooldown = src.cooldown,
             manaCost = src.manaCost,
             skillRange = src.skillRange,
+            skillDelay = src.skillDelay,
+            maxTargetCount = src.maxTargetCount,
+            pierceCount = src.pierceCount,
             targeting = src.targeting,
             delivery = src.delivery,
             impacts = src.impacts,
             costPolicy = src.costPolicy,
             castVfx = src.castVfx,
             hitVfx = src.hitVfx,
+            skillVfx = src.skillVfx,
             castVfxSize = src.castVfxSize,
-            hitVfxSize = src.hitVfxSize
+            hitVfxSize = src.hitVfxSize,
+            skillVfxSize = src.skillVfxSize
         };
     }
 
@@ -56,8 +64,9 @@ namespace Combat.Skills
     public interface ITimeSource { float Now { get; } }
     public interface ISpawner
     {
-        GameObject Spawn(GameObject prefab, Vector3 pos, Quaternion rot);
+        GameObject Spawn(GameObject prefab, float scl, Vector3 pos, Quaternion rot);
         void SpawnOneShot(GameObject prefab, float scl, Vector3 pos, Quaternion rot);
+        void SpawnOneShot(GameObject prefab, float scl, Vector3 pos, Quaternion rot, float duration);
     }
     public interface IDamageable
     {

@@ -173,7 +173,7 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
         }
 
         Debug.Log($"Hit, {gameObject.name} HP : {CurrentHP}");
-
+        if (CurrentHP >= MaxHP) CurrentHP = MaxHP;
         if (CurrentHP <= 0)
         {
             CurrentHP = 0;
