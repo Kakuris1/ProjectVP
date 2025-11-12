@@ -93,11 +93,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetAreaNumber: 1
+  FormationSlot: 0
+  CurrentState: 0
   moveSpeed: 5
-  attackRange: 5
+  skillRange: 0
+  maxHealth: 100
   detectionRadius: 5
   Skill: {fileID: 0}
-  FormationSlot: 0
+  CurrentTarget: {fileID: 0}
+  uiPrefab: {fileID: 954490523143617969, guid: 6df3f7abbfc8b8042b801dabe0743684, type: 3}
+  hpSlider: {fileID: 0}
+  skillSlider: {fileID: 0}
 --- !u!114 &3092541353991083255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,10 +132,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20bc0a92e08282a48bae557943450991, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRange: 5
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 16384
   stopFollowingDistance: 4
   startFollowingDistance: 8
 --- !u!114 &8785838234750923511
@@ -191,6 +193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equippedSpecAsset: {fileID: 11400000, guid: 1a3b8a7f56e954f49be391646e6ab462, type: 2}
   pipeline: {fileID: 0}
+  nextReadyTime: 0
   fireAction: {fileID: 0}
 --- !u!114 &-5031429293810958208
 MonoBehaviour:

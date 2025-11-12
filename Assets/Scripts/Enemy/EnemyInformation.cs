@@ -1,7 +1,8 @@
 using Combat.Skills;
 using System;
 using UnityEngine;
-// 동료 유닛 데이터 중심 클래스
+using UnityEngine.UI;
+// 적 유닛 데이터 중심 클래스
 public class EnemyInformation : MonoBehaviour, IUnitDataHub
 {
     [Header("최초 구역")]
@@ -38,8 +39,17 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
     public float detectionRadius = 12f;
     [Header("스킬 (Skill")]
     public SkillSpecAsset Skill;
+    private SkillController _skillController;
     [Tooltip("현재 목표물")]
     public Transform CurrentTarget;
+
+    [Header("UI")]
+    public GameObject uiPrefab; // UI 프리팹
+    private GameObject UnitUI; // 생성할 UI 오브젝트 담을 변수
+    public Vector3 UIOffset; // UI 생성 위치 (기본값 플레이어 유닛 기준이라 유닛별 재조정 필요)
+    // start()에서 연결
+    [HideInInspector] public Slider hpSlider;
+    [HideInInspector] public Slider skillSlider;
 
     // 이벤트
     public event Action<float, float> OnHPChanged; // 현재, 최대 체력
@@ -47,12 +57,83 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
 
     protected virtual void Awake()
     {
+        // 체력 초기화
         CurrentHP = maxHealth;
         MaxHP = maxHealth;
-        SkillController _SkillController = GetComponent<SkillController>();
-        _SkillController.Equip(Skill);
-        skillRange = Skill.skillRange;
+
+        _skillController = GetComponent<SkillController>();
+        if(_skillController != null)
+        {
+            _skillController.Equip(Skill);
+            skillRange = Skill.skillRange;
+        }
     }
+
+    protected virtual void Start()
+    {
+        // 1. UI 프리팹 생성 및 연결
+        if (uiPrefab != null)
+        {
+            UnitUI = Instantiate(uiPrefab, transform.position, Quaternion.identity);
+
+            // 2. UI가 '나'를 따라다니도록 Target 연결
+            FollowTargetWithOffset followScript = UnitUI.GetComponent<FollowTargetWithOffset>();
+            if (followScript != null)
+            {
+                followScript.target = this.transform;
+                followScript.cameraRelativeOffset = UIOffset;
+            }
+
+            // 3. UI 참조 스크립트에서 슬라이더 가져오기
+            UnitUIReferences uiRefs = UnitUI.GetComponent<UnitUIReferences>();
+            if (uiRefs != null)
+            {
+                hpSlider = uiRefs.hpSlider;
+                skillSlider = uiRefs.skillSlider;
+            }
+            else
+            {
+                Debug.LogError(this.name + "의 UI 프리팹에서 UnitUIReferences 스크립트를 찾을 수 없습니다.");
+            }
+
+            // 4. 초기값 설정
+            if (hpSlider != null)
+            {
+                hpSlider.value = CurrentHP / MaxHP; // (1.0)
+            }
+            if (skillSlider != null)
+            {
+                skillSlider.value = 1.0f; // 스킬은 꽉 찬 상태로 시작
+            }
+
+            // 5. SkillController에 skillSlider 참조 넘겨주기
+            if (_skillController != null && skillSlider != null)
+            {
+                _skillController.SetSkillGauge(skillSlider);
+            }
+
+            // 6. UI Fade 연결
+            VisibilityFader fader = GetComponent<VisibilityFader>();
+            if (fader != null)
+            {
+                fader.SetLinkedUI(UnitUI); // UI의 루트 오브젝트를 넘겨줌
+            }
+            else
+            {
+                // VisibilityFader가 없는 유닛(예: 플레이어)일 수 있으므로
+                // 적 유닛이라면 Warning을 띄우는 것이 좋습니다.
+                Debug.LogWarning(this.name + "에서 VisibilityFader를 찾을 수 없습니다. UI 숨기기가 작동하지 않을 수 있습니다.");
+            }
+
+            // 7. 보이지 않게 비활성화
+            UnitUI.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError(this.name + "에 uiPrefab이 할당되지 않았습니다!");
+        }
+    }
+
     // 상태 변경
     public void ChangeState(EnemyUnitState newState)
     {
@@ -82,7 +163,14 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
         if (IsDead) return;
         CurrentHP -= amount;
         // HP 변경 알림
-        OnHPChanged?.Invoke(CurrentHP, MaxHP); 
+        OnHPChanged?.Invoke(CurrentHP, MaxHP);
+
+        // 체력바 UI 업데이트
+        if (hpSlider != null)
+        {
+            // 값을 0~1 사이의 비율로 변환
+            hpSlider.value = CurrentHP / MaxHP;
+        }
 
         Debug.Log($"Hit, {gameObject.name} HP : {CurrentHP}");
 
@@ -101,6 +189,13 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
         EventManager.Instance.EnemyDefeated(EnemyID); // 사망 알림 전역
         Debug.Log($"몬스터 ID {EnemyID} 처치!");
 
+        // UI 오브젝트도 함께 파괴
+        if (UnitUI != null)
+        {
+            Destroy(UnitUI);
+        }
+
+        // 오브젝트 파괴
         Destroy(gameObject);
     }
 }

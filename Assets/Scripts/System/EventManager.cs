@@ -19,6 +19,15 @@ public class EventManager : MonoBehaviour
         }
     }
 
+    // "GameOver" 이벤트
+    public event Action OnGameOver;
+
+    // "GameOver" 이벤트를 발동시킬 함수
+    public void TriggerGameOver()
+    {
+        OnGameOver?.Invoke();
+    }
+
     // 적 개체 파괴시 발생하는 이벤트
     public event Action<int> OnEnemyDefeated;
     // 적 개체의 ID를 받아서 넘김
