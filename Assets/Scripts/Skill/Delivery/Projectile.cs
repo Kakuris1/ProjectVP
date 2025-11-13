@@ -30,10 +30,14 @@ public class Projectile : MonoBehaviour
         _ctx = ctx;
         _isInitialized = true;
 
+        // 상태 리셋: 이동 거리 초기화
+        _distanceTraveled = 0f;
+
         // SkillSpecAsset에서 관통 횟수를 가져옴
         _pierceCountLeft = _ctx.Spec.pierceCount;
 
         // 시전자는 절대 맞으면 안 됨
+        _targetsHit.Clear();
         _targetsHit.Add(_ctx.Caster);
 
         _maxTravelDistance = _ctx.Spec.skillRange * this.projectileRangeMultiplier;
@@ -58,7 +62,7 @@ public class Projectile : MonoBehaviour
         _distanceTraveled += deltaDistance;
         if (_distanceTraveled >= _maxTravelDistance)
         {
-            Destroy(gameObject); // 사거리 도달 시 파괴
+            _ctx.Spawner.Despawn(gameObject); // 사거리 도달 시 디스폰
         }
     }
 
@@ -90,7 +94,7 @@ public class Projectile : MonoBehaviour
         // 남은 관통 횟수가 없으면
         if (_pierceCountLeft <= 0)
         {
-            Destroy(gameObject); // 투사체 파괴
+            _ctx.Spawner.Despawn(gameObject); // 디스폰
         }
     }
 

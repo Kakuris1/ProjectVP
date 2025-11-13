@@ -42,9 +42,8 @@ public class GroundAoE : MonoBehaviour
             return;
         }
 
-        // 장판의 총 생명주기 설정
-        Destroy(gameObject, duration + _ctx.Spec.skillDelay);
-
+        // Despawn을 예약하는 Invoke 헬퍼를 사용
+        Invoke(nameof(SelfDespawn), duration + _ctx.Spec.skillDelay);
         // SkillSpec의 'skillDelay'를 "장판 활성화 대기 시간"으로 사용
         Invoke(nameof(ActivateAoE), _ctx.Spec.skillDelay);
     }
@@ -109,6 +108,18 @@ public class GroundAoE : MonoBehaviour
             {
                 _ctx.Spec.impacts[i].Apply(_ctx, target);
             }
+        }
+    }
+
+    private void SelfDespawn()
+    {
+        if (_isInitialized && _ctx.Spawner != null)
+        {
+            _ctx.Spawner.Despawn(gameObject);
+        }
+        else if (gameObject != null)
+        {
+            Destroy(gameObject); // Spawner가 없는 비상 상황
         }
     }
 }

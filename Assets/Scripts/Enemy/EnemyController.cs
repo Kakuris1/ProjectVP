@@ -38,7 +38,7 @@ public class EnemyController : MonoBehaviour
     private void OnEnable()
     {
         sensor.OnTargetChanged += HandleTargetChanged;
-        EnemyInfo.OnDeath += HandleDeath;
+        //EnemyInfo.OnDeath += HandleDeath;
     }
 
     private void OnDisable()
@@ -50,7 +50,7 @@ public class EnemyController : MonoBehaviour
         }
         if (EnemyInfo != null)
         {
-            EnemyInfo.OnDeath -= HandleDeath;
+            //EnemyInfo.OnDeath -= HandleDeath;
         }
     }
 

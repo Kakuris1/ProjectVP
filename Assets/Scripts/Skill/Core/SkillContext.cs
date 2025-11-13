@@ -67,6 +67,7 @@ namespace Combat.Skills
         GameObject Spawn(GameObject prefab, float scl, Vector3 pos, Quaternion rot);
         void SpawnOneShot(GameObject prefab, float scl, Vector3 pos, Quaternion rot);
         void SpawnOneShot(GameObject prefab, float scl, Vector3 pos, Quaternion rot, float duration);
+        void Despawn(GameObject instance);
     }
     public interface IDamageable
     {
@@ -90,7 +91,6 @@ namespace Combat.Skills
     // 2) Delivery: 어떻게 닿게 만들지(근접/투사체/장판…)
     public abstract class DeliveryAsset : ScriptableObject
     {
-        // 주의: 투사체형은 이 안에서 스폰만 하고, 충돌 순간에 Impact를 호출하는 식으로 설계 가능
         public abstract void Deliver(in SkillContext ctx, List<Transform> targets);
     }
 

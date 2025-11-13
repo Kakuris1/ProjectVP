@@ -24,5 +24,6 @@ public class PlatformControlSwitcher : MonoBehaviour
 
         // Common_Controls는 스크립트에서 아예 건드리지 않으므로
         // 항상 활성화된 상태를 유지
+        
     }
 }

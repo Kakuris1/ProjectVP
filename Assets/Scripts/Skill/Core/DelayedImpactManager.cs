@@ -68,7 +68,7 @@ public class DelayedImpactManager : MonoBehaviour
         }
         // --- (임팩트 적용 로직 끝) ---
 
-        // 5. 임무 완수 후 스스로 파괴
-        Destroy(gameObject);
+        // 5. 임무 완수 후 디스폰
+        _ctx.Spawner.Despawn(gameObject);
     }
 }

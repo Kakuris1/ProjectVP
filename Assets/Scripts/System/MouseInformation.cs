@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class MouseInformation : EnemyInformation
 {
+    public override void Initialize(int AreaNumber)
+    {
+        base.Initialize(AreaNumber);
+        Hostile = false; // 생쥐만 적대적 초기값이 달라서 추가
+    }
+
     public override void SetTarget(Transform newTarget)
     {
         CurrentTarget = newTarget;
