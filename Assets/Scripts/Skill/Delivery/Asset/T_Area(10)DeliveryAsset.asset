@@ -15,4 +15,4 @@ MonoBehaviour:
   hitMask:
     serializedVersion: 2
     m_Bits: 16384
-  skillAreaRange: 4
+  skillAreaRange: 10

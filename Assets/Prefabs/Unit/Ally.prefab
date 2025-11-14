@@ -98,7 +98,7 @@ MonoBehaviour:
   moveSpeed: 6
   skillRange: 0
   maxHealth: 300
-  detectionRadius: 5
+  detectionRadius: 15
   Skill: {fileID: 0}
   defaultSkillPool: {fileID: 11400000, guid: 326967e6b5a0e634e97aae3392385101, type: 2}
   CurrentTarget: {fileID: 0}

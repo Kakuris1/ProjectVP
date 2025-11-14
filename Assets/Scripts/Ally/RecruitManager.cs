@@ -5,10 +5,23 @@ using UnityEngine;
 public class RecruitManager : MonoBehaviour
 {
     private AllyInformation Info;
+    [Header("영입시 이펙트")]
+    [SerializeField]
+    private GameObject recruitVFX;
+
+    private ISpawner _spawner;
 
     private void Awake()
     {
         Info = GetComponent<AllyInformation>();
+        if (SkillManager.Instance != null)
+        {
+            _spawner = SkillManager.Instance.Spawner;
+        }
+        else
+        {
+            Debug.LogError("RecruitManager가 SkillManager.Instance.Spawner를 찾을 수 없습니다!");
+        }
     }
 
     private void OnEnable()
@@ -33,6 +46,10 @@ public class RecruitManager : MonoBehaviour
     private void Recruit()
     {
         // 0. 영입시 발생 이벤트
+        if (_spawner != null && recruitVFX != null)
+        {
+            _spawner.SpawnOneShot(recruitVFX, 1f, transform.position, transform.rotation, 5f);
+        }
 
         // 1. TeamManager에 자신을 아군으로 등록해달라고 요청
         TeamManager.Instance.RecruitAlly(Info);

@@ -133,6 +133,12 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
         }
     }
 
+    private void Update()
+    {
+        // 미영입 상태시 무적판정
+        if (CurrentState == AllyUnitState.Solo) { CurrentHP = MaxHP; }
+    }
+
     // 상태 변경
     public void ChangeState(AllyUnitState newState)
     {
@@ -185,6 +191,7 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
 // 아군 유닛이 가질 수 있는 상태들
 public enum AllyUnitState
 {
+    Solo,           // 미영입상태
     Idle,           // 대기
     Following,      // 플레이어 추적
     Engaging,       // 적과 교전
