@@ -1,58 +1,70 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-// ±¸¿ª °ü¸® ¸Å´ÏÀú
+using UnityEngine.SceneManagement;
+// êµ¬ì—­ ê´€ë¦¬ ë§¤ë‹ˆì €
 public class AreaManager : MonoBehaviour
 {
-    [Header("±¸¿ª ¹øÈ£")]
+    [Header("êµ¬ì—­ ë²ˆí˜¸")]
     public int areaNumber;
-    [Header("½ºÆù ¼³Á¤")]
+    [Header("ìŠ¤í° ì„¤ì •")]
     public int NumberOfMouse;
     public int NumberOfConch;
     public int NumberOfUrchin1;
     public int NumberOfUrchin2;
-    [Tooltip("ÀÌ ¹İ°æ ³»¿¡¼­ ÀûµéÀÌ ½ºÆùµË´Ï´Ù.")]
-    public float spawnRadius = 20f; // ½ºÆù ¹İ°æ
+    [Tooltip("ì´ ë°˜ê²½ ë‚´ì—ì„œ ì ë“¤ì´ ìŠ¤í°ë©ë‹ˆë‹¤.")]
+    public float spawnRadius = 20f; // ìŠ¤í° ë°˜ê²½
 
-    [Header("°Å¸® Ã¼Å© ¼³Á¤")]
-    [Tooltip("ÇÃ·¹ÀÌ¾î°¡ ÀÌ °Å¸® ¾ÈÀ¸·Î µé¾î¿À¸é ½ºÆù ½ÃÀÛ")]
-    public float spawnDistance = 200f;
-    [Tooltip("ÇÃ·¹ÀÌ¾î°¡ ÀÌ °Å¸® ¹ÛÀ¸·Î ³ª°¡¸é µğ½ºÆù. ½ºÆù °Å¸®º¸´Ù Ä¿¾ß ÇÕ´Ï´Ù.")]
+    [Header("ê±°ë¦¬ ì²´í¬ ì„¤ì •")]
+    [Tooltip("í”Œë ˆì´ì–´ê°€ ì´ ê±°ë¦¬ ì•ˆìœ¼ë¡œ ë“¤ì–´ì˜¤ë©´ ìŠ¤í° ì‹œì‘")]
+    public float spawnDistance = 50f;
+    [Tooltip("í”Œë ˆì´ì–´ê°€ ì´ ê±°ë¦¬ ë°–ìœ¼ë¡œ ë‚˜ê°€ë©´ ë””ìŠ¤í°. ìŠ¤í° ê±°ë¦¬ë³´ë‹¤ ì»¤ì•¼ í•©ë‹ˆë‹¤.")]
     public float despawnDistance = 300f;
-    [Tooltip("°Å¸® Ã¼Å© ÁÖ±â(ÃÊ)")]
+    [Tooltip("ê±°ë¦¬ ì²´í¬ ì£¼ê¸°(ì´ˆ)")]
     public float checkInterval = 5.0f;
 
-    [Header("Å¬¸®¾î Á¶°Ç Ã³Ä¡ ¼ö")]
+    [Header("í´ë¦¬ì–´ ì¡°ê±´ ì²˜ì¹˜ ìˆ˜")]
     [SerializeField]
-    [Tooltip("0 ÀÌ¸é »ıÁã Á¦¿Ü ¸ğµç À¯´Ö Ã³Ä¡")]
-    private int NumberOfClearCondition = 0;   // Å¬¸®¾î Á¶°Ç ¼ö
-    private int CountDefeatedEnemyInArea = 0; // ±¸¿ª Ã³Ä¡µÈ Àû °³Ã¼ ¼ö
-    private bool isCleared = false;            // ±¸¿ª Å¬¸®¾î ¿©ºÎ
-    private List<GameObject> _activeEnemies = new List<GameObject>(); // ½ºÆùµÈ Àû ÃßÀû ¸®½ºÆ®
-    private Transform _playerTransform; // ÇÃ·¹ÀÌ¾î ÂüÁ¶
-    private bool _isSpawned = false; // ÇöÀç ½ºÆùµÇ¾î ÀÖ´ÂÁö »óÅÂ ÇÃ·¡±×
+    [Tooltip("0 ì´ë©´ ìƒì¥ ì œì™¸ ëª¨ë“  ìœ ë‹› ì²˜ì¹˜")]
+    private int NumberOfClearCondition = 0;     // í´ë¦¬ì–´ ì¡°ê±´ ìˆ˜
+    private int CountDefeatedEnemyInArea = 0;   // êµ¬ì—­ ì²˜ì¹˜ëœ ì  ê°œì²´ ìˆ˜
+    private bool isCleared = false;             // êµ¬ì—­ í´ë¦¬ì–´ ì—¬ë¶€
+    private List<GameObject> _activeEnemies     // ìŠ¤í°ëœ ì  ì¶”ì  ë¦¬ìŠ¤íŠ¸
+        = new List<GameObject>();               
+    private Transform _playerTransform;         // í”Œë ˆì´ì–´ ì°¸ì¡°
+    private bool _isSpawned = false;            // í˜„ì¬ ìŠ¤í°ë˜ì–´ ìˆëŠ”ì§€ ìƒíƒœ í”Œë˜ê·¸
+    private Transform _enemyContainer;          // ìŠ¤í° ëœ ì ì„ ë‹´ì„ ì»¨í…Œì´ë„ˆ
 
     private void Awake()
     {
         if(NumberOfClearCondition == 0)
         {
-            // »ıÁã Á¦¿Ü À¯´Ö ¸ğµÎ Ã³Ä¡½Ã Å¬¸®¾î
+            // ìƒì¥ ì œì™¸ ìœ ë‹› ëª¨ë‘ ì²˜ì¹˜ì‹œ í´ë¦¬ì–´
             NumberOfClearCondition = NumberOfConch + NumberOfUrchin1 + NumberOfUrchin2;
         }
 
-        // despawnDistance°¡ spawnDistanceº¸´Ù ÀÛÀ¸¸é °æ°í ¹× ÀÚµ¿ º¸Á¤
+        // despawnDistanceê°€ spawnDistanceë³´ë‹¤ ì‘ìœ¼ë©´ ê²½ê³  ë° ìë™ ë³´ì •
         if (despawnDistance <= spawnDistance)
         {
-            Debug.LogWarning($"AreaManager {areaNumber}: µğ½ºÆù °Å¸®({despawnDistance}m)°¡ ½ºÆù °Å¸®({spawnDistance}m)º¸´Ù ÀÛ°Å³ª °°½À´Ï´Ù. ÀÚµ¿ º¸Á¤ÇÕ´Ï´Ù.");
+            Debug.LogWarning($"AreaManager {areaNumber}: ë””ìŠ¤í° ê±°ë¦¬({despawnDistance}m)ê°€ ìŠ¤í° ê±°ë¦¬({spawnDistance}m)ë³´ë‹¤ ì‘ê±°ë‚˜ ê°™ìŠµë‹ˆë‹¤. ìë™ ë³´ì •í•©ë‹ˆë‹¤.");
             despawnDistance = spawnDistance + 50f;
         }
+
     }
     private void Start()
     {
+        // [ ì  ì»¨í…Œì´ë„ˆ ìƒì„±]
+        // ì´ AreaManagerê°€ MainLevelSceneì— ìˆìœ¼ë¯€ë¡œ, ì´ ì»¨í…Œì´ë„ˆë„ MainLevelSceneì— ìƒì„±
+        _enemyContainer = new GameObject($"[Area {areaNumber} Enemies]").transform;
+
+        // ì”¬ í•˜ì´ì–´ë¼í‚¤ë¥¼ ê¹”ë”í•˜ê²Œ í•˜ê¸° ìœ„í•´
+        // ì»¨í…Œì´ë„ˆë¥¼ EnemyContainerì˜ ìì‹ìœ¼ë¡œ ì„¤ì •
+        _enemyContainer.SetParent(EnemyContainer.Instance.transform);
+
         _playerTransform = Player.Instance.transform;
 
-        // 0ÃÊ ÈÄ Áï½Ã 1È¸ ½ÇÇà, ±× ÈÄ checkInterval(5ÃÊ)¸¶´Ù CheckDistanceToPlayer ¹İº¹ È£Ãâ
-        InvokeRepeating(nameof(CheckDistanceToPlayer), 0f, checkInterval);
+        // 0ì´ˆ í›„ ì¦‰ì‹œ 1íšŒ ì‹¤í–‰, ê·¸ í›„ checkInterval(5ì´ˆ)ë§ˆë‹¤ CheckDistanceToPlayer ë°˜ë³µ í˜¸ì¶œ
+        InvokeRepeating(nameof(CheckDistanceToPlayer), 1f, checkInterval);
     }
     private void OnEnable()
     {   
@@ -69,47 +81,46 @@ public class AreaManager : MonoBehaviour
 
     private void HandleEnemyDefeated(EnemyType enemyType, int EnemyID)
     {
-        // Å¬¸®¾î ½Ã °¡µå Å¬·ÎÁî
+        // í´ë¦¬ì–´ ì‹œ ê°€ë“œ í´ë¡œì¦ˆ
         if (isCleared) { return; }
-        // »ıÁã°¡ ¾Æ´Ñ À¯´Ö¸¸ Ä«¿îÆ®
+        // ìƒì¥ê°€ ì•„ë‹Œ ìœ ë‹›ë§Œ ì¹´ìš´íŠ¸
         if(enemyType != EnemyType.Mouse) CountDefeatedEnemyInArea++;
-        // Á¶°Ç¸¸Å­ Ã³Ä¡½Ã ±¸¿ª Å¬¸®¾î ÆÇÁ¤
+        // ì¡°ê±´ë§Œí¼ ì²˜ì¹˜ì‹œ êµ¬ì—­ í´ë¦¬ì–´ íŒì •
         if (NumberOfClearCondition <= CountDefeatedEnemyInArea)
         {
             isCleared = true;
             EventManager.Instance.AreaCleared(areaNumber);
         }
     }
-
     private void CheckDistanceToPlayer()
     {
-        // °Å¸® °è»ê (YÃàÀº ¹«½ÃÇÏ°í XZ Æò¸é 2D °Å¸®·Î °è»ê)
+        // ê±°ë¦¬ ê³„ì‚° (Yì¶•ì€ ë¬´ì‹œí•˜ê³  XZ í‰ë©´ 2D ê±°ë¦¬ë¡œ ê³„ì‚°)
         Vector3 playerPosXZ = new Vector3(_playerTransform.position.x, 0, _playerTransform.position.z);
         Vector3 areaPosXZ = new Vector3(transform.position.x, 0, transform.position.z);
-        float distanceSqr = (playerPosXZ - areaPosXZ).sqrMagnitude; // Á¦°ö °Å¸®°¡ Vector3.Distanceº¸´Ù ¿¬»êÀÌ ºü¸§
+        float distanceSqr = (playerPosXZ - areaPosXZ).sqrMagnitude; // ì œê³± ê±°ë¦¬ê°€ Vector3.Distanceë³´ë‹¤ ì—°ì‚°ì´ ë¹ ë¦„
 
-        // 1. ½ºÆù Á¶°Ç (°¡±î¿ò + ¾ÆÁ÷ ½ºÆù ¾È µÊ + Å¬¸®¾î ¾È µÊ)
+        // 1. ìŠ¤í° ì¡°ê±´ (ê°€ê¹Œì›€ + ì•„ì§ ìŠ¤í° ì•ˆ ë¨ + í´ë¦¬ì–´ ì•ˆ ë¨)
         if (distanceSqr < spawnDistance * spawnDistance && !_isSpawned && !isCleared)
         {
-            Debug.Log($"Area {areaNumber}: ÇÃ·¹ÀÌ¾î Á¢±Ù, ½ºÆù ½ÃÀÛ.");
-            SpawnAllEnemies();
+            Debug.Log($"Area {areaNumber}: í”Œë ˆì´ì–´ ì ‘ê·¼, ìŠ¤í° ì‹œì‘.");
             _isSpawned = true;
+            SpawnAllEnemies();
         }
-        // 2. µğ½ºÆù Á¶°Ç (¸Ø + ÇöÀç ½ºÆùµÈ »óÅÂ + Å¬¸®¾î ¾È µÊ)
+        // 2. ë””ìŠ¤í° ì¡°ê±´ (ë©ˆ + í˜„ì¬ ìŠ¤í°ëœ ìƒíƒœ + í´ë¦¬ì–´ ì•ˆ ë¨)
         else if (distanceSqr > despawnDistance * despawnDistance && _isSpawned && !isCleared)
         {
-            Debug.Log($"Area {areaNumber}: ÇÃ·¹ÀÌ¾î ÀÌÅ», µğ½ºÆù ½ÃÀÛ.");
-            DespawnAllEnemies();
+            Debug.Log($"Area {areaNumber}: í”Œë ˆì´ì–´ ì´íƒˆ, ë””ìŠ¤í° ì‹œì‘.");
             _isSpawned = false;
+            DespawnAllEnemies();
 
-            // "´Ù½Ã µ¹¾Æ¿À¸é º¹±¸" Ã³Ä¡ Ä«¿îÆ® ¸®¼Â
+            // "ë‹¤ì‹œ ëŒì•„ì˜¤ë©´ ë³µêµ¬" ì²˜ì¹˜ ì¹´ìš´íŠ¸ ë¦¬ì…‹
             CountDefeatedEnemyInArea = 0;
         }
     }
 
     private void SpawnAllEnemies()
     {
-        Debug.Log(areaNumber + "±¸¿ª Àû ½ºÆù");
+        Debug.Log(areaNumber + "êµ¬ì—­ ì  ìŠ¤í°");
         SpawnEnemiesByType(0, NumberOfMouse);
         SpawnEnemiesByType(1, NumberOfConch);
         SpawnEnemiesByType(2, NumberOfUrchin1);
@@ -125,39 +136,42 @@ public class AreaManager : MonoBehaviour
             EnemyInformation spawnedEnemy = Instance.GetComponent<EnemyInformation>();
             if (spawnedEnemy != null)
             {
-                spawnedEnemy.area = this;   // ½ºÆù À¯´ÖÀÇ areaManager ÃßÀû
+                spawnedEnemy.area = this;   // ìŠ¤í° ìœ ë‹›ì˜ areaManager ì¶”ì 
             }
-            else Debug.LogError("Àû À¯´Ö ½ºÆù ÈÄ ÃÊ±âÈ­ ½ÇÆĞ");
-            _activeEnemies.Add(Instance); // ÃßÀû ¸®½ºÆ®¿¡ Ãß°¡
+            else Debug.LogError("ì  ìœ ë‹› ìŠ¤í° í›„ ì´ˆê¸°í™” ì‹¤íŒ¨");
+            // GPPì— ìŠ¤í°ëœ Instanceì˜ ë¶€ëª¨ë¥¼ MainLevelSceneì— ìˆëŠ”
+            // _enemyContainerë¡œ ì„¤ì •í•˜ì—¬ ì”¬ì„ 'ì´ë™'ì‹œí‚´
+            Instance.transform.SetParent(_enemyContainer);
+            _activeEnemies.Add(Instance); // ì¶”ì  ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€
         }
     }
     private void DespawnAllEnemies()
     {
-        Debug.Log(areaNumber + "±¸¿ª Àû µğ½ºÆù");
+        Debug.Log(areaNumber + "êµ¬ì—­ ì  ë””ìŠ¤í°");
         foreach (GameObject enemy in _activeEnemies)
         {
-            if (enemy != null && enemy.activeSelf) // ÀÌ¹Ì Á×Áö ¾Ê¾Ò´Ù¸é
+            if (enemy != null && enemy.activeSelf) // ì´ë¯¸ ì£½ì§€ ì•Šì•˜ë‹¤ë©´
             {
                 PoolManager.Instance.Despawn(enemy);
             }
         }
-        _activeEnemies.Clear(); // ¸®½ºÆ® ºñ¿ì±â (´Ù½Ã µ¹¾Æ¿À¸é »õ·Î ½ºÆù)
+        _activeEnemies.Clear(); // ë¦¬ìŠ¤íŠ¸ ë¹„ìš°ê¸° (ë‹¤ì‹œ ëŒì•„ì˜¤ë©´ ìƒˆë¡œ ìŠ¤í°)
     }
 
     private Vector3 GetRandomNavMeshPosition(Vector3 origin, float radius)
     {
-        // 1. ¹İ°æ ³» ·£´ıÇÑ ÁöÁ¡ ¼±ÅÃ
+        // 1. ë°˜ê²½ ë‚´ ëœë¤í•œ ì§€ì  ì„ íƒ
         Vector3 randomDir = Random.insideUnitSphere * radius;
         randomDir += origin;
 
-        // 2. NavMesh¿¡¼­ °¡Àå °¡±î¿î À¯È¿ÇÑ ÁöÁ¡À» 5m ¹İ°æ ³»¿¡¼­ Ã£À½
+        // 2. NavMeshì—ì„œ ê°€ì¥ ê°€ê¹Œìš´ ìœ íš¨í•œ ì§€ì ì„ 5m ë°˜ê²½ ë‚´ì—ì„œ ì°¾ìŒ
         if (NavMesh.SamplePosition(randomDir, out NavMeshHit hit, 5.0f, NavMesh.AllAreas))
         {
             return hit.position;
         }
         else
         {
-            return origin; // ¸ø Ã£À¸¸é ±×³É Áß¾Ó¿¡ ½ºÆù
+            return origin; // ëª» ì°¾ìœ¼ë©´ ê·¸ëƒ¥ ì¤‘ì•™ì— ìŠ¤í°
         }
     }
 }

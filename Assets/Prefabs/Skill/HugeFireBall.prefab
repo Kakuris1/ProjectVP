@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4156272573564127589}
   - component: {fileID: 8144844699019679515}
   - component: {fileID: 8246771084216296337}
-  - component: {fileID: 2990132148635315491}
+  - component: {fileID: 1374461548050607055}
   m_Layer: 0
   m_Name: HugeFireBall
   m_TagString: Untagged
@@ -83,7 +83,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2990132148635315491
+--- !u!114 &1374461548050607055
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,13 +92,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 8917488671128237167}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b714fc4020c36f40a916202c3bfdded, type: 3}
+  m_Script: {fileID: 11500000, guid: e1e38c81a067a6e47a8aeb9fa79847c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
+  tickRate: 0.2
   targetLayer:
     serializedVersion: 2
     m_Bits: 16384
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 768
+  projectileRangeMultiplier: 1.5
 --- !u!1001 &1533406013343136720
 PrefabInstance:
   m_ObjectHideFlags: 0

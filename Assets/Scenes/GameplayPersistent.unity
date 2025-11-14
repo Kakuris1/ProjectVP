@@ -404,7 +404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab:
-  - {fileID: 919132149155446097, guid: 350cccc9b6b40e14782661e26c6d0e5b, type: 3}
+  - {fileID: 1151807541875160355, guid: 840532c05be24af45be45dfd9fc81d81, type: 3}
   - {fileID: 8071828669023420719, guid: 7ef8bee88b163174a83979d00dc5793d, type: 3}
   - {fileID: 5520188246181787693, guid: 54fb5e2ceef6c4b438ab81e84d53eb29, type: 3}
   - {fileID: 1545345005409356799, guid: d739ecc02386c844784dd854235de80e, type: 3}
@@ -762,7 +762,7 @@ GameObject:
   - component: {fileID: 441483247}
   - component: {fileID: 441483246}
   - component: {fileID: 441483245}
-  m_Layer: 7
+  m_Layer: 15
   m_Name: BackgroundPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1224,7 +1224,7 @@ GameObject:
   - component: {fileID: 594085471}
   - component: {fileID: 594085470}
   - component: {fileID: 594085469}
-  m_Layer: 7
+  m_Layer: 15
   m_Name: MinimapPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2017,7 +2017,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &1026473075
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2508,11 +2508,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3808209104694535747, guid: 6afae59666566d3428886df3c8c95ed7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.5
+      value: -16.5
       objectReference: {fileID: 0}
     - target: {fileID: 3808209104694535747, guid: 6afae59666566d3428886df3c8c95ed7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 11.25
+      value: 34.25
       objectReference: {fileID: 0}
     - target: {fileID: 3808209104694535747, guid: 6afae59666566d3428886df3c8c95ed7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2909,33 +2909,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 622333503629280156, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
-      propertyPath: radius
-      value: 28
-      objectReference: {fileID: 0}
-    - target: {fileID: 1161250154739145882, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
-      propertyPath: radius
-      value: 28
-      objectReference: {fileID: 0}
     - target: {fileID: 2142918660254338326, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 2181083101088645605, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
-      propertyPath: Skill
-      value: 
-      objectReference: {fileID: 11400000, guid: db3503db05ca9d24fbfc91335a305222, type: 2}
-    - target: {fileID: 2181083101088645605, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
-      propertyPath: uiPrefab
-      value: 
-      objectReference: {fileID: 954490523143617969, guid: 6df3f7abbfc8b8042b801dabe0743684, type: 3}
-    - target: {fileID: 2181083101088645605, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
-      propertyPath: defaultSkillPool
-      value: 
-      objectReference: {fileID: 11400000, guid: 326967e6b5a0e634e97aae3392385101, type: 2}
+    - target: {fileID: 6312401834086215743, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6574999602249099165, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 26
+      value: -66
       objectReference: {fileID: 0}
     - target: {fileID: 6574999602249099165, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2943,7 +2927,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6574999602249099165, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -112.85
+      value: -86.850006
       objectReference: {fileID: 0}
     - target: {fileID: 6574999602249099165, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2972,6 +2956,10 @@ PrefabInstance:
     - target: {fileID: 6574999602249099165, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7663423319785875633, guid: 1dbe9d41b11169846a2217c218cd4c64, type: 3}
+      propertyPath: maxSpeed
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3395,8 +3383,8 @@ SceneRoots:
   - {fileID: 399324344}
   - {fileID: 159844395}
   - {fileID: 402355995}
-  - {fileID: 166452910}
   - {fileID: 205956507}
+  - {fileID: 166452910}
   - {fileID: 533805610}
   - {fileID: 1082849689}
   - {fileID: 1694278586}

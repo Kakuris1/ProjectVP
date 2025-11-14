@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 253b00a76d1f22c44ad4bcc653379856, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: eaf33bdddcc43bc49b45a165271720ae, type: 2}
     - target: {fileID: 919132149155446097, guid: 253b00a76d1f22c44ad4bcc653379856, type: 3}
       propertyPath: m_Name
       value: Urchin2
@@ -90,6 +94,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 253b00a76d1f22c44ad4bcc653379856, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4890471041078077655}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 253b00a76d1f22c44ad4bcc653379856, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4636215141324619892}
   m_SourcePrefab: {fileID: 100100000, guid: 253b00a76d1f22c44ad4bcc653379856, type: 3}
 --- !u!1 &1545345005409356799 stripped
 GameObject:
@@ -108,20 +115,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d55846334be3c7429b19b3c315d0757, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 3
   EnemyID: 0
-  EnemyType: 3
+  area: {fileID: 0}
   CurrentState: 1
   Hostile: 1
   nonHostileBehavior: {fileID: 0}
+  PatrolOrigin: {x: 0, y: 0, z: 0}
   CanAttack: 0
   hasMoveCommand: 0
-  patrolSpeed: 5
-  engagingSpeed: 8
-  runSpeed: 10
-  skillRange: 5
-  maxHealth: 100
-  detectionRadius: 12
-  Skill: {fileID: 0}
+  patrolSpeed: 6
+  engagingSpeed: 6
+  runSpeed: 6
+  skillRange: 0
+  maxHealth: 200
+  detectionRadius: 18
+  Skill: {fileID: 11400000, guid: 9adce21f90c0d114aba649155e8ab77d, type: 2}
   CurrentTarget: {fileID: 0}
   uiPrefab: {fileID: 954490523143617969, guid: 6df3f7abbfc8b8042b801dabe0743684, type: 3}
   UIOffset: {x: 0.3, y: -1.1, z: 0}
@@ -230,7 +239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderers: []
   fadeInDuration: 0.15
-  fadeOutDuration: 0.5
+  fadeOutDuration: 0.4
   colorProp: _BaseColor
 --- !u!195 &7307082316877474602
 NavMeshAgent:
@@ -275,3 +284,30 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 240
   m_Center: {x: 0.000091552734, y: -12.586655, z: -0.0014801025}
+--- !u!54 &4636215141324619892
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1545345005409356799}
+  serializedVersion: 4
+  m_Mass: 10
+  m_Drag: 5
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0

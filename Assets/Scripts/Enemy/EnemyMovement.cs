@@ -24,9 +24,22 @@ public class EnemyMovement : MonoBehaviour
         enemyInfo = GetComponent<EnemyInformation>();
         enemyController = GetComponent<EnemyController>();
         sensor = GetComponent<EnemySensorSight>();
+    }
 
-        // 순찰 기준점을 이 유닛이 처음 스폰된 위치로 기억합니다.
-        patrolOrigin = transform.position;
+    public void Initialize()
+    {
+        if(enemyInfo != null)
+        {
+            // 순찰 기준점을 이 유닛이 처음 스폰된 위치로 기억합니다.
+            patrolOrigin = enemyInfo.PatrolOrigin;
+        }
+        else
+        {
+            // 비상시: AreaManager가 할당 안 해줬으면 스폰된 위치를 기준점으로
+            patrolOrigin = transform.position;
+            Debug.LogWarning($"{name}: AreaManager가 'area'를 할당하지 않았습니다. 스폰 위치를 순찰 기준점으로 사용합니다.");
+        }
+        patrolWanderTimer = 0f; // 타이머 초기화
     }
 
     private void Update()
@@ -169,17 +182,18 @@ public class EnemyMovement : MonoBehaviour
     }
 
     // (죽음) 상태: 모든 컴포넌트를 비활성화
+    // 미사용 -> 디스폰 시스템 추가
     private void HandleDead()
     {
-        StopMovement();
-        agent.enabled = false;
+        //StopMovement();
+        //agent.enabled = false;
 
-        GetComponent<EnemyController>().enabled = false;
-        GetComponent<EnemySensorSight>().enabled = false;
-        GetComponent<SkillController>().enabled = false;
-        GetComponent<SkillPipeline>().enabled = false; //
+        //GetComponent<EnemyController>().enabled = false;
+        //GetComponent<EnemySensorSight>().enabled = false;
+        //GetComponent<SkillController>().enabled = false;
+        //GetComponent<SkillPipeline>().enabled = false; //
 
-        this.enabled = false; // 자기 자신도 끈다
+        //this.enabled = false; // 자기 자신도 끈다
     }
 
     private void StopMovement()

@@ -57,18 +57,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e25efcb20ce1a446b7f966023808f25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetAreaNumber: 0
+  enemyType: 0
   EnemyID: 0
+  area: {fileID: 0}
   CurrentState: 1
   Hostile: 0
   nonHostileBehavior: {fileID: 11400000, guid: bb13e2199e3acaf4fa9866e7c0ac3ee5, type: 2}
+  PatrolOrigin: {x: 0, y: 0, z: 0}
   CanAttack: 0
   hasMoveCommand: 0
   patrolSpeed: 5
   engagingSpeed: 8
   runSpeed: 10
   skillRange: 0
-  maxHealth: 100
+  maxHealth: 20
   detectionRadius: 15
   Skill: {fileID: 11400000, guid: 9adce21f90c0d114aba649155e8ab77d, type: 2}
   CurrentTarget: {fileID: 0}
@@ -179,7 +181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderers: []
   fadeInDuration: 0.15
-  fadeOutDuration: 0.5
+  fadeOutDuration: 0.4
   colorProp: _BaseColor
 --- !u!195 &-1199509219229259334
 NavMeshAgent:
@@ -287,8 +289,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1151807541875160355}
   serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
+  m_Mass: 5
+  m_Drag: 5
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -304,7 +306,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!114 &2896963158269526894
 MonoBehaviour:

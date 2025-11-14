@@ -34,7 +34,7 @@ public class PoolManager : MonoBehaviour
     }
 
     // 4. 오브젝트 '스폰' (꺼내기)
-    public GameObject Spawn(GameObject prefab, Vector3 position, Quaternion rotation)
+    public GameObject Spawn(GameObject prefab, float scl, Vector3 position, Quaternion rotation)
     {
        // Debug.Log("PoolManager Spawn 호출");
         // 1. 이 프리팹에 대한 풀(Queue)이 존재하는지 확인
@@ -59,7 +59,9 @@ public class PoolManager : MonoBehaviour
         {
             // 5. 없으면: 새로 Instantiate (이때만 GC 발생)
             instance = Instantiate(prefab);
-
+            // 새로 생성된거면 사이즈 초기화
+            Vector3 size = instance.transform.localScale;
+            instance.transform.localScale = new Vector3(size.x * scl, size.y * scl, size.z * scl);
             // 6. 새로 만들었다면, 이 오브젝트의 '출신(원본 프리팹)'을
             //    기억하기 위해 PooledObject 헬퍼 컴포넌트를 붙임
             PooledObject helper = instance.AddComponent<PooledObject>();

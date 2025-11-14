@@ -21,13 +21,12 @@ public class EnemySpawner : MonoBehaviour
 
     public GameObject SpawnEnemy(int areaNum, int enemyNum, Vector3 spawnPosition)
     {
-        GameObject enemyInstance = PoolManager.Instance.Spawn(enemyPrefab[enemyNum], spawnPosition, Quaternion.identity);
-
+        spawnPosition.y = 0;
+        GameObject enemyInstance = PoolManager.Instance.Spawn(enemyPrefab[enemyNum], 1f, spawnPosition, Quaternion.identity);
         EnemyInformation info = enemyInstance.GetComponent<EnemyInformation>();
-
         if (info != null)
         {
-            info.Initialize(areaNum);
+            info.Initialize(areaNum, spawnPosition);
         }
         return enemyInstance;
     }

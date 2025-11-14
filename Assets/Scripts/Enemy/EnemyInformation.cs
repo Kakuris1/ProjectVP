@@ -6,7 +6,7 @@ using UnityEngine.UI;
 // 적 유닛 데이터 중심 클래스
 public class EnemyInformation : MonoBehaviour, IUnitDataHub
 {
-    [SerializeField] private EnemyType EnemyType;
+    [SerializeField] private EnemyType enemyType;
     [Header("적 유닛 ID")]
     public int EnemyID;
     public AreaManager area;
@@ -16,6 +16,7 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
     public bool Hostile; // 프로퍼티로 바꿔야함
     [Header("비적대적일 때 행동 SO")]
     public NonHostileBehaviorAsset nonHostileBehavior;
+    public Vector3 PatrolOrigin;
     [Header("BT 제어 플래그")]
     [Tooltip("BT가 공격을 허가할 때만 true가 됨")]
     public bool CanAttack = false; // 기본값은 false
@@ -40,6 +41,7 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
     [Header("스킬 (Skill")]
     public SkillSpecAsset Skill;
     private SkillController _skillController;
+    private EnemyMovement _enemyMovement;
     [Tooltip("현재 목표물")]
     public Transform CurrentTarget;
 
@@ -59,15 +61,17 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
     {
         // 최대체력 설정
         MaxHP = maxHealth;
+
         _skillController = GetComponent<SkillController>();
-        if(_skillController != null)
+        if(_skillController != null && Skill!=null)
         {
             _skillController.Equip(Skill);
             skillRange = Skill.skillRange;
         }
+        _enemyMovement = GetComponent<EnemyMovement>();
     }
 
-    public virtual void Initialize(int AreaNumber)
+    public virtual void Initialize(int AreaNumber, Vector3 spawnPos)
     {
         EnemyID = AreaNumber;
         ChangeState(EnemyUnitState.Patrol);
@@ -79,6 +83,8 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
         IsDead = false;
         CurrentTarget = null;
         ConnectUI();
+        PatrolOrigin = spawnPos;
+        _enemyMovement.Initialize();
     }
 
     protected virtual void ConnectUI()
@@ -86,7 +92,10 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
         // 1. UI 프리팹 생성 및 연결
         if (uiPrefab != null)
         {
-            UnitUI = PoolManager.Instance.Spawn(uiPrefab, transform.position, Quaternion.identity);
+            UnitUI = PoolManager.Instance.Spawn(uiPrefab, 1f, transform.position, Quaternion.identity);
+
+            // 하이어라키 창 정리
+            UnitUI.transform.SetParent(UnitUIContainer.Instance.transform);
 
             // 2. UI가 '나'를 따라다니도록 Target 연결
             FollowTargetWithOffset followScript = UnitUI.GetComponent<FollowTargetWithOffset>();
@@ -198,7 +207,7 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
         if (IsDead) return;
         IsDead = true;
         OnDeath?.Invoke(); // 사망 알림 내부
-        EventManager.Instance.EnemyDefeated(EnemyID); // 사망 알림 전역
+        EventManager.Instance.EnemyDefeated(enemyType, EnemyID); // 사망 알림 전역
         Debug.Log($"몬스터 ID {EnemyID} 처치!");
 
         // UI 오브젝트도 함께 파괴

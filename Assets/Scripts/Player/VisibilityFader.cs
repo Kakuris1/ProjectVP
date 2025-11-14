@@ -31,6 +31,11 @@ public class VisibilityFader : MonoBehaviour
     public void SetLinkedUI(GameObject uiRoot)
     {
         _linkedUI = uiRoot;
+        if (_linkedUI != null)
+        {
+            bool isTargetVisible = (_target > 0f);
+            _linkedUI.SetActive(isTargetVisible);
+        }
     }
 
     public void SetVisible(bool v)
@@ -41,17 +46,11 @@ public class VisibilityFader : MonoBehaviour
         // '보이기'(v=true)일 경우 fadeInDuration을, '숨기기'(v=false)일 경우 fadeOutDuration을 선택
         float duration = v ? fadeInDuration : fadeOutDuration;
 
-        // 보이기 시작하면 UI 활성화
-        if (v && _linkedUI != null)
-        {
-            _linkedUI.SetActive(true);
-        }
-
         // Fade 코루틴에 선택한 duration 값을 매개변수로 넘김
-        _co = StartCoroutine(Fade(duration));
+        _co = StartCoroutine(Fade(duration, v));
     }
 
-    IEnumerator Fade(float duration)
+    IEnumerator Fade(float duration, bool isFadingIn)
     {
         // (안전 장치) 만약 duration이 0이면 즉시 값을 적용하고 코루틴 종료
         if (duration <= 0f)
@@ -63,6 +62,11 @@ public class VisibilityFader : MonoBehaviour
             if (_linkedUI != null) _linkedUI.SetActive(_target > 0f);
 
             yield break; // 코루틴 즉시 종료
+        }
+
+        if (isFadingIn && _linkedUI != null)
+        {
+            _linkedUI.SetActive(true);
         }
 
         float start = _current, t = 0f;

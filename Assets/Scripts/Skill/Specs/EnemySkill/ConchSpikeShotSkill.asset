@@ -10,22 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa01ed33454d5584ea36325bdef9e07d, type: 3}
-  m_Name: New Skill Spec Asset
+  m_Name: ConchSpikeShotSkill
   m_EditorClassIdentifier: 
   damage: 20
-  cooldown: 0.5
+  cooldown: 2
   manaCost: 10
-  skillRange: 5
+  skillRange: 15
   skillDelay: 0
   maxTargetCount: 1
   pierceCount: 1
-  targeting: {fileID: 0}
-  delivery: {fileID: 0}
-  impacts: []
-  costPolicy: {fileID: 0}
+  targeting: {fileID: 11400000, guid: 3975edee73eb3b84c9ac101511352f67, type: 2}
+  delivery: {fileID: 11400000, guid: fa59d81f483771e41b732492afada6f5, type: 2}
+  impacts:
+  - {fileID: 11400000, guid: 656b48ede13ea1846a62e47a38bf65d9, type: 2}
+  costPolicy: {fileID: 11400000, guid: e6233c3206bbf6740bec7e35e8d87e9f, type: 2}
   castVfx: {fileID: 0}
   castVfxSize: 0
   hitVfx: {fileID: 0}
   hitVfxSize: 0
-  skillVfx: {fileID: 0}
-  skillVfxSize: 0
+  skillVfx: {fileID: 8777542493743947490, guid: 111588d98e69f4d49916ee9822edbb7f, type: 3}
+  skillVfxSize: 1

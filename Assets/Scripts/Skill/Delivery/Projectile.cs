@@ -1,16 +1,19 @@
-using UnityEngine;
 using Combat.Skills;
 using System.Collections.Generic;
+using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 // 이 스크립트는 투사체 프리팹에 붙어야 합니다.
 // 또한, 프리팹에는 Rigidbody(IsKinematic=true)와 Collider(IsTrigger=true)가 필요합니다.
 [RequireComponent(typeof(Collider), typeof(Rigidbody))]
-public class Projectile : MonoBehaviour
+public class Projectile : MonoBehaviour, IProjectileLogic
 {
     [Header("투사체 설정")]
     public float moveSpeed = 20f;
     [Tooltip("이 투사체가 영향을 줄 대상의 레이어")]
     public LayerMask targetLayer;
+    [Tooltip("투사체를 '막을' 대상의 레이어")]
+    public LayerMask obstacleLayer;
     [Tooltip("투사체의 실제 사거리 배율. (값 = SkillSpec의 skillRange * 이 계수)")]
     public float projectileRangeMultiplier = 1.5f; 
 
@@ -70,6 +73,15 @@ public class Projectile : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (!_isInitialized) return;
+
+        // 장애물 레이어에 부딪혔는지 '먼저' 확인
+        if ((obstacleLayer.value & (1<<other.gameObject.layer)) != 0)
+        {
+            // 장애물에 부딪히면 '아무것도 하지 말고' 즉시 소멸
+            _isInitialized = false;
+            _ctx.Spawner.Despawn(gameObject);
+            return; // 함수 종료
+        }
 
         // 1. 타겟 레이어가 맞는지 확인
         if ((targetLayer.value & (1 << other.gameObject.layer)) == 0)

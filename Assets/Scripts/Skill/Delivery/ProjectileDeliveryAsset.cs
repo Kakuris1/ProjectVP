@@ -25,7 +25,7 @@ namespace Combat.Skills
             if (projectileInstance == null) return;
 
             // 4. 스폰된 투사체에서 Projectile 스크립트를 찾음
-            if (projectileInstance.TryGetComponent<Projectile>(out var projectileLogic))
+            if (projectileInstance.TryGetComponent<IProjectileLogic>(out var projectileLogic))
             {
                 // 5. 투사체에게 SkillContext와 발사 방향을 전달하여 초기화
                 projectileLogic.Initialize(ctx);

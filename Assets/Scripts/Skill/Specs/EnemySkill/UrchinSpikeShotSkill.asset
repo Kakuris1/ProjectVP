@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa01ed33454d5584ea36325bdef9e07d, type: 3}
-  m_Name: HugeFireBall
+  m_Name: UrchinSpikeShotSkill
   m_EditorClassIdentifier: 
-  damage: 20
-  cooldown: 0.5
+  damage: 2
+  cooldown: 3
   manaCost: 10
   skillRange: 15
   skillDelay: 0
   maxTargetCount: 1
   pierceCount: 0
-  targeting: {fileID: 11400000, guid: fe9ab10e15c196f4eab38a5f5bb03e04, type: 2}
-  delivery: {fileID: 11400000, guid: fa59d81f483771e41b732492afada6f5, type: 2}
+  targeting: {fileID: 11400000, guid: be736449f2b77df4fae325993f39e2fd, type: 2}
+  delivery: {fileID: 11400000, guid: 0e6d63e095f51004bb381c5ffddb3da9, type: 2}
   impacts:
   - {fileID: 11400000, guid: 656b48ede13ea1846a62e47a38bf65d9, type: 2}
   costPolicy: {fileID: 11400000, guid: e6233c3206bbf6740bec7e35e8d87e9f, type: 2}
@@ -28,5 +28,5 @@ MonoBehaviour:
   castVfxSize: 0
   hitVfx: {fileID: 0}
   hitVfxSize: 0
-  skillVfx: {fileID: 8917488671128237167, guid: c8a53d1a2922f1840b09017129907d52, type: 3}
-  skillVfxSize: 2
+  skillVfx: {fileID: 7585867443407927547, guid: 09c025b5b9563024682583ccd90b4be2, type: 3}
+  skillVfxSize: 1

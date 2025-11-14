@@ -11,8 +11,7 @@ public class PooledSpawner : MonoBehaviour, ISpawner
         //Debug.Log($"ISpawner.Spawn");
         if (!prefab) return null;
         // PoolManager에게 스폰 요청
-        GameObject instance = PoolManager.Instance.Spawn(prefab, pos, rot);
-        instance.transform.localScale = new Vector3(scl, scl, scl);
+        GameObject instance = PoolManager.Instance.Spawn(prefab, scl, pos, rot);
         return instance;
     }
 
@@ -29,8 +28,7 @@ public class PooledSpawner : MonoBehaviour, ISpawner
     public void SpawnOneShot(GameObject prefab, float scl, Vector3 pos, Quaternion rot)
     {
         if (prefab == null) return;
-        GameObject instance = PoolManager.Instance.Spawn(prefab, pos, rot);
-        instance.transform.localScale = new Vector3(scl, scl, scl);
+        GameObject instance = PoolManager.Instance.Spawn(prefab, scl, pos, rot);
         //Debug.Log($"ISpawner.SpawnOneShot (5초 버전)");
         // 5초 뒤에 '파괴'가 아닌 'Despawn(반납)'을 하도록 코루틴 실행
         StartCoroutine(DespawnAfterDelay(instance, 5f));
@@ -40,8 +38,7 @@ public class PooledSpawner : MonoBehaviour, ISpawner
     public void SpawnOneShot(GameObject prefab, float scl, Vector3 pos, Quaternion rot, float duration)
     {
         if (prefab == null) return;
-        GameObject instance = PoolManager.Instance.Spawn(prefab, pos, rot);
-        instance.transform.localScale = new Vector3(scl, scl, scl);
+        GameObject instance = PoolManager.Instance.Spawn(prefab, scl, pos, rot);
         //Debug.Log($"ISpawner.SpawnOneShot (지정 시간 버전)");
         // 'duration'초 뒤에 Despawn(반납) 하도록 코루틴 실행
         StartCoroutine(DespawnAfterDelay(instance, duration));

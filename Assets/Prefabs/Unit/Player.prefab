@@ -103,7 +103,7 @@ MonoBehaviour:
   playerRoot: {fileID: 6574999602249099165}
   eyeHeight: 1.3
   fovAngle: 90
-  radius: 24
+  radius: 28
   segments: 64
   obstacleMask:
     serializedVersion: 2
@@ -128,7 +128,7 @@ MonoBehaviour:
   eye: {fileID: 6574999602249099165}
   eyeHeight: 1.3
   fovAngle: 90
-  radius: 20
+  radius: 28
   rearRadius: 6
   obstacleMask:
     serializedVersion: 2
@@ -296,7 +296,7 @@ Transform:
   m_GameObject: {fileID: 2142918660254338326}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26, y: 0.5707722, z: -112.85}
+  m_LocalPosition: {x: -17, y: 0.5707722, z: -111.850006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -317,7 +317,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f9949cbed12e7442a6443b4cdc8488c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 300
+  uiPrefab: {fileID: 954490523143617969, guid: 6df3f7abbfc8b8042b801dabe0743684, type: 3}
+  hpSlider: {fileID: 0}
+  skillSlider: {fileID: 0}
+  Skill: {fileID: 11400000, guid: db3503db05ca9d24fbfc91335a305222, type: 2}
+  defaultSkillPool: {fileID: 11400000, guid: 326967e6b5a0e634e97aae3392385101, type: 2}
 --- !u!114 &7663423319785875633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,7 +348,7 @@ Rigidbody:
   m_GameObject: {fileID: 2142918660254338326}
   serializedVersion: 4
   m_Mass: 10
-  m_Drag: 0
+  m_Drag: 5
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}

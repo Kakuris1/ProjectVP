@@ -90,7 +90,8 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
         if (uiPrefab != null)
         {
             UnitUI = Instantiate(uiPrefab, transform.position, Quaternion.identity);
-
+            // 하이어라키 창 정리
+            UnitUI.transform.SetParent(UnitUIContainer.Instance.transform);
             // 2. UI가 '나'를 따라다니도록 Target 연결
             FollowTargetWithOffset followScript = UnitUI.GetComponent<FollowTargetWithOffset>();
             if (followScript != null)
