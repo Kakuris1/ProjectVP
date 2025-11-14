@@ -80,6 +80,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa63513526f1c9a478924a64a81c5dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recruitVFX: {fileID: 0}
 --- !u!114 &3160761074601808384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,7 +240,7 @@ Rigidbody:
   m_GameObject: {fileID: 2230885765117154152}
   serializedVersion: 4
   m_Mass: 10
-  m_Drag: 3
+  m_Drag: 1
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}

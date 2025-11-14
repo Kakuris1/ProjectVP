@@ -1,7 +1,6 @@
 using Combat.Skills;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 // 이 스크립트는 투사체 프리팹에 붙어야 합니다.
 // 또한, 프리팹에는 Rigidbody(IsKinematic=true)와 Collider(IsTrigger=true)가 필요합니다.

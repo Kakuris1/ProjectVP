@@ -20,8 +20,9 @@ namespace Combat.Skills
             if (targets == null || targets.Count == 0 || targets[0] == null) return;
 
             // 2. 시전자 위치에 CastVfx 스폰
-            if (ctx.Spec.castVfx)
-                ctx.Spawner?.SpawnOneShot(ctx.Spec.castVfx, ctx.Spec.castVfxSize, ctx.Origin, Quaternion.LookRotation(-ctx.Direction), 1f); // 1초 뒤 자동 파괴
+            Vector3 spawnPos = ctx.Origin + ctx.Direction * 1.5f;
+            if (ctx.Spec.castVfx != null)
+                ctx.Spawner?.SpawnOneShot(ctx.Spec.castVfx, ctx.Spec.castVfxSize, spawnPos, Quaternion.LookRotation(ctx.Direction), 1f);
 
             // 3. 폭발 중심점 = 첫 번째 타겟의 위치
             Vector3 centerPoint = targets[0].position;

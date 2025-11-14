@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa01ed33454d5584ea36325bdef9e07d, type: 3}
+  m_Name: Crystal(Miss)
+  m_EditorClassIdentifier: 
+  damage: 30
+  cooldown: 5
+  manaCost: 10
+  skillRange: 10
+  skillDelay: 0
+  maxTargetCount: 5
+  pierceCount: 1
+  targeting: {fileID: 11400000, guid: fe9ab10e15c196f4eab38a5f5bb03e04, type: 2}
+  delivery: {fileID: 11400000, guid: 746edd3f04b91314394b252cbf455a87, type: 2}
+  impacts:
+  - {fileID: 11400000, guid: 656b48ede13ea1846a62e47a38bf65d9, type: 2}
+  costPolicy: {fileID: 11400000, guid: e6233c3206bbf6740bec7e35e8d87e9f, type: 2}
+  castVfx: {fileID: 5607819269926399345, guid: 45e0f06c750176947862c10346226439, type: 3}
+  castVfxSize: 2
+  hitVfx: {fileID: 0}
+  hitVfxSize: 0
+  skillVfx: {fileID: 517170533460803855, guid: 117f8a505030d254abaa098fdbd5b484, type: 3}
+  skillVfxSize: 2

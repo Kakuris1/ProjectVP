@@ -13,8 +13,9 @@ namespace Combat.Skills
             if (targets == null || targets.Count == 0) return;
 
             // 캐스트 VFX (시전 타이밍)
+            Vector3 spawnPos = ctx.Origin + ctx.Direction * 1.5f;
             if (ctx.Spec.castVfx != null)
-                ctx.Spawner?.SpawnOneShot(ctx.Spec.castVfx, ctx.Spec.castVfxSize, ctx.Origin, Quaternion.LookRotation(ctx.Direction));
+                ctx.Spawner?.SpawnOneShot(ctx.Spec.castVfx, ctx.Spec.castVfxSize, spawnPos, Quaternion.LookRotation(ctx.Direction), 1f);
 
 
             // 타겟 수 계산
