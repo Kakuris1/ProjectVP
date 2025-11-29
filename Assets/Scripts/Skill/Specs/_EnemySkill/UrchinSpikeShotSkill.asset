@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa01ed33454d5584ea36325bdef9e07d, type: 3}
+  m_Name: UrchinSpikeShotSkill
+  m_EditorClassIdentifier: 
+  damage: 4
+  cooldown: 3
+  manaCost: 10
+  skillRange: 15
+  skillDelay: 0
+  maxTargetCount: 1
+  pierceCount: 0
+  targeting: {fileID: 11400000, guid: be736449f2b77df4fae325993f39e2fd, type: 2}
+  delivery: {fileID: 11400000, guid: 0e6d63e095f51004bb381c5ffddb3da9, type: 2}
+  impacts:
+  - {fileID: 11400000, guid: 656b48ede13ea1846a62e47a38bf65d9, type: 2}
+  costPolicy: {fileID: 11400000, guid: e6233c3206bbf6740bec7e35e8d87e9f, type: 2}
+  castVfx: {fileID: 0}
+  castVfxSize: 0
+  hitVfx: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8, type: 3}
+  hitVfxSize: 1
+  skillVfx: {fileID: 7585867443407927547, guid: 09c025b5b9563024682583ccd90b4be2, type: 3}
+  skillVfxSize: 1

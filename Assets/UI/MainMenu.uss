@@ -1,0 +1,82 @@
+/* ============================================
+   메인 메뉴 버튼 (ID 기반)
+============================================ */
+
+/* --- 시작 버튼 --- */
+#StartButton {
+    
+    /* 아이콘 크기 */
+    width: 150px; 
+    height: 150px;
+    
+    /* 해상도 대응 배치 (가장 안전한 방식) */
+    position: absolute;
+    top: 52%;
+    left: 42%;
+    transform: translate(-50%, -50%); /* 중앙점 기준 배치 */
+
+    /* 클릭 효과를 위해 테두리/배경은 투명하게 */
+    border-width: 0;
+    background-color: rgba(0,0,0,0);
+}
+
+/* 시작 버튼 호버 효과 */
+#StartButton:hover {
+    transform: translate(-50%, -50%) scale(1.1); /* 1.1배 확대 */
+}
+
+/* --- 옵션 버튼 --- */
+#OptionButton {
+    width: 100px;
+    height: 100px;
+    
+    position: absolute;
+    top: 48%;
+    left: 58%;
+    transform: translate(-50%, -50%);
+
+    border-width: 0;
+    background-color: rgba(0,0,0,0);
+}
+#OptionButton:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* --- 종료 버튼 --- */
+#QuitButton {
+    width: 80px;
+    height: 80px;
+
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    border-width: 0;
+    background-color: rgba(0,0,0,0);
+}
+#QuitButton:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* ============================================
+2. 버튼 호버/클릭 시각 효과
+============================================
+*/
+
+/* ★ 마우스를 올렸을 때 (Hover) ★ */
+.unity-button:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* 더 밝게 */
+    color: rgb(0, 0, 0); /* 글자색 검게 */
+    
+    /* transform: scale() 버그 대신 테두리 색상으로 대체 */
+    border-color: rgb(255, 255, 255); /* 흰색 테두리 보이기 */
+}
+
+/* ★ 클릭했을 때 (pressed/active) ★ */
+.unity-button:active {
+    background-color: rgb(255, 255, 255); /* 완전 흰색 */
+    
+    /* transform: scale() 버그 대신 테두리 색상으로 대체 */
+    border-color: rgb(255, 255, 255); /* 흰색 테두리 유지 */
+}
