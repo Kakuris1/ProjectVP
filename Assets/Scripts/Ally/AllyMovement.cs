@@ -54,9 +54,11 @@ public class AllyMovement : MonoBehaviour
     // 플레이어 추적 (4m 거리 유지)
     private void HandleFollowingMovement()
     {
-        agent.stoppingDistance = 4.0f;
+        if ((transform.position-playerTransform.position).magnitude < 7f) { StopMovement(); }
+        agent.stoppingDistance = 6.0f;
+        agent.speed = allyInfo.moveSpeed;
         agent.SetDestination(playerTransform.position);
-
+        allyInfo.SetTarget(null);
         // Idle 상태로 전환될 때 1초 후 배회할 수 있도록 타이머 초기화
         idleWanderTimer = 1f;
     }

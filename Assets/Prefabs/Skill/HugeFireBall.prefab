@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8144844699019679515}
   - component: {fileID: 8246771084216296337}
   - component: {fileID: 1374461548050607055}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: HugeFireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,9 +112,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4156272573564127589}
     m_Modifications:
+    - target: {fileID: 1769629087, guid: 11c9a5d587e034e43a68d4ebfb901206, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 2972392977303283589, guid: 11c9a5d587e034e43a68d4ebfb901206, type: 3}
       propertyPath: m_Name
       value: FX_Fire_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 2972392977303283589, guid: 11c9a5d587e034e43a68d4ebfb901206, type: 3}
+      propertyPath: m_Layer
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 2972392977303283608, guid: 11c9a5d587e034e43a68d4ebfb901206, type: 3}
       propertyPath: m_LocalScale.x
@@ -167,6 +175,22 @@ PrefabInstance:
     - target: {fileID: 2972392977303283608, guid: 11c9a5d587e034e43a68d4ebfb901206, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2972392977518692226, guid: 11c9a5d587e034e43a68d4ebfb901206, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 2972392978296103414, guid: 11c9a5d587e034e43a68d4ebfb901206, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 2972392978941833383, guid: 11c9a5d587e034e43a68d4ebfb901206, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 2972392979007978752, guid: 11c9a5d587e034e43a68d4ebfb901206, type: 3}
+      propertyPath: m_Layer
+      value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

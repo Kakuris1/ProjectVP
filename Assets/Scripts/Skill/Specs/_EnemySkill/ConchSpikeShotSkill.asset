@@ -26,7 +26,7 @@ MonoBehaviour:
   costPolicy: {fileID: 11400000, guid: e6233c3206bbf6740bec7e35e8d87e9f, type: 2}
   castVfx: {fileID: 0}
   castVfxSize: 0
-  hitVfx: {fileID: 0}
-  hitVfxSize: 0
+  hitVfx: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8, type: 3}
+  hitVfxSize: 1
   skillVfx: {fileID: 8777542493743947490, guid: 111588d98e69f4d49916ee9822edbb7f, type: 3}
   skillVfxSize: 1

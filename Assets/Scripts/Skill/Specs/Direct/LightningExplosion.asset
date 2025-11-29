@@ -20,7 +20,7 @@ MonoBehaviour:
   maxTargetCount: 1
   pierceCount: 1
   targeting: {fileID: 11400000, guid: fe9ab10e15c196f4eab38a5f5bb03e04, type: 2}
-  delivery: {fileID: 11400000, guid: 9aef5957d60c5f8448cdef5c989547bb, type: 2}
+  delivery: {fileID: 11400000, guid: 1a2bb5264b84a6b4eb91215219ad5cc5, type: 2}
   impacts:
   - {fileID: 11400000, guid: 656b48ede13ea1846a62e47a38bf65d9, type: 2}
   costPolicy: {fileID: 11400000, guid: e6233c3206bbf6740bec7e35e8d87e9f, type: 2}

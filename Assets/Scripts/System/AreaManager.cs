@@ -84,7 +84,7 @@ public class AreaManager : MonoBehaviour
         // 클리어 시 가드 클로즈
         if (isCleared) { return; }
         // 생쥐가 아닌 유닛만 카운트
-        if(enemyType != EnemyType.Mouse) CountDefeatedEnemyInArea++;
+        if(enemyType != EnemyType.Mouse && EnemyID == areaNumber) CountDefeatedEnemyInArea++;
         // 조건만큼 처치시 구역 클리어 판정
         if (NumberOfClearCondition <= CountDefeatedEnemyInArea)
         {

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Slash_A
   m_EditorClassIdentifier: 
   damage: 30
-  cooldown: 1.5
+  cooldown: 1
   manaCost: 10
-  skillRange: 5
+  skillRange: 6
   skillDelay: 0
   maxTargetCount: 1
   pierceCount: 1

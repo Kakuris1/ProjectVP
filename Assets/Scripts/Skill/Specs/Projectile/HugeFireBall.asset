@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa01ed33454d5584ea36325bdef9e07d, type: 3}
   m_Name: HugeFireBall
   m_EditorClassIdentifier: 
-  damage: 20
-  cooldown: 0.5
+  damage: 100
+  cooldown: 0.01
   manaCost: 10
   skillRange: 15
   skillDelay: 0

@@ -13,7 +13,7 @@ public class MouseInformation : EnemyInformation
     public override void SetTarget(Transform newTarget)
     {
         CurrentTarget = newTarget;
-
+        Debug.Log("플레이어 만남");
         if (firstTimeToMeet && newTarget != null)
         {
             MouseManager.Instance.MeetPlayer(this);

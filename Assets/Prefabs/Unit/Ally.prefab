@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 2720641696136882775}
   - component: {fileID: 7800878483247566046}
   - component: {fileID: 8742911658806565627}
+  - component: {fileID: 7952818704150495730}
   m_Layer: 11
   m_Name: Ally
   m_TagString: Untagged
@@ -80,7 +81,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa63513526f1c9a478924a64a81c5dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recruitVFX: {fileID: 0}
+  auraPrefab: {fileID: 1289543790355709915, guid: b99922c2f59b1a542bdd06ae8bee47ae, type: 3}
+  auraScale: 2
+  spawnInterval: 2
+  effectDuration: 2
+  recruitVFX: {fileID: 5766691976136461342, guid: 43d1d06cf70fcb2488255051aaae40a5, type: 3}
 --- !u!114 &3160761074601808384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,10 +101,10 @@ MonoBehaviour:
   targetAreaNumber: 0
   FormationSlot: 0
   CurrentState: 0
-  moveSpeed: 6
+  moveSpeed: 10
   skillRange: 0
   maxHealth: 300
-  detectionRadius: 15
+  detectionRadius: 20
   Skill: {fileID: 0}
   defaultSkillPool: {fileID: 11400000, guid: 326967e6b5a0e634e97aae3392385101, type: 2}
   CurrentTarget: {fileID: 0}
@@ -134,8 +139,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20bc0a92e08282a48bae557943450991, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stopFollowingDistance: 4
-  startFollowingDistance: 8
+  stopFollowingDistance: 5
+  startFollowingDistance: 18
 --- !u!114 &8785838234750923511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,7 +224,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1.2
-  m_Speed: 6
+  m_Speed: 20
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -300,6 +305,62 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!137 &7952818704150495730
+SkinnedMeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2230885765117154152}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 3
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  serializedVersion: 2
+  m_Quality: 0
+  m_UpdateWhenOffscreen: 0
+  m_SkinnedMotionVectors: 1
+  m_Mesh: {fileID: 0}
+  m_Bones: []
+  m_BlendShapeWeights: []
+  m_RootBone: {fileID: 0}
+  m_AABB:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  m_DirtyAABB: 0
 --- !u!1 &3065231768981848588
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,6 +589,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2778461293514231858}
   - component: {fileID: 2308176822988555548}
+  - component: {fileID: 4596083775674162367}
   m_Layer: 0
   m_Name: "\uAD6C\uCCB4"
   m_TagString: Untagged
@@ -613,6 +675,19 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0000000023283064, y: 0.009999995, z: -0.0000000013969839}
     m_Extent: {x: 0.009872306, y: 0.009975764, z: 0.009872304}
   m_DirtyAABB: 0
+--- !u!114 &4596083775674162367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8118217070784226357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91a3656b443762e48a238aaf871a2dfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  materialPool: {fileID: 11400000, guid: bc368c9cd2bc9604290b1aadef7917c9, type: 2}
 --- !u!1 &8575796758707424489
 GameObject:
   m_ObjectHideFlags: 0

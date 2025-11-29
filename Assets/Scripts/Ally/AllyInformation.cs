@@ -170,6 +170,7 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
             hpSlider.value = CurrentHP / MaxHP;
         }
         if (CurrentHP >= MaxHP) CurrentHP = MaxHP;
+        Debug.Log(gameObject.name + " 피해 입음. HP : " + CurrentHP);
 
         if (CurrentHP <= 0)
         {

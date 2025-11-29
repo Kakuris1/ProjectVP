@@ -77,7 +77,7 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
         ChangeState(EnemyUnitState.Patrol);
         Hostile = true;
         CanAttack = false;
-        firstTimeToMeet = false;
+        firstTimeToMeet = true;
         hasMoveCommand = false;
         CurrentHP = MaxHP;
         IsDead = false;

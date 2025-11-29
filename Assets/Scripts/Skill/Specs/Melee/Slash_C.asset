@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa01ed33454d5584ea36325bdef9e07d, type: 3}
   m_Name: Slash_C
   m_EditorClassIdentifier: 
-  damage: 20
-  cooldown: 3
+  damage: 30
+  cooldown: 1
   manaCost: 10
-  skillRange: 5
+  skillRange: 6
+  skillDelay: 0
+  maxTargetCount: 1
+  pierceCount: 1
   targeting: {fileID: 11400000, guid: be736449f2b77df4fae325993f39e2fd, type: 2}
   delivery: {fileID: 11400000, guid: b11f69b0bb6c6f44ab07a9ae23d7a196, type: 2}
   impacts:
@@ -25,3 +28,5 @@ MonoBehaviour:
   castVfxSize: 3
   hitVfx: {fileID: 0}
   hitVfxSize: 0
+  skillVfx: {fileID: 0}
+  skillVfxSize: 0

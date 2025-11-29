@@ -124,12 +124,12 @@ MonoBehaviour:
   PatrolOrigin: {x: 0, y: 0, z: 0}
   CanAttack: 1
   hasMoveCommand: 0
-  patrolSpeed: 3
-  engagingSpeed: 2
-  runSpeed: 2
+  patrolSpeed: 4
+  engagingSpeed: 6
+  runSpeed: 6
   skillRange: 5
   maxHealth: 100
-  detectionRadius: 20
+  detectionRadius: 25
   Skill: {fileID: 11400000, guid: 13875ab9927c0744ea0522b24cd901d5, type: 2}
   CurrentTarget: {fileID: 0}
   uiPrefab: {fileID: 954490523143617969, guid: 6df3f7abbfc8b8042b801dabe0743684, type: 3}
@@ -239,6 +239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderers: []
   fadeInDuration: 0.15
+  fadeOutDelay: 0.3
   fadeOutDuration: 0.4
   colorProp: _BaseColor
 --- !u!195 &743704433367516092

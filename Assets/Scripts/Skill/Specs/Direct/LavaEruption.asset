@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: LavaEruption
   m_EditorClassIdentifier: 
   damage: 50
-  cooldown: 5
+  cooldown: 4
   manaCost: 10
   skillRange: 12
   skillDelay: 0
   maxTargetCount: 1
   pierceCount: 1
   targeting: {fileID: 11400000, guid: 3975edee73eb3b84c9ac101511352f67, type: 2}
-  delivery: {fileID: 11400000, guid: 746edd3f04b91314394b252cbf455a87, type: 2}
+  delivery: {fileID: 11400000, guid: 9aef5957d60c5f8448cdef5c989547bb, type: 2}
   impacts:
   - {fileID: 11400000, guid: 656b48ede13ea1846a62e47a38bf65d9, type: 2}
   costPolicy: {fileID: 11400000, guid: e6233c3206bbf6740bec7e35e8d87e9f, type: 2}
@@ -29,4 +29,4 @@ MonoBehaviour:
   hitVfx: {fileID: 0}
   hitVfxSize: 0
   skillVfx: {fileID: 6455648179204778157, guid: 64c2e3a6f4900734386c3531fbd35a96, type: 3}
-  skillVfxSize: 3
+  skillVfxSize: 5

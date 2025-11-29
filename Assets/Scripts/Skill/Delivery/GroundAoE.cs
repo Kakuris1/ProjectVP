@@ -1,125 +1,167 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using Combat.Skills;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
-// ÀÌ ½ºÅ©¸³Æ®´Â ÀåÆÇ ÇÁ¸®ÆÕ¿¡ ºÙ¾î¾ß ÇÕ´Ï´Ù.
-// ¶ÇÇÑ, ÇÁ¸®ÆÕ¿¡´Â SphereCollider(IsTrigger=true)¿Í Rigidbody(IsKinematic=true)°¡ ÇÊ¿äÇÕ´Ï´Ù.
 [RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(Rigidbody))]
 public class GroundAoE : MonoBehaviour
 {
-    [Header("ÀåÆÇ ¼³Á¤")]
-    [Tooltip("ÀåÆÇÀÌ È°¼ºÈ­µÈ ÈÄ ÃÑ Áö¼ÓµÇ´Â ½Ã°£")]
+    [Header("ì¥íŒ ì„¤ì •")]
     public float duration = 5.0f;
-    [Tooltip("´ë¹ÌÁö/ÈúÀÌ Àû¿ëµÇ´Â ÁÖ±â (ÃÊ)")]
-    public float tickRate = 1f;
+    public float tickRate = 0.5f;
 
-    [Header("´ë»ó ÇÊÅÍ¸µ")]
-    [Tooltip("ÀÌ ÀåÆÇÀÌ ¿µÇâÀ» ÁÙ ´ë»óÀÇ ·¹ÀÌ¾î")]
+    [Header("ëŒ€ìƒ í•„í„°ë§")]
     public LayerMask targetLayer;
 
-    // ³»ºÎ ½Ã½ºÅÛ
+    // ë‚´ë¶€ ì‹œìŠ¤í…œ
     private SkillContext _ctx;
     private bool _isInitialized = false;
     private bool _isActive = false;
 
-    // Æ½ ÁÖ±â °ü¸®¸¦ À§ÇØ ³»ºÎ¿¡ ÀÖ´Â Å¸°Ù°ú ¸¶Áö¸· Æ½ ½Ã°£À» ÀúÀå
-    private Dictionary<Collider, float> _targetsInside = new Dictionary<Collider, float>();
+    // [ìˆ˜ì •] í‹± ê´€ë¦¬ ëŒ€ìƒ ëª©ë¡ (OnTriggerEnter/Exitìœ¼ë¡œë§Œ ê´€ë¦¬ë¨)
+    private HashSet<Collider> _targetsInside = new HashSet<Collider>();
+    private Coroutine _tickCoroutine;
 
-    // 1. DeliveryAssetÀÌ È£Ãâ
+    private Rigidbody _rb;
+    void Awake()
+    {
+        _rb = GetComponent<Rigidbody>();
+        if (_rb != null)
+        {
+            _rb.isKinematic = true;
+            _rb.useGravity = false;
+        }
+
+        Collider col = GetComponent<Collider>();
+        if (col != null)
+        {
+            col.isTrigger = true;
+        }
+    }
+
+
+    // 1. DeliveryAssetì´ í˜¸ì¶œ
     public void Initialize(in SkillContext ctx)
     {
         _ctx = ctx;
         _isInitialized = true;
+        _isActive = false; // [ì¶”ê°€] ì¬ì‚¬ìš© ì‹œ ë¦¬ì…‹
+        _targetsInside.Clear(); // [ì¶”ê°€] ì¬ì‚¬ìš© ì‹œ ë¦¬ì…‹
     }
 
-    // 2. ½ºÆù Á÷ÈÄ ½ÇÇà
+    // 2. ìŠ¤í° ì§í›„ ì‹¤í–‰
     void Start()
     {
         if (!_isInitialized)
         {
-            Debug.LogError("GroundAoE°¡ InitializeµÇÁö ¾Ê¾Ò½À´Ï´Ù!", this);
-            Destroy(gameObject);
+            Debug.LogError("GroundAoEê°€ Initializeë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!", this);
+            SelfDespawn(); // Despawn í˜¸ì¶œ
             return;
         }
 
-        // DespawnÀ» ¿¹¾àÇÏ´Â Invoke ÇïÆÛ¸¦ »ç¿ë
         Invoke(nameof(SelfDespawn), duration + _ctx.Spec.skillDelay);
-        // SkillSpecÀÇ 'skillDelay'¸¦ "ÀåÆÇ È°¼ºÈ­ ´ë±â ½Ã°£"À¸·Î »ç¿ë
         Invoke(nameof(ActivateAoE), _ctx.Spec.skillDelay);
     }
 
-    // 3. skillDelay ÀÌÈÄ ÀåÆÇ È°¼ºÈ­
+    // 5. í™œì„±í™” ì‹œ ëŒ€ë¯¸ì§€ í‹± ì½”ë£¨í‹´ ì‹œì‘
     void ActivateAoE()
     {
         _isActive = true;
-        // (ÇÊ¿ä½Ã) ¿©±â¼­ ÀåÆÇ È°¼ºÈ­ ÀÌÆåÆ®¸¦ µû·Î ½ºÆùÇÒ ¼ö ÀÖÀ½
+        ApplyTickToAllTargets(); // í™œì„±í™” ì¦‰ì‹œ 1íšŒ ì ìš©
+        _tickCoroutine = StartCoroutine(DamageTickCoroutine());
     }
 
-    // 4. (½Ç½Ã°£) ÀåÆÇ ¹üÀ§¿¡ 'Ã³À½' µé¾î¿ÔÀ» ¶§
+    // 6. ëŒ€ë¯¸ì§€ í‹± ì½”ë£¨í‹´
+    private IEnumerator DamageTickCoroutine()
+    {
+        // tickRate(ì˜ˆ: 0.5ì´ˆ)ë§ˆë‹¤ ë°˜ë³µ
+        while (true)
+        {
+            yield return new WaitForSeconds(tickRate);
+            ApplyTickToAllTargets();
+        }
+    }
+
+    // â–¼â–¼â–¼ [ 7. ìˆ˜ì •ëœ í•¨ìˆ˜ ] â–¼â–¼â–¼
+    private void ApplyTickToAllTargets()
+    {
+        if (_targetsInside.Count == 0) return;
+        if (_ctx.Spec.impacts == null) return;
+
+        // [ìˆ˜ì •] ë³µì‚¬ë³¸ ìƒì„±
+        List<Collider> targetsToTick = _targetsInside.ToList();
+
+        foreach (var targetCollider in targetsToTick)
+        {
+            // [âœ¨ í•µì‹¬ ìˆ˜ì •]
+            // "ê°€ì§œ ë„" ìƒíƒœ(ì˜¤ë¸Œì íŠ¸ê°€ Destroyëœ)ì¸ì§€ ë¨¼ì € í™•ì¸í•©ë‹ˆë‹¤.
+            // (Unity ì˜¤ë¸Œì íŠ¸ëŠ” '==' ì—°ì‚°ìê°€ ì˜¤ë²„ë¡œë“œë˜ì–´ ìˆì–´ ì•ˆì „í•©ë‹ˆë‹¤)
+            if (targetCollider == null)
+            {
+                continue;
+            }
+
+            // [ì•ˆì „ ì¥ì¹˜ 2] ë¹„í™œì„±í™”(Despawnëœ) ìƒíƒœì¸ì§€ í™•ì¸
+            if (!targetCollider.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
+
+            // ì´ì œ targetCollider.transformì´ ì•ˆì „í•¨ì„ ë³´ì¥
+            Transform targetTransform = targetCollider.transform;
+
+            for (int i = 0; i < _ctx.Spec.impacts.Length; i++)
+            {
+                if (_ctx.Spec.impacts[i] != null)
+                {
+                    _ctx.Spec.impacts[i].Apply(_ctx, targetTransform);
+                }
+            }
+        }
+
+        // [ì œê±°] _targetsToRemove ë° _targetsInside.Remove ë¡œì§ ì œê±°
+        // ëª©ë¡ ì •ë¦¬ëŠ” OnTriggerExitì´ ì „ë‹´
+    }
+
+    // 8. (ì‹¤ì‹œê°„) ì¥íŒ ë²”ìœ„ì— 'ì²˜ìŒ' ë“¤ì–´ì™”ì„ ë•Œ (ëª©ë¡ì—ë§Œ ì¶”ê°€)
     void OnTriggerEnter(Collider other)
     {
-        if (!_isActive) return; // ¾ÆÁ÷ È°¼ºÈ­ ¾ÈµÆÀ¸¸é ¹«½Ã
-
-        // ¼³Á¤ÇÑ targetLayer¿Í ÀÏÄ¡ÇÏ´ÂÁö È®ÀÎ
+        if (!_isActive) return;
+        if (other.transform == _ctx.Caster) return;
         if ((targetLayer.value & (1 << other.gameObject.layer)) == 0)
             return;
 
-        // µñ¼Å³Ê¸®¿¡ Ãß°¡ÇÏ°í 'Áï½Ã' 1È¸ Àû¿ë
-        if (!_targetsInside.ContainsKey(other))
-        {
-            _targetsInside.Add(other, Time.time);
-            ApplyImpactTo(other.transform);
-        }
+        _targetsInside.Add(other);
     }
 
-    // 5. (½Ç½Ã°£) ÀåÆÇ ¹üÀ§¿¡ '¸Ó¹«¸£´Â' µ¿¾È
-    void OnTriggerStay(Collider other)
-    {
-        if (!_isActive) return;
-
-        // µñ¼Å³Ê¸®¿¡ ÀÖ´ÂÁö (Enter°¡ È£ÃâµÆ¾ú´ÂÁö) È®ÀÎ
-        if (_targetsInside.TryGetValue(other, out float lastTickTime))
-        {
-            // ÇöÀç ½Ã°£ÀÌ (¸¶Áö¸· Æ½ ½Ã°£ + Æ½ ÁÖ±â)¸¦ ³Ñ°å´Ù¸é
-            if (Time.time > lastTickTime + tickRate)
-            {
-                _targetsInside[other] = Time.time; // ¸¶Áö¸· Æ½ ½Ã°£ °»½Å
-                ApplyImpactTo(other.transform); // ÀÓÆÑÆ® Àû¿ë
-            }
-        }
-    }
-
-    // 6. (½Ç½Ã°£) ÀåÆÇ ¹üÀ§¿¡¼­ '³ª°¬À»' ¶§
+    // 9. (ì‹¤ì‹œê°„) ì¥íŒ ë²”ìœ„ì—ì„œ 'ë‚˜ê°”ì„' ë•Œ (ëª©ë¡ì—ì„œ ì œê±°)
     void OnTriggerExit(Collider other)
     {
-        // µñ¼Å³Ê¸®¿¡¼­ Á¦°Å
         _targetsInside.Remove(other);
     }
 
-    // 7. ½ÇÁ¦ ÀÓÆÑÆ®(´ë¹ÌÁö/Èú) Àû¿ë
-    void ApplyImpactTo(Transform target)
-    {
-        if (_ctx.Spec.impacts == null) return;
-
-        // SkillSpec¿¡ µî·ÏµÈ ¸ğµç Impact¸¦ ¼øÂ÷ÀûÀ¸·Î Àû¿ë
-        for (int i = 0; i < _ctx.Spec.impacts.Length; i++)
-        {
-            if (_ctx.Spec.impacts[i] != null)
-            {
-                _ctx.Spec.impacts[i].Apply(_ctx, target);
-            }
-        }
-    }
-
+    // 10. (Invoke) ìŠ¤ìŠ¤ë¡œ íŒŒê´´(ë°˜ë‚©)
     private void SelfDespawn()
     {
+        if (_tickCoroutine != null)
+        {
+            StopCoroutine(_tickCoroutine);
+            _tickCoroutine = null; // [ì¶”ê°€] ì½”ë£¨í‹´ ì°¸ì¡° ë¹„ìš°ê¸°
+        }
+
         if (_isInitialized && _ctx.Spawner != null)
         {
             _ctx.Spawner.Despawn(gameObject);
         }
-        else if (gameObject != null)
+        else if (SkillManager.Instance?.Spawner != null)
         {
-            Destroy(gameObject); // Spawner°¡ ¾ø´Â ºñ»ó »óÈ²
+            SkillManager.Instance.Spawner.Despawn(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject); // ìµœí›„ì˜ ìˆ˜ë‹¨
         }
     }
 }

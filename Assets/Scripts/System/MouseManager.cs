@@ -28,9 +28,9 @@ public class MouseManager : MonoBehaviour
     public Vector3 CurrentConvengePoint { get; private set; }
 
     [Header("이 이상 숫자가 모이면 적대적")]
-    public int hostileMouseCount = 7; // 이 숫자 이상 모이면 적대적으로 전환
+    public int hostileMouseCount = 20; // 이 숫자 이상 모이면 적대적으로 전환
     [Header("이 이하로 숫자가 줄면 도망(비적대적)")]
-    public int nonHostileMouseCount = 2; // 이 숫자까지 줄어들면 도망
+    public int nonHostileMouseCount = 5; // 이 숫자까지 줄어들면 도망
     [Header("생쥐 무리의 플레이어와 유지 거리")]
     public int DistanceWithPlayer = 30;
     [Header("이 수치 이하로 피가 까이면 잠시 후퇴")]
@@ -102,8 +102,8 @@ public class MouseManager : MonoBehaviour
                 }
 
                 // 임시 : 한번 도망갈 때 마다, 요구되는 무리 숫자 +1
-                hostileMouseCount++;
-                nonHostileMouseCount++;
+                //hostileMouseCount++;
+                //nonHostileMouseCount++;
             }
         }
     }

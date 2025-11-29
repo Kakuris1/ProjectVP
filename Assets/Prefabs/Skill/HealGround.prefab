@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4494990740945592310}
   - component: {fileID: 3090202715222950236}
   - component: {fileID: 128782449927335380}
-  m_Layer: 12
+  m_Layer: 16
   m_Name: HealGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,9 +167,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 313914918410716761}
     m_Modifications:
+    - target: {fileID: 100000, guid: d9751637d4fc2de40a234b45e10cb88d, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: d9751637d4fc2de40a234b45e10cb88d, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: d9751637d4fc2de40a234b45e10cb88d, type: 3}
       propertyPath: m_Name
       value: L_Recover_hold
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: d9751637d4fc2de40a234b45e10cb88d, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: d9751637d4fc2de40a234b45e10cb88d, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: d9751637d4fc2de40a234b45e10cb88d, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 100010, guid: d9751637d4fc2de40a234b45e10cb88d, type: 3}
+      propertyPath: m_Layer
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 100012, guid: d9751637d4fc2de40a234b45e10cb88d, type: 3}
+      propertyPath: m_Layer
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: d9751637d4fc2de40a234b45e10cb88d, type: 3}
       propertyPath: m_LocalScale.x
