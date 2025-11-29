@@ -56,7 +56,8 @@ public class VisionSensor : MonoBehaviour, ISkillTargetSensor
 
                 // SkillController 에 넘길 타겟 정보
                 TargetColliders.Add(t);
-                // 가장 가까운 대상
+
+                // 가장 가까운 대상 (NearestTarget 계산은 ClosestPoint가 여전히 유효함)
                 Vector3 closestPoint = col.ClosestPoint(origin);
                 float distanceSqr = (closestPoint - origin).sqrMagnitude;
 
@@ -90,28 +91,33 @@ public class VisionSensor : MonoBehaviour, ISkillTargetSensor
             _visible.Remove(f); // 목록에서는 파괴되었든 아니든 제거
         }
     }
-
     bool IsVisible(Vector3 origin, Vector3 forward, Transform target, Collider col)
     {
-        Vector3 closestColliderPoint = col.ClosestPoint(origin); // 타깃 Collider와의 최단 지점
-        Vector3 dir = closestColliderPoint - origin;    // 해당 지점으로 방향 벡터
+        // 1.  '가장 가까운 지점' 대신 '콜라이더의 중심점'을 사용
+        Vector3 targetPoint = col.bounds.center;
+
+        // 2. 중심점을 기준으로 방향, 거리, 각도 계산
+        Vector3 dir = targetPoint - origin;    // 해당 지점으로 방향 벡터
         float dist = dir.magnitude;
         Vector3 toFlat = dir; toFlat.y = 0f; // 각도 체크 위한 수평 벡터
 
+        // 3. 시야각 체크
         bool angleOK = (dist <= rearRadius) || Vector3.Angle(forward, toFlat) <= fovAngle * 0.5f;
         if (!angleOK) return false; // 근접하지 않고,, 시야 각 범위 밖이면 안보임
 
-        // 타겟 Collider 최단 지점에 도달하지 않으면 안보임
-        if (!col.Raycast(new Ray(origin, dir.normalized), out var hitToTarget, dir.magnitude + 0.05f))
+        // 4. [제거] 불필요하고 불안정했던 col.Raycast 체크 제거
+        // if (!col.Raycast(...)) return false;
+
+        // 5. 장애물 체크 (origin -> targetPoint)
+        //    (Raycast가 타겟 자신의 콜라이더를 무시하도록 QueryTriggerInteraction.Ignore 사용)
+        if (Physics.Raycast(origin, dir.normalized, dist - 0.1f, obstacleMask, QueryTriggerInteraction.Ignore))
             return false;
 
-        // 장애물에 가리면 안 보임
-        if (Physics.Raycast(origin, dir.normalized, dist + 0.05f, obstacleMask, QueryTriggerInteraction.Ignore))
-            return false;
-
-        // 위 조건들 충족시 보임
+        // 6. 위 조건들 충족시 보임
         return true;
     }
+    // ▲▲▲ [수정 완료] ▲▲▲
+
 
     public List<Transform> GetCurrentTargetList()
     {
@@ -125,18 +131,13 @@ public class VisionSensor : MonoBehaviour, ISkillTargetSensor
 
     public bool IsNearestTargetInAttackRange(float range, Vector3 origin)
     {
-        // 1. 캐시된 타겟과 콜라이더가 유효한지 확인
+        // (이 함수는 ClosestPoint를 쓰는 것이 맞으므로 수정하지 않습니다)
         if (NearestTarget == null || NearestTargetCollider == null)
         {
             return false;
         }
-
-        // 2. 'ClosestPoint'를 사용해 '콜라이더 가장자리'까지의 정확한 거리 계산
-        //    (CostAsset이 매 프레임 호출해도 될 만큼 가볍습니다)
         Vector3 closestPoint = NearestTargetCollider.ClosestPoint(origin);
         float distance = Vector3.Distance(origin, closestPoint);
-
-        // 3. 사거리 내에 있는지 판별
         return distance <= range;
     }
 }

@@ -21,12 +21,18 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
     public float MaxHP { get; private set; }
     public float CurrentHP { get; private set; }
     public bool IsDead { get; private set; } = false;
+
     [Header("시야 설정")]
     [Tooltip("적을 감지할 최대 반경 (XZ 평면 기준)")]
     public float detectionRadius = 5f;
+
     [Header("스킬 (Skill")]
+    [Tooltip("인스펙터에서 직접 지정할 스킬. 비워두면(Null) Pool에서 랜덤 선택")]
     public SkillSpecAsset Skill;
+    [Tooltip("Skill 변수가 비어있을 경우, 이 풀에서 랜덤 스킬을 선택")]
+    public SkillPoolAsset defaultSkillPool;
     private SkillController _skillController;
+
     [Tooltip("현재 목표물")]
     public Transform CurrentTarget;
 
@@ -48,10 +54,33 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
         MaxHP = maxHealth;
 
         _skillController = GetComponent<SkillController>();
-        if (_skillController != null)
+
+        // 1. 인스펙터에서 직접 할당한 스킬이 있는지 확인
+        if (Skill == null)
+        {
+            // 2. 할당된 스킬이 없다면, defaultSkillPool에서 랜덤으로 가져오기
+            if (defaultSkillPool != null && defaultSkillPool.skills.Count > 0)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, defaultSkillPool.skills.Count);
+                Skill = defaultSkillPool.skills[randomIndex];
+            }
+            else
+            {
+                // 풀이 비어있거나 설정되지 않은 경우
+                Debug.LogWarning($"[{name}] : 스킬이 할당되지 않았고, Default Skill Pool이 비어있거나 없습니다.", this);
+            }
+        }
+
+        // 3. 최종 결정된 스킬을 SkillController에 장착
+        if (Skill != null)
         {
             _skillController.Equip(Skill);
             skillRange = Skill.skillRange;
+            Debug.Log($"[{name}] 스킬 배정 완료, Skill : " + Skill.name);
+        }
+        else
+        {
+            Debug.LogError($"[{name}] : 최종적으로 장착할 스킬이 없습니다!", this);
         }
     }
 
@@ -61,7 +90,8 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
         if (uiPrefab != null)
         {
             UnitUI = Instantiate(uiPrefab, transform.position, Quaternion.identity);
-
+            // 하이어라키 창 정리
+            UnitUI.transform.SetParent(UnitUIContainer.Instance.transform);
             // 2. UI가 '나'를 따라다니도록 Target 연결
             FollowTargetWithOffset followScript = UnitUI.GetComponent<FollowTargetWithOffset>();
             if (followScript != null)
@@ -103,6 +133,12 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
         }
     }
 
+    private void Update()
+    {
+        // 미영입 상태시 무적판정
+        if (CurrentState == AllyUnitState.Solo) { CurrentHP = MaxHP; }
+    }
+
     // 상태 변경
     public void ChangeState(AllyUnitState newState)
     {
@@ -133,6 +169,8 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
             // 값을 0~1 사이의 비율로 변환
             hpSlider.value = CurrentHP / MaxHP;
         }
+        if (CurrentHP >= MaxHP) CurrentHP = MaxHP;
+        Debug.Log(gameObject.name + " 피해 입음. HP : " + CurrentHP);
 
         if (CurrentHP <= 0)
         {
@@ -154,6 +192,7 @@ public class AllyInformation : MonoBehaviour, IUnitDataHub
 // 아군 유닛이 가질 수 있는 상태들
 public enum AllyUnitState
 {
+    Solo,           // 미영입상태
     Idle,           // 대기
     Following,      // 플레이어 추적
     Engaging,       // 적과 교전

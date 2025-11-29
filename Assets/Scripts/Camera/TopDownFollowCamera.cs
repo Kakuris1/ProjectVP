@@ -9,6 +9,34 @@ public class TopDownFollowCamera : MonoBehaviour
     public float maxSpeed = 10f; // 최고 속도
     private Vector3 velocity = Vector3.zero;
 
+    // 줌 기능을 위한 변수
+    [Header("Zoom")]
+    public float zoomSpeed = 15f;   // 줌 속도
+    public float minHeight = 15f;    // 최소 높이 
+    public float maxHeight = 30f;   // 최대 높이
+
+    [SerializeField]
+    private InputReader inputReader;
+
+    private void Update()
+    {
+        if (inputReader == null) return;
+
+        // 마우스 스크롤 휠 입력 받기 (올리면 +, 내리면 -)
+        float scroll = inputReader.ZoomScroll;
+
+        // 스크롤 입력이 감지되면
+        if (Mathf.Abs(scroll) > 0.01f)
+        {
+            // 큰 델타 값을 (-1f ~ 1f) 정규화
+            scroll = Mathf.Clamp(scroll/10, -1f, 1f);
+
+            float newHeight = offset.y - (scroll * zoomSpeed);
+            // 계산된 새 높이를 minHeight와 maxHeight 사이로 제한(Clamp)합니다.
+            offset.y = Mathf.Clamp(newHeight, minHeight, maxHeight);
+        }
+    }
+
     public void HandleFollow()
     {
         if (target == null) return;
@@ -54,5 +82,10 @@ public class TopDownFollowCamera : MonoBehaviour
     private void SetTarget(Transform player)
     {
         target = player;
+    }
+
+    public void ResetVelocity()
+    {
+        velocity = Vector3.zero;
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6854402217193952719}
   - component: {fileID: 5914251709532284238}
   - component: {fileID: 7314360862236169330}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: FireTrail_00_Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 442644508222135126}
   - component: {fileID: 4869258288877024156}
   - component: {fileID: 8371578552128198298}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: FireBallTrail_Bright
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 4208486508472538131}
   - component: {fileID: 4781761241093729812}
   - component: {fileID: 1594140974745370393}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: FireBall02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -325,7 +325,7 @@ GameObject:
   - component: {fileID: 972190304720640780}
   - component: {fileID: 8947138831800349355}
   - component: {fileID: 8340837958727959841}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: FireBallTrail_00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -442,7 +442,7 @@ GameObject:
   - component: {fileID: 5105397115891800658}
   - component: {fileID: -719536535720641230}
   - component: {fileID: -7844229109703413291}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -530,6 +530,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b714fc4020c36f40a916202c3bfdded, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 20
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  projectileRangeMultiplier: 1.5
 --- !u!54 &-719536535720641230
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -587,7 +595,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8386416488027761907}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}

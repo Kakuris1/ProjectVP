@@ -23,8 +23,6 @@ namespace Combat.Skills
         {
             // cast VFX
             if (ctx.Spec.castVfx) ctx.Spawner?.SpawnOneShot(ctx.Spec.castVfx, ctx.Spec.castVfxSize, ctx.Origin, Quaternion.LookRotation(-ctx.Direction));
-            // 스킬 사운드 재생
-            AudioManager.Instance.PlaySFX(ctx.Spec.skillName, 0.8f);
 
             float skillRange = ctx.Spec.skillRange;
 

@@ -5,7 +5,6 @@ namespace Combat.Skills
 {
     public class SkillPipeline : MonoBehaviour
     {
-        // 인스턴스 필드로 1개만 캐시 → 이 파이프라인을 쓰는 '한 캐릭터' 전용이라 충돌 없음
         private readonly List<Transform> _targets = new(32);
         public bool Execute(in SkillContext ctx)
         {

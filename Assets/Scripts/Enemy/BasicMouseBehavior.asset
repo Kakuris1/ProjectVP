@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa964b43a40f6d54d9314823f2cafb4a, type: 3}
   m_Name: BasicMouseBehavior
   m_EditorClassIdentifier: 
-  fleeDistance: 10
-  convergeDistance: 20
+  fleeDistance: 16
+  convergeDistance: 30

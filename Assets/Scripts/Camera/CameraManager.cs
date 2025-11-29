@@ -22,15 +22,16 @@ public class CameraManager : MonoBehaviour
     public CameraState currentState = CameraState.TopDown;
     void FixedUpdate()
     {
-        switch (currentState)
+        if (currentState == CameraState.TopDown)
         {
-            case CameraState.TopDown:
-                topDownFollow.HandleFollow();
-                break;
-
-            case CameraState.Cutscene:
-                cutsceneController.HandleCutscene();
-                break;
+            topDownFollow.HandleFollow();
+        }
+    }
+    void Update()
+    {
+        if (currentState == CameraState.Cutscene)
+        {
+            cutsceneController.HandleCutscene();
         }
     }
 
@@ -41,12 +42,23 @@ public class CameraManager : MonoBehaviour
 
     public void SwitchToCutscene(Transform target)
     {
+        Debug.Log("컷씬 시작!");
+        Time.timeScale = 0f; // 게임 일시 정지
         currentState = CameraState.Cutscene;
         cutsceneController.StartCutscene(target);
     }
 
     public void SwitchToTopDown()
     {
+        Debug.Log("컷씬 종료!");
+        Time.timeScale = 1f; // 게임 재개
         currentState = CameraState.TopDown;
+
+        ////// 카메라를 플레이어 위치로 즉시 스냅
+        //if (topDownFollow.target != null)
+        //{
+        //    transform.position = topDownFollow.target.position + topDownFollow.offset;
+        //    topDownFollow.ResetVelocity(); // 팔로우 카메라의 속도 초기화 (순간이동 후 튀는 현상 방지)
+        //}
     }
 }

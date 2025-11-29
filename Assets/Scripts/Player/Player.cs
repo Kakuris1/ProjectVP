@@ -21,6 +21,11 @@ public class Player : MonoBehaviour, IUnitDataHub
     [HideInInspector] public Slider hpSlider;
     [HideInInspector] public Slider skillSlider;
 
+    [Header("스킬 (Skill")]
+    [Tooltip("인스펙터에서 직접 지정할 스킬. 비워두면(Null) Pool에서 랜덤 선택")]
+    public SkillSpecAsset Skill;
+    [Tooltip("Skill 변수가 비어있을 경우, 이 풀에서 랜덤 스킬을 선택")]
+    public SkillPoolAsset defaultSkillPool;
     SkillController _skillController;
 
     // --- 이벤트 (Events) ---
@@ -42,6 +47,32 @@ public class Player : MonoBehaviour, IUnitDataHub
         Instance = this;
 
         _skillController = GetComponent<SkillController>();
+        // 1. 인스펙터에서 직접 할당한 스킬이 있는지 확인
+        if (Skill == null)
+        {
+            // 2. 할당된 스킬이 없다면, defaultSkillPool에서 랜덤으로 가져오기
+            if (defaultSkillPool != null && defaultSkillPool.skills.Count > 0)
+            {
+                int randomIndex = UnityEngine.Random.Range(0, defaultSkillPool.skills.Count);
+                Skill = defaultSkillPool.skills[randomIndex];
+            }
+            else
+            {
+                // 풀이 비어있거나 설정되지 않은 경우
+                Debug.LogWarning($"[{name}] : 스킬이 할당되지 않았고, Default Skill Pool이 비어있거나 없습니다.", this);
+            }
+        }
+
+        // 3. 최종 결정된 스킬을 SkillController에 장착
+        if (Skill != null)
+        {
+            _skillController.Equip(Skill);
+            Debug.Log($"[{name}] 스킬 배정 완료, Skill : " + Skill.name);
+        }
+        else
+        {
+            Debug.LogError($"[{name}] : 최종적으로 장착할 스킬이 없습니다!", this);
+        }
     }
 
     private void Start()
@@ -58,6 +89,9 @@ public class Player : MonoBehaviour, IUnitDataHub
         if (uiPrefab != null)
         {
             UnitUI = Instantiate(uiPrefab, transform.position, Quaternion.identity);
+
+            // 하이어라키 창 정리
+            UnitUI.transform.SetParent(UnitUIContainer.Instance.transform);
 
             // 2. UI가 '나'를 따라다니도록 Target 연결
             FollowTargetWithOffset followScript = UnitUI.GetComponent<FollowTargetWithOffset>();
@@ -126,6 +160,7 @@ public class Player : MonoBehaviour, IUnitDataHub
             hpSlider.value = CurrentHP / MaxHP;
         }
 
+        if (CurrentHP >= MaxHP) CurrentHP = MaxHP;
         Debug.Log("Player 피해 입음. HP : " +  CurrentHP);
         if (CurrentHP <= 0)
         {

@@ -19,7 +19,7 @@ namespace Combat.Skills
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
                 TimeSource = GetComponentInChildren<UnityTimeSource>();
-                Spawner = GetComponentInChildren<SimpleSpawner>();
+                Spawner = GetComponentInChildren<PooledSpawner>();
             }
             else
             {

@@ -13,8 +13,8 @@ public class AllyController : MonoBehaviour
     private Vector3 moveCommandPosition; // '한곳에 모이기' 명령의 목표 지점
 
     [Header("상태 전환 거리")]
-    public float stopFollowingDistance = 4.0f; // 이 거리 안으로 들어오면 Idle
-    public float startFollowingDistance = 10.0f; // 이 거리보다 멀어지면 Following
+    public float stopFollowingDistance = 5.0f; // 이 거리 안으로 들어오면 Idle
+    public float startFollowingDistance = 20.0f; // 이 거리보다 멀어지면 Following
 
     void Awake()
     {
@@ -36,20 +36,13 @@ public class AllyController : MonoBehaviour
 
     void Update()
     {
+        if (allyInfo.CurrentState == AllyUnitState.Dead) return;
         // '한곳에 모이기' 명령이 최우선 순위
         if (hasMoveCommand)
         {
             allyInfo.ChangeState(AllyUnitState.MovingToCommand);
             allyInfo.SetCommandPosition(moveCommandPosition);
             // TODO: 목표 지점 도착 시 hasMoveCommand를 false로 바꿔주는 로직 필요
-            return;
-        }
-
-        // 전투 모드일 때, 적이 있으면 교전
-        if (TeamManager.Instance.IsCombatMode && allyInfo.CurrentTarget != null)
-        {
-            // 전투 상태
-            allyInfo.ChangeState(AllyUnitState.Engaging);
             return;
         }
 
@@ -63,8 +56,27 @@ public class AllyController : MonoBehaviour
         }
         else if (distanceToPlayer <= stopFollowingDistance)
         {
+            // 전투 모드일 때, 적이 있으면 교전
+            if (TeamManager.Instance.IsCombatMode && allyInfo.CurrentTarget != null)
+            {
+                // 전투 상태
+                allyInfo.ChangeState(AllyUnitState.Engaging);
+                return;
+            }
             // 플레이어와 충분히 가까우면, 대기 상태로 변경
             allyInfo.ChangeState(AllyUnitState.Idle);
+        }
+        else
+        {
+            if(allyInfo.CurrentState == AllyUnitState.Following)
+            {
+                allyInfo.ChangeState(AllyUnitState.Following); // 추적상태 유지
+            }
+            else if (TeamManager.Instance.IsCombatMode && allyInfo.CurrentTarget != null)
+            {
+               // Player 따라붙는 중이 아니고, 타겟이 유효하고 전투모드 ON이면
+                allyInfo.ChangeState(AllyUnitState.Engaging); // 전투 상태
+            }
         }
     }
 

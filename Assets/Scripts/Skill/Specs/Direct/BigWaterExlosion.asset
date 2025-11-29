@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa01ed33454d5584ea36325bdef9e07d, type: 3}
+  m_Name: BigWaterExlosion
+  m_EditorClassIdentifier: 
+  damage: 60
+  cooldown: 1.5
+  manaCost: 10
+  skillRange: 15
+  skillDelay: 0
+  maxTargetCount: 1
+  pierceCount: 1
+  targeting: {fileID: 11400000, guid: fe9ab10e15c196f4eab38a5f5bb03e04, type: 2}
+  delivery: {fileID: 11400000, guid: 9aef5957d60c5f8448cdef5c989547bb, type: 2}
+  impacts:
+  - {fileID: 11400000, guid: 656b48ede13ea1846a62e47a38bf65d9, type: 2}
+  costPolicy: {fileID: 11400000, guid: e6233c3206bbf6740bec7e35e8d87e9f, type: 2}
+  castVfx: {fileID: 5607819269926399345, guid: 45e0f06c750176947862c10346226439, type: 3}
+  castVfxSize: 1.5
+  hitVfx: {fileID: 7505931454801173794, guid: 2cacee8dfb61f3942870cbb327c2c3bb, type: 3}
+  hitVfxSize: 1
+  skillVfx: {fileID: 7478366525760822976, guid: 10f52b5eb2305ce48a995cf6c48ea7ad, type: 3}
+  skillVfxSize: 5

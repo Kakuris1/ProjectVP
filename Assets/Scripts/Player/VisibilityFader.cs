@@ -1,24 +1,26 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 
 [DisallowMultipleComponent]
 public class VisibilityFader : MonoBehaviour
 {
-    public Renderer[] renderers;          // ºñ¿ì¸é ÀÚµ¿ ¼öÁı
+    public Renderer[] renderers;
 
-    [Header("ÆäÀÌµå ¼Óµµ (ÃÊ)")]
-    [Tooltip("´õ ºü¸£°Ô (º¸ÀÏ ¶§)")]
+    [Header("í˜ì´ë“œ ì†ë„ (ì´ˆ)")]
     public float fadeInDuration = 0.15f;
-    [Tooltip("´õ ÃµÃµÈ÷ (»ç¶óÁú ¶§)")]
+    [Tooltip("ì´ ì‹œê°„(ì´ˆ)ë§Œí¼ ì‹œì•¼ì—ì„œ ì‚¬ë¼ì ¸ë„ 'ì•ˆ ë³´ì„' ì²˜ë¦¬ë¥¼ ìœ ì˜ˆí•©ë‹ˆë‹¤.")]
+    public float fadeOutDelay = 0.3f; // [âœ¨ 1. ìœ ì˜ˆ ì‹œê°„ ì¶”ê°€]
     public float fadeOutDuration = 1f;
-    [Header("Ã¼·Â, ½ºÅ³ °ÔÀÌÁö UI")]
+
+    [Header("ì²´ë ¥, ìŠ¤í‚¬ ê²Œì´ì§€ UI")]
     private GameObject _linkedUI;
 
-    public string colorProp = "_BaseColor"; // URP Lit
+    public string colorProp = "_BaseColor";
     float _target = 0f, _current = 0f;
-    Coroutine _co;
+    Coroutine _co; // í˜„ì¬ ì‹¤í–‰ ì¤‘ì¸ í˜ì´ë“œ ë˜ëŠ” ë”œë ˆì´ ì½”ë£¨í‹´
     MaterialPropertyBlock _mpb;
 
+    // ... (Awake, SetLinkedUI í•¨ìˆ˜ëŠ” ë™ì¼) ...
     void Awake()
     {
         if (renderers == null || renderers.Length == 0)
@@ -27,42 +29,79 @@ public class VisibilityFader : MonoBehaviour
         Apply(_current);
     }
 
-    // EnemyInformationÀÌ UI¸¦ µî·ÏÇÏ±â À§ÇÑ ¸Ş¼­µå 
     public void SetLinkedUI(GameObject uiRoot)
     {
         _linkedUI = uiRoot;
+        if (_linkedUI != null)
+        {
+            bool isTargetVisible = (_target > 0f);
+            _linkedUI.SetActive(isTargetVisible);
+        }
     }
 
+
+    // â–¼â–¼â–¼ [ 2. SetVisible ë¡œì§ ìˆ˜ì • ] â–¼â–¼â–¼
     public void SetVisible(bool v)
     {
-        _target = v ? 1f : 0f;
-        if (_co != null) StopCoroutine(_co);
+        float newTarget = v ? 1f : 0f;
 
-        // 'º¸ÀÌ±â'(v=true)ÀÏ °æ¿ì fadeInDurationÀ», '¼û±â±â'(v=false)ÀÏ °æ¿ì fadeOutDurationÀ» ¼±ÅÃ
-        float duration = v ? fadeInDuration : fadeOutDuration;
-
-        // º¸ÀÌ±â ½ÃÀÛÇÏ¸é UI È°¼ºÈ­
-        if (v && _linkedUI != null)
+        // 1. ì´ë¯¸ ì›í•˜ëŠ” ìƒíƒœ(í˜¹ì€ ê·¸ ìƒíƒœë¡œ 'ë³€í•˜ëŠ” ì¤‘')ì´ë©´ ë¬´ì‹œ
+        if (newTarget == _target)
         {
-            _linkedUI.SetActive(true);
+            return;
         }
 
-        // Fade ÄÚ·çÆ¾¿¡ ¼±ÅÃÇÑ duration °ªÀ» ¸Å°³º¯¼ö·Î ³Ñ±è
-        _co = StartCoroutine(Fade(duration));
+        // 2. ìƒˆë¡œìš´ ëª©í‘œ ìƒíƒœë¡œ ê°±ì‹ 
+        _target = newTarget;
+
+        // 3. í˜„ì¬ ì§„í–‰ ì¤‘ì¸ ëª¨ë“  í˜ì´ë“œ/ë”œë ˆì´ ì½”ë£¨í‹´ ì¤‘ì§€
+        if (_co != null)
+        {
+            StopCoroutine(_co);
+        }
+
+        // 4. ìƒíƒœì— ë”°ë¼ ìƒˆ ì½”ë£¨í‹´ ì‹œì‘
+        if (_target == 1f) // "ë³´ì´ê¸°" ëª…ë ¹
+        {
+            // ì¦‰ì‹œ Fade-In ì‹œì‘
+            _co = StartCoroutine(Fade(fadeInDuration, true));
+        }
+        else // "ìˆ¨ê¸°ê¸°" ëª…ë ¹
+        {
+            // 'ìœ ì˜ˆ ì‹œê°„'ì„ ê°€ì§„ Fade-Out ì½”ë£¨í‹´ ì‹œì‘
+            _co = StartCoroutine(FadeOutWithDelay());
+        }
     }
 
-    IEnumerator Fade(float duration)
+    // â–¼â–¼â–¼ [ 3. ìƒˆë¡œìš´ Fade-Out ë”œë ˆì´ ì½”ë£¨í‹´ ] â–¼â–¼â–¼
+    IEnumerator FadeOutWithDelay()
     {
-        // (¾ÈÀü ÀåÄ¡) ¸¸¾à durationÀÌ 0ÀÌ¸é Áï½Ã °ªÀ» Àû¿ëÇÏ°í ÄÚ·çÆ¾ Á¾·á
+        // 1. 'fadeOutDelay' (ì˜ˆ: 0.5ì´ˆ) ë§Œí¼ ê¸°ë‹¤ë¦¼
+        yield return new WaitForSeconds(fadeOutDelay);
+
+        // (ì´ 0.5ì´ˆ ì•ˆì— SetVisible(true)ê°€ í˜¸ì¶œë˜ë©´,
+        //  StopCoroutineì— ì˜í•´ ì´ ì½”ë£¨í‹´ì€ 'ì—¬ê¸°ì„œ' ì¤‘ì§€ë¨)
+
+        // 2. 0.5ì´ˆê°€ ì§€ë‚¬ëŠ”ë°ë„ _targetì´ ì—¬ì „íˆ 0f(ìˆ¨ê¸°ê¸°)ë¼ë©´,
+        //    'ì§„ì§œ' Fade-Out ì½”ë£¨í‹´ì„ ì‹œì‘í•¨.
+        _co = StartCoroutine(Fade(fadeOutDuration, false));
+    }
+
+    IEnumerator Fade(float duration, bool isFadingIn)
+    {
+        // ... (duration 0 ì´í•˜ì¼ ë•Œ ì•ˆì „ ì¥ì¹˜ ì½”ë“œëŠ” ë™ì¼) ...
         if (duration <= 0f)
         {
             _current = _target;
             Apply(_current);
-            _co = null; // ÄÚ·çÆ¾ ÂüÁ¶ ºñ¿ì±â
-            // À§Çè ¿¹¹æ »ó UI ¹İ¿µ
+            _co = null;
             if (_linkedUI != null) _linkedUI.SetActive(_target > 0f);
+            yield break;
+        }
 
-            yield break; // ÄÚ·çÆ¾ Áï½Ã Á¾·á
+        if (isFadingIn && _linkedUI != null)
+        {
+            _linkedUI.SetActive(true);
         }
 
         float start = _current, t = 0f;
@@ -76,12 +115,12 @@ public class VisibilityFader : MonoBehaviour
         }
         _current = _target; Apply(_current);
 
-        // FADE OUT ¿Ï·á ½Ã UI ºñÈ°¼ºÈ­
         if (_target == 0f && _linkedUI != null) _linkedUI.SetActive(false);
 
-        _co = null; // ÄÚ·çÆ¾ÀÌ ¿Ï·áµÇ¾úÀ¸¹Ç·Î ÂüÁ¶ ºñ¿ì±â
+        _co = null;
     }
 
+    // ... (Apply í•¨ìˆ˜ëŠ” ë™ì¼) ...
     void Apply(float a)
     {
         foreach (var r in renderers)

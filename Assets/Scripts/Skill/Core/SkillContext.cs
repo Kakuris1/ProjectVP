@@ -25,14 +25,17 @@ namespace Combat.Skills
         public float cooldown;
         public float manaCost;
         public float skillRange;
+        public float skillDelay;
+        public int maxTargetCount;
+        public int pierceCount;
 
         public TargetingAsset targeting;
         public DeliveryAsset delivery;
         public ImpactAsset[] impacts;
         public CostAsset costPolicy;
 
-        public GameObject castVfx, hitVfx;
-        public float castVfxSize, hitVfxSize;
+        public GameObject castVfx, hitVfx, skillVfx;
+        public float castVfxSize, hitVfxSize, skillVfxSize;
 
         public static SkillRuntimeSpec From(SkillSpecAsset src) => new SkillRuntimeSpec
         {
@@ -41,14 +44,19 @@ namespace Combat.Skills
             cooldown = src.cooldown,
             manaCost = src.manaCost,
             skillRange = src.skillRange,
+            skillDelay = src.skillDelay,
+            maxTargetCount = src.maxTargetCount,
+            pierceCount = src.pierceCount,
             targeting = src.targeting,
             delivery = src.delivery,
             impacts = src.impacts,
             costPolicy = src.costPolicy,
             castVfx = src.castVfx,
             hitVfx = src.hitVfx,
+            skillVfx = src.skillVfx,
             castVfxSize = src.castVfxSize,
-            hitVfxSize = src.hitVfxSize
+            hitVfxSize = src.hitVfxSize,
+            skillVfxSize = src.skillVfxSize
         };
     }
 
@@ -56,8 +64,10 @@ namespace Combat.Skills
     public interface ITimeSource { float Now { get; } }
     public interface ISpawner
     {
-        GameObject Spawn(GameObject prefab, Vector3 pos, Quaternion rot);
+        GameObject Spawn(GameObject prefab, float scl, Vector3 pos, Quaternion rot);
         void SpawnOneShot(GameObject prefab, float scl, Vector3 pos, Quaternion rot);
+        void SpawnOneShot(GameObject prefab, float scl, Vector3 pos, Quaternion rot, float duration);
+        void Despawn(GameObject instance);
     }
     public interface IDamageable
     {
@@ -81,7 +91,6 @@ namespace Combat.Skills
     // 2) Delivery: 어떻게 닿게 만들지(근접/투사체/장판…)
     public abstract class DeliveryAsset : ScriptableObject
     {
-        // 주의: 투사체형은 이 안에서 스폰만 하고, 충돌 순간에 Impact를 호출하는 식으로 설계 가능
         public abstract void Deliver(in SkillContext ctx, List<Transform> targets);
     }
 

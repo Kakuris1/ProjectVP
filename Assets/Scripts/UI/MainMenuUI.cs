@@ -191,10 +191,10 @@ public class MainMenuUI : MonoBehaviour
     {
         // 게임 플레이 상주 씬 로드
         yield return SceneManager.LoadSceneAsync("GameplayPersistent", LoadSceneMode.Additive);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("GameplayPersistent"));
 
         // 레벨 씬 로드, 활성씬 설정
         yield return SceneManager.LoadSceneAsync("MainLevelScene", LoadSceneMode.Additive);
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("MainLevelScene"));
 
         //메뉴 언 로드
         yield return SceneManager.UnloadSceneAsync(gameObject.scene);

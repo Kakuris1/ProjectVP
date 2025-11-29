@@ -29,11 +29,11 @@ public class EventManager : MonoBehaviour
     }
 
     // 적 개체 파괴시 발생하는 이벤트
-    public event Action<int> OnEnemyDefeated;
+    public event Action<EnemyType, int> OnEnemyDefeated;
     // 적 개체의 ID를 받아서 넘김
-    public void EnemyDefeated(int EnemyID)
+    public void EnemyDefeated(EnemyType enemyType, int enemyID)
     {
-        OnEnemyDefeated?.Invoke(EnemyID);
+        OnEnemyDefeated?.Invoke(enemyType, enemyID);
     }
 
     // 구역 클리어시 발생하는 이벤트

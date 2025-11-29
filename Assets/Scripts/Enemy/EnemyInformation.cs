@@ -1,21 +1,22 @@
 using Combat.Skills;
 using System;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.UI;
 // 적 유닛 데이터 중심 클래스
 public class EnemyInformation : MonoBehaviour, IUnitDataHub
 {
-    [Header("최초 구역")]
-    public int targetAreaNumber;
+    [SerializeField] private EnemyType enemyType;
     [Header("적 유닛 ID")]
     public int EnemyID;
+    public AreaManager area;
     [Header("상태 (State)")]
-    // 외부에서는 읽기만 가능하도록 private set을 사용합니다.
     public EnemyUnitState CurrentState; //프로퍼티로 바꿔야함!!!
     // 플레이어와의 조우시 적대적 = 즉시 교전, 비적대적 = 도망
     public bool Hostile; // 프로퍼티로 바꿔야함
     [Header("비적대적일 때 행동 SO")]
     public NonHostileBehaviorAsset nonHostileBehavior;
+    public Vector3 PatrolOrigin;
     [Header("BT 제어 플래그")]
     [Tooltip("BT가 공격을 허가할 때만 true가 됨")]
     public bool CanAttack = false; // 기본값은 false
@@ -40,6 +41,7 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
     [Header("스킬 (Skill")]
     public SkillSpecAsset Skill;
     private SkillController _skillController;
+    private EnemyMovement _enemyMovement;
     [Tooltip("현재 목표물")]
     public Transform CurrentTarget;
 
@@ -57,24 +59,43 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
 
     protected virtual void Awake()
     {
-        // 체력 초기화
-        CurrentHP = maxHealth;
+        // 최대체력 설정
         MaxHP = maxHealth;
 
         _skillController = GetComponent<SkillController>();
-        if(_skillController != null)
+        if(_skillController != null && Skill!=null)
         {
             _skillController.Equip(Skill);
             skillRange = Skill.skillRange;
         }
+        _enemyMovement = GetComponent<EnemyMovement>();
     }
 
-    protected virtual void Start()
+    public virtual void Initialize(int AreaNumber, Vector3 spawnPos)
+    {
+        EnemyID = AreaNumber;
+        ChangeState(EnemyUnitState.Patrol);
+        Hostile = true;
+        CanAttack = false;
+        firstTimeToMeet = true;
+        hasMoveCommand = false;
+        CurrentHP = MaxHP;
+        IsDead = false;
+        CurrentTarget = null;
+        ConnectUI();
+        PatrolOrigin = spawnPos;
+        _enemyMovement.Initialize();
+    }
+
+    protected virtual void ConnectUI()
     {
         // 1. UI 프리팹 생성 및 연결
         if (uiPrefab != null)
         {
-            UnitUI = Instantiate(uiPrefab, transform.position, Quaternion.identity);
+            UnitUI = PoolManager.Instance.Spawn(uiPrefab, 1f, transform.position, Quaternion.identity);
+
+            // 하이어라키 창 정리
+            UnitUI.transform.SetParent(UnitUIContainer.Instance.transform);
 
             // 2. UI가 '나'를 따라다니도록 Target 연결
             FollowTargetWithOffset followScript = UnitUI.GetComponent<FollowTargetWithOffset>();
@@ -162,6 +183,7 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
     {
         if (IsDead) return;
         CurrentHP -= amount;
+        if (CurrentHP >= MaxHP) CurrentHP = MaxHP;
         // HP 변경 알림
         OnHPChanged?.Invoke(CurrentHP, MaxHP);
 
@@ -173,7 +195,6 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
         }
 
         Debug.Log($"Hit, {gameObject.name} HP : {CurrentHP}");
-
         if (CurrentHP <= 0)
         {
             CurrentHP = 0;
@@ -186,17 +207,17 @@ public class EnemyInformation : MonoBehaviour, IUnitDataHub
         if (IsDead) return;
         IsDead = true;
         OnDeath?.Invoke(); // 사망 알림 내부
-        EventManager.Instance.EnemyDefeated(EnemyID); // 사망 알림 전역
+        EventManager.Instance.EnemyDefeated(enemyType, EnemyID); // 사망 알림 전역
         Debug.Log($"몬스터 ID {EnemyID} 처치!");
 
         // UI 오브젝트도 함께 파괴
         if (UnitUI != null)
         {
-            Destroy(UnitUI);
+            PoolManager.Instance.Despawn(UnitUI);
         }
 
         // 오브젝트 파괴
-        Destroy(gameObject);
+        PoolManager.Instance.Despawn(gameObject);
     }
 }
 
@@ -208,4 +229,12 @@ public enum EnemyUnitState
     Engaging,       // 적과 교전
     MovingToCommand,// 명령 지점으로 이동
     Dead            // 죽음
+}
+
+public enum EnemyType
+{
+    Mouse,
+    Conch,
+    Urchin1_Ranged,
+    Urchin2_Melee
 }
